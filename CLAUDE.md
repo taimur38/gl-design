@@ -19,6 +19,7 @@ playground/           # Working example: Pakistan FM brief
 
 skills/
   md2docx/            # Markdown → Word conversion skill (pandoc + Lua filters)
+  chart-audit/        # Visual audit checklist for ggplot charts against framework
 
 # Visual explainers (open in browser)
 framework-visual.html           # Interactive walkthrough of the design system
@@ -52,6 +53,8 @@ The theme (`theme_gl`) is already set at the start of R documents — do not set
 - **Default dimensions**: width=9, height=6 for standalone saves; use `gl_fig` sizes for report figures
 - **Log scale**: use `scale_x_log10()` when GDP per capita is on the x-axis
 - **Mode**: `theme_gl(mode = "report")` suppresses title/subtitle/caption (document handles them)
+- **Legend**: report mode defaults to bottom-left. Override to `legend.position = "right"` only for charts with >8 categories. Use `guide_legend(nrow = 2)` if bottom labels clip.
+- **Chart audit**: after generating charts, run the `skills/chart-audit/` checklist to catch visual issues
 
 ## Converting markdown to Word
 

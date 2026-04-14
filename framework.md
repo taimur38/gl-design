@@ -119,7 +119,7 @@ Every size is rounded to the nearest 0.5pt for clean rendering.
 - **Above H3:** 18pt
 - **Above H4:** 12pt
 - **Below all headings:** 6pt
-- **Paragraph spacing:** 6pt after each paragraph (no first-line indent)
+- **Paragraph spacing:** 6pt after each paragraph (no first-line indent); body text is **justified**
 - **Figure/table spacing:** 12pt above, 6pt below caption
 
 ### Slide vs. report mode
@@ -131,6 +131,8 @@ Every size is rounded to the nearest 0.5pt for clean rendering.
 - **`mode = "report"`** — title, subtitle, and caption are **suppressed**
   (set to `element_blank()`). The document handles these via Figure Title
   and Figure Source styles. Axis labels (`x`, `y`) are kept.
+  Legend is placed **bottom-left** by default to preserve plot width.
+  Charts with many categories (>8) may override to `legend.position = "right"`.
 
 ```r
 theme_set(theme_gl(mode = "report"))

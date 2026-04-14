@@ -95,9 +95,13 @@ theme_gl <- function(base_size = 12, mode = "slide") {
 
     if (mode == "report") {
         t <- t + theme(
-            plot.title    = element_blank(),
-            plot.subtitle = element_blank(),
-            plot.caption  = element_blank()
+            plot.title      = element_blank(),
+            plot.subtitle   = element_blank(),
+            plot.caption    = element_blank(),
+            legend.position = "bottom",
+            legend.justification = "left",
+            legend.margin   = margin(t = 4),
+            legend.key.size = unit(0.4, "cm")
         )
     }
 
@@ -292,6 +296,7 @@ sbp |>
         "Claims on banks (ODCs)"           = "#D1852A",
         "Claims on private sector"         = "#36B250"
     )) +
+    guides(color = guide_legend(nrow = 2)) +
     scale_y_continuous(labels = percent) +
     labs(title = "unused", subtitle = "unused",
          x = NULL, y = "% of GDP", color = NULL, caption = "unused")
@@ -369,6 +374,7 @@ percap_trade |>
     scale_x_continuous(n.breaks = 10, limits = shared_xlim) +
     scale_y_continuous(limits = shared_ylim) +
     scale_fill_manual(values = gl_cluster_colors) +
+    theme(legend.position = "right") +
     labs(title = "unused", y = 'Per Capita, constant 2023 USD', x = 'Year', fill = '', caption = "unused")
 save_fig("full", "exports-per-capita.png")
 
@@ -484,6 +490,7 @@ percap_with_remit |>
     scale_x_continuous(n.breaks = 10, limits = shared_xlim) +
     scale_y_continuous(limits = shared_ylim) +
     scale_fill_manual(values = gl_cluster_colors) +
+    theme(legend.position = "right") +
     labs(title = "unused", y = 'Per Capita, constant 2023 USD', x = 'Year', fill = '', caption = "unused")
 save_fig("full", "exports-plus-remittances-per-capita.png")
 
