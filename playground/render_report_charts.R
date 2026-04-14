@@ -438,16 +438,21 @@ pop_2024 <- pak_population |> filter(year == 2024) |> pull(pop)
 defl_2011 <- usd_deflator |> filter(year == 2011) |> pull(usd_deflator)
 defl_2024 <- usd_deflator |> filter(year == 2024) |> pull(usd_deflator)
 
+# Log decomposition: Δlog(x_i/P) = Δlog(s_i) + Δlog(G_i) - Δlog(P)
+# Population term is identical for all sectors; components are additive in pp.
+pop_growth <- log(pop_2024 / pop_2011) * 100          # pp (positive = drag)
 decomp <- global_wide |>
+    filter(share_2011 > 0, share_2024 > 0,
+           global_export_2011 > 0, global_export_2024 > 0) |>
     mutate(
-        s11 = share_2011, s24 = share_2024,
-        G11 = global_export_2011, G24 = global_export_2024,
-        population_effect    = s11 * G11 * (1/pop_2024 - 1/pop_2011) / (defl_2011 / 100),
-        global_trade_effect  = s11 * (G24 / (defl_2024/100) - G11 / (defl_2011/100)) / pop_2024,
-        competitiveness_effect = (s24 - s11) * G24 / pop_2024 / (defl_2024 / 100)
+        # Real global exports growth (in constant USD)
+        global_trade_effect    = log((global_export_2024 / (defl_2024/100)) /
+                                     (global_export_2011 / (defl_2011/100))) * 100,
+        competitiveness_effect = log(share_2024 / share_2011) * 100,
+        population_effect      = -pop_growth,
+        total = global_trade_effect + competitiveness_effect + population_effect
     ) |>
-    select(catlabel, population_effect, global_trade_effect, competitiveness_effect) |>
-    mutate(total = population_effect + global_trade_effect + competitiveness_effect) |>
+    select(catlabel, population_effect, global_trade_effect, competitiveness_effect, total) |>
     pivot_longer(cols = c(population_effect, global_trade_effect, competitiveness_effect),
                  names_to = 'component', values_to = 'value') |>
     mutate(component = factor(component,
@@ -455,15 +460,19 @@ decomp <- global_wide |>
         labels = c('Population growth', 'Global trade growth', 'Competitiveness (market share)')
     ))
 
+# Use same y-axis order as export decline drivers (USD per capita change)
+sector_order <- export_decline |> arrange(change) |> pull(catlabel)
 decomp |>
-    mutate(catlabel = fct_reorder(catlabel, total)) |>
+    mutate(catlabel = factor(catlabel, levels = sector_order)) |>
     ggplot(aes(x = value, y = catlabel, fill = component)) +
     geom_col() +
     geom_point(aes(x = total), show.legend = FALSE) +
     geom_vline(xintercept = 0) +
+    scale_x_continuous(labels = function(x) paste0(x, '%')) +
     labs(title = "unused", subtitle = "unused",
-         x = 'Change in per capita exports (USD)', y = '', fill = '', caption = "unused")
+         x = 'Change in per capita exports (log pp)', y = '', fill = '', caption = "unused")
 save_fig("full", "exports-decomposition.png")
+
 
 # 7. Exports + remittances per capita
 percap_with_remit <- percap_trade |>
