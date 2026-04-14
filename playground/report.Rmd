@@ -1,0 +1,268 @@
+---
+title: "Pakistan: From Stabilization to Transformation"
+subtitle: "A Growth Diagnostics Brief"
+author: "Growth Lab, Harvard Kennedy School"
+date: "April 2026"
+output:
+    html_document: default
+bibliography: references.bib
+---
+
+<!--
+    Mini-report playground — tests the GL Report Design Framework.
+    This file uses content from the Pakistan FM engagement to create
+    a realistic 4-page report exercising all the major framework elements:
+    headings (H1–H3), body text, figures at different sizes, a table,
+    a call-out box, and citations.
+-->
+
+```{r setup, message=FALSE, warning=FALSE, results='hide'}
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+library(tidyverse)
+library(ggthemes)
+library(ggrepel)
+library(arrow)
+library(showtext)
+library(sysfonts)
+library(patchwork)
+library(scales)
+
+# ---- Growth Lab design tokens ------------------------------------------------
+
+gl <- list(
+    text_dark   = "#333333",
+    text_muted  = "#7c7c7c",
+    border      = "#dcdcdc",
+    background  = "#f3f3f3",
+    brand_blue  = "#266798",
+    palette = c(
+        "#266798", "#C64646", "#36B250", "#EAC218", "#D1852A",
+        "#52E2DE", "#A42DE2", "#7C6760", "#757777"
+    )
+)
+
+highlight    <- "#C64646"
+highlight_sz <- 1.1
+
+# ---- Fonts -------------------------------------------------------------------
+
+font_add_google("Source Sans 3", "gl_sans")
+font_add_google("JetBrains Mono", "gl_mono")
+showtext_auto()
+showtext_opts(dpi = 300)
+
+# ---- Theme -------------------------------------------------------------------
+
+theme_gl <- function(base_size = 12) {
+    theme_few(base_size = base_size) %+replace%
+    theme(
+        text          = element_text(family = "gl_sans", color = gl$text_dark),
+        plot.title    = element_text(family = "gl_sans", face = "plain",
+                                     size = rel(1.35), hjust = 0,
+                                     margin = margin(b = 4)),
+        plot.subtitle = element_text(family = "gl_sans", color = gl$text_muted,
+                                     size = rel(1.0), hjust = 0,
+                                     margin = margin(b = 10)),
+        plot.caption  = element_text(family = "gl_mono", color = gl$text_muted,
+                                     size = rel(0.75), hjust = 1,
+                                     margin = margin(t = 8)),
+        axis.title    = element_text(family = "gl_mono", color = gl$text_muted,
+                                     size = rel(0.85)),
+        axis.title.x  = element_text(margin = margin(t = 6)),
+        axis.title.y  = element_text(margin = margin(r = 6), angle = 90),
+        axis.text     = element_text(family = "gl_sans", color = gl$text_dark,
+                                     size = rel(0.85)),
+        legend.title  = element_text(family = "gl_mono", color = gl$text_muted,
+                                     size = rel(0.8)),
+        legend.text   = element_text(family = "gl_sans", size = rel(0.85)),
+        strip.text    = element_text(family = "gl_mono", color = gl$text_dark,
+                                     size = rel(0.85))
+    )
+}
+
+theme_set(theme_gl())
+
+options(
+    ggplot2.discrete.colour = gl$palette,
+    ggplot2.discrete.fill   = gl$palette
+)
+
+# ---- Figure sizes (from framework.md) ----------------------------------------
+
+gl_fig <- list(
+    full        = list(w = 6.5,   h = 4.0),
+    full_tall   = list(w = 6.5,   h = 6.0),
+    full_square = list(w = 6.5,   h = 6.5),
+    major       = list(w = 4.278, h = 4.0),
+    half        = list(w = 3.167, h = 3.0),
+    half_tall   = list(w = 3.167, h = 5.0)
+)
+
+save_fig <- function(name, filename, plot = last_plot(), dpi = 300) {
+    sz <- gl_fig[[name]]
+    ggsave(file.path("imgs", filename), plot = plot,
+           width = sz$w, height = sz$h, dpi = dpi)
+}
+
+# ---- Data --------------------------------------------------------------------
+
+macro_df <- read_parquet("~/dev/shared-data/growth-lab/glmacro_master_alldata.parquet")
+
+main_country     <- "PAK"
+main_comparators <- c("BGD", "EGY", "IND", "IDN", "LKA", "MAR", "VNM")
+
+```
+
+# Introduction
+
+Pakistan stands at a critical juncture. After decades of boom-bust cycles
+driven by recurring balance-of-payments crises, the country has entered a new
+stabilization phase under its latest IMF program. But stabilization alone is
+not a growth strategy. Without a deliberate shift toward export-led growth and
+productive diversification, Pakistan risks returning to the same pattern that
+has kept its per capita income stagnant relative to peers.
+
+This brief presents a diagnostic overview of Pakistan's macroeconomic
+trajectory, drawing on data from the IMF, World Bank, and the Atlas of
+Economic Complexity. It accompanies the Growth Lab's proposed 18-month
+engagement with the Ministry of Finance.
+
+> **Key finding:** Pakistan's growth above 2% per capita has historically been
+> associated with current account deterioration — a structural constraint that
+> can only be relaxed through export diversification.
+
+# The Macro-Fiscal Picture
+
+## Foreign reserves: a recurring vulnerability
+
+Pakistan's foreign exchange reserves have repeatedly fallen below the
+three-month-of-imports threshold considered the minimum for macroeconomic
+stability. Each episode triggers emergency borrowing, IMF programs, and
+contractionary adjustment.
+
+```{r fig_reserves}
+
+macro_df |>
+    filter(countrycodeiso == main_country, year > 1990) |>
+    rename(reserves = wdi_fi_res_totl_mo) |>
+    filter(!is.na(reserves)) |>
+    ggplot(aes(x = year, y = reserves)) +
+    geom_hline(yintercept = 3, linetype = "dashed", color = "grey") +
+    geom_line() +
+    geom_point() +
+    labs(
+        title = "Reserves in months of imports",
+        subtitle = "Pakistan, 1990–2023. Dashed line = 3-month threshold.",
+        x = NULL, y = "Months of imports",
+        caption = "Source: World Bank WDI"
+    )
+
+save_fig("full", "reserves.png")
+
+```
+
+**Figure 1.** Pakistan's foreign exchange reserves in months of imports, 1990–2023.
+
+*Source: World Bank World Development Indicators.*
+
+## Growth and the current account constraint
+
+The scatter plot below illustrates the core structural problem: years of
+higher per capita GDP growth are associated with a worsening current account
+balance. This "growth–current account trade-off" is not inevitable — countries
+that diversify their exports can grow without generating unsustainable external
+deficits.
+
+```{r fig_gdp_comparators}
+
+comparator_set <- c(main_country, main_comparators)
+
+gdppc <- macro_df |>
+    filter(countrycodeiso %in% comparator_set,
+           year %in% c(2000, 2023),
+           !is.na(wdi_ny_gdp_pcap_kd)) |>
+    select(countrycodeiso, year, gdppc = wdi_ny_gdp_pcap_kd) |>
+    pivot_wider(names_from = year, values_from = gdppc, names_prefix = "y") |>
+    mutate(
+        growth = (y2023 / y2000) - 1,
+        is_pak = countrycodeiso == main_country
+    )
+
+gdppc |>
+    ggplot(aes(x = y2000, y = growth, label = countrycodeiso)) +
+    geom_point() +
+    geom_point(data = . %>% filter(is_pak), color = "red", size = 3) +
+    geom_text_repel() +
+    scale_x_log10(labels = dollar) +
+    scale_y_continuous(labels = percent) +
+    labs(
+        title = "GDP per capita growth, 2000–2023",
+        subtitle = "Pakistan vs regional comparators",
+        x = "GDP per capita, 2000 (constant USD, log scale)",
+        y = "Cumulative growth, 2000–2023",
+        caption = "Source: World Bank WDI"
+    )
+
+save_fig("full", "gdp_comparators.png")
+
+```
+
+**Figure 2.** GDP per capita growth (2000–2023) against initial income level.
+Pakistan highlighted in red.
+
+*Source: World Bank WDI. Authors' calculations.*
+
+## Private credit: a symptom of shallow finance
+
+```{r fig_credit_comparison}
+
+credit <- macro_df |>
+    filter(countrycodeiso %in% comparator_set,
+           year == 2022,
+           !is.na(wdi_fs_ast_prvt_gd_zs)) |>
+    select(countrycodeiso, credit = wdi_fs_ast_prvt_gd_zs) |>
+    mutate(is_pak = countrycodeiso == main_country) |>
+    arrange(desc(credit))
+
+credit |>
+    ggplot(aes(x = reorder(countrycodeiso, credit), y = credit)) +
+    geom_col() +
+    geom_col(data = . %>% filter(is_pak), fill = "red") +
+    coord_flip() +
+    scale_y_continuous(labels = percent_format(scale = 1)) +
+    labs(
+        title = "Domestic credit to private sector, 2022",
+        subtitle = "Pakistan vs comparators (% of GDP)",
+        x = NULL, y = "% of GDP",
+        caption = "Source: World Bank WDI"
+    )
+
+save_fig("half_tall", "credit_comparison.png")
+
+```
+
+**Figure 3.** Domestic credit to the private sector as a share of GDP,
+Pakistan vs comparators.
+
+*Source: World Bank WDI.*
+
+# Toward a Growth Strategy
+
+The Growth Lab's engagement with Pakistan is structured around two pillars:
+
+| Pillar                          | Focus                                    | Timeline    |
+|---------------------------------|------------------------------------------|-------------|
+| Macro-Fiscal Framework          | Fiscal space, debt sustainability, SBP   | Months 1–8  |
+| Export Diversification Strategy  | Product space, complexity, industrial policy | Months 4–18 |
+
+Both pillars are supported by an **Action-Learning Team** model that pairs
+Growth Lab researchers with counterparts in the Ministry of Finance, the
+Planning Commission, and the State Bank of Pakistan.
+
+> The goal is not to produce a report that sits on a shelf, but to build
+> analytical capacity within government institutions that outlasts the
+> engagement itself.
+
+# References

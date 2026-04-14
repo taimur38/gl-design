@@ -1,0 +1,114 @@
+#!/bin/bash
+# md2docx - Convert markdown to Word with citations and cross-references
+#
+# Usage:
+#   md2docx input.md                       → produces input.docx (default theme)
+#   md2docx --theme gl input.md            → produces input.docx (GL theme)
+#   md2docx input.md output.docx           → produces output.docx at specified path
+#   md2docx --theme gl input.md out.docx   → GL theme, custom output path
+#   md2docx --list-themes                  → list available themes
+#
+# Requires a references.bib in the same directory as the input file.
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+TEMPLATES_DIR="$SCRIPT_DIR/../assets/templates"
+CSL="$SCRIPT_DIR/../assets/citation-style.csl"
+LUA_FILTER="$SCRIPT_DIR/growthlabbify.lua"
+
+THEME="default"
+
+# Parse arguments
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --theme)
+            THEME="$2"
+            shift 2
+            ;;
+        --list-themes)
+            echo "Available themes:"
+            for t in "$TEMPLATES_DIR"/*.docx; do
+                name="$(basename "$t" .docx)"
+                echo "  $name"
+            done
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$1")
+            shift
+            ;;
+    esac
+done
+
+if [ ${#POSITIONAL[@]} -eq 0 ]; then
+    echo "Usage: md2docx [--theme NAME] input.md [output.docx]"
+    echo "       md2docx --list-themes"
+    exit 1
+fi
+
+INPUT="${POSITIONAL[0]}"
+OUTPUT="${POSITIONAL[1]:-${INPUT%.md}.docx}"
+
+# Resolve template: check templates/ directory first, then fall back to legacy path
+TEMPLATE="$TEMPLATES_DIR/$THEME.docx"
+if [ ! -f "$TEMPLATE" ]; then
+    # Fall back to the legacy single-template location
+    LEGACY="$SCRIPT_DIR/../assets/template.docx"
+    if [ "$THEME" = "default" ] && [ -f "$LEGACY" ]; then
+        TEMPLATE="$LEGACY"
+    else
+        echo "Error: Theme '$THEME' not found."
+        echo "Available themes:"
+        for t in "$TEMPLATES_DIR"/*.docx; do
+            echo "  $(basename "$t" .docx)"
+        done
+        exit 1
+    fi
+fi
+
+INPUT_DIR="$(dirname "$INPUT")"
+BIB="$INPUT_DIR/references.bib"
+
+# Check if local bib file exists
+if [ ! -f "$BIB" ]; then
+    echo "Error: No references.bib found in $INPUT_DIR"
+    echo "Please create or copy a references.bib file to the same directory as your markdown file."
+    exit 1
+fi
+
+TEMPLATE_ARG="--reference-doc=$TEMPLATE"
+
+pandoc "$INPUT" \
+  --from=markdown \
+  --to=docx \
+  $TEMPLATE_ARG \
+  --bibliography="$BIB" \
+  --filter pandoc-crossref \
+  --citeproc \
+  --csl="$CSL" \
+  --number-sections \
+  --toc \
+  --toc-depth=3 \
+  --lua-filter="$LUA_FILTER" \
+  -o "$OUTPUT"
+
+# Suppress Word's "update fields" prompt by patching settings.xml in the output
+python3 -c "
+import zipfile, shutil, sys, re
+src = sys.argv[1]
+tmp = src + '.tmp'
+with zipfile.ZipFile(src, 'r') as zin, zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
+    for item in zin.infolist():
+        data = zin.read(item.filename)
+        if item.filename == 'word/settings.xml':
+            text = data.decode('utf-8')
+            # Remove any existing updateFields element
+            text = re.sub(r'<w:updateFields[^/]*/>', '', text)
+            # Insert updateFields=false before closing tag
+            text = text.replace('</w:settings>', '<w:updateFields w:val=\"false\"/></w:settings>')
+            data = text.encode('utf-8')
+        zout.writestr(item, data)
+shutil.move(tmp, src)
+" "$OUTPUT"
+
+echo "Created: $OUTPUT (theme: $THEME)"
