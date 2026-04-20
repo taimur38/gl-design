@@ -20,6 +20,8 @@ playground/           # Working example: Pakistan FM brief
 skills/
   md2docx/            # Markdown → Word conversion skill (pandoc + Lua filters)
   chart-audit/        # Visual audit checklist for ggplot charts against framework
+  gl-ggplot/          # Skill: GL design system for R/ggplot2 (theme, scales, sizes)
+    assets/theme_gl.R  # Sourceable R file — the portable runtime
 
 # Visual explainers (open in browser)
 framework-visual.html           # Interactive walkthrough of the design system
@@ -44,15 +46,24 @@ All values are defined in `framework.md`. Quick reference:
 
 ## ggplot conventions
 
-The theme (`theme_gl`) is already set at the start of R documents — do not set it per graph. Minimize per-chart aesthetic overrides and let the theme do the work.
+Every R script that produces charts should start with:
 
+```r
+source("~/dev/gl-design/skills/gl-ggplot/assets/theme_gl.R")
+gl_setup()
+```
+
+This loads fonts, sets `theme_gl(mode = "report")`, and configures default color/fill palettes. See `skills/gl-ggplot/SKILL.md` for full usage guide.
+
+Key rules (the skill has the complete reference):
+
+- **Do not override the theme per chart** — only adjust `legend.position` or `guides()` when needed
 - **Highlight color**: always use `highlight` variable (`#C64646`), never `"red"`
 - **Highlighted elements**: paint the geom twice — once for all data, once filtered with `color = highlight` and larger `size`
-- **Figure sizes**: use named sizes from `gl_fig` list: `full`, `full_tall`, `full_square`, `major`, `half`, `half_tall`
-- **Save**: `save_fig("full", "filename.png")` — outputs to `imgs/` at 300 DPI
-- **Default dimensions**: width=9, height=6 for standalone saves; use `gl_fig` sizes for report figures
+- **Color scales**: default palette applies automatically; use `scale_color_gl("hs_sectors")` / `scale_fill_gl("hs_sectors")` for named palettes
+- **Figure sizes**: use `save_fig("full", "filename.png")` with named sizes: `full`, `full_tall`, `full_square`, `major`, `half`, `half_tall`, `slide`
 - **Log scale**: use `scale_x_log10()` when GDP per capita is on the x-axis
-- **Mode**: `theme_gl(mode = "report")` suppresses title/subtitle/caption (document handles them)
+- **Mode**: `gl_setup()` defaults to report mode (suppresses title/subtitle/caption). Use `gl_setup(mode = "slide")` for standalone charts.
 - **Legend**: report mode defaults to bottom-left. Override to `legend.position = "right"` only for charts with >8 categories. Use `guide_legend(nrow = 2)` if bottom labels clip.
 - **Chart audit**: after generating charts, run the `skills/chart-audit/` checklist to catch visual issues
 

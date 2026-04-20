@@ -13,7 +13,9 @@ Changes:
   - Footer: page number in JetBrains Mono
 
 Usage:
-    python3 build_gl_template.py
+    python3 build_gl_template.py              # builds gl-report.docx
+    python3 build_gl_template.py --editorial  # builds gl-report-editorial.docx
+    python3 build_gl_template.py --all        # builds both
 """
 
 import zipfile
@@ -22,9 +24,8 @@ import re
 import sys
 import os
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SOURCE = os.path.expanduser("~/dev/taimur-skills/md2docx/assets/template.docx")
-OUTPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gl-report.docx")
-TMP = OUTPUT + ".tmp"
 
 # ---------------------------------------------------------------------------
 # GL Design Tokens
@@ -45,7 +46,21 @@ GL_COLORS = {
     "folHlink": "7c7c7c",  # Followed link = muted
 }
 
-# Font: Source Sans 3 for both heading and body
+# Typography variants
+VARIANTS = {
+    "default": {
+        "major": "Source Sans 3",
+        "minor": "Source Sans 3",
+        "output": "gl-report.docx",
+    },
+    "editorial": {
+        "major": "Crimson Pro",
+        "minor": "Source Sans 3",
+        "output": "gl-report-editorial.docx",
+    },
+}
+
+# Font: Source Sans 3 for both heading and body (default, overridden per variant)
 MAJOR_FONT = "Source Sans 3"
 MINOR_FONT = "Source Sans 3"
 
@@ -278,6 +293,7 @@ def transform_styles_xml(content):
         '</w:rPr></w:rPrDefault>'
         '<w:pPrDefault><w:pPr>'
         '<w:spacing w:after="120" w:line="300" w:lineRule="auto"/>'  # ~15pt leading at 11pt
+        '<w:jc w:val="both"/>'  # Justified text
         '</w:pPr></w:pPrDefault>'
         '</w:docDefaults>',
         content,
@@ -365,13 +381,53 @@ def transform_header_xml(content):
 # Main: unzip → transform → rezip
 # ---------------------------------------------------------------------------
 
-def main():
-    if not os.path.exists(SOURCE):
-        print(f"Error: Source template not found at {SOURCE}")
-        sys.exit(1)
+def apply_variant(variant_name):
+    """Set the global MAJOR_FONT/MINOR_FONT and rebuild STYLES for a variant."""
+    global MAJOR_FONT, MINOR_FONT, STYLES, CHAR_STYLES
+
+    v = VARIANTS[variant_name]
+    MAJOR_FONT = v["major"]
+    MINOR_FONT = v["minor"]
+
+    STYLES = {
+        "Normal":         (MINOR_FONT, 22, "333333", False, False, None, 120),
+        "Heading1":       (MAJOR_FONT, 43, "333333", True,  False, 480, 120),
+        "Heading2":       (MAJOR_FONT, 34, "333333", True,  False, 360, 120),
+        "Heading3":       (MAJOR_FONT, 28, "333333", True,  False, 240, 120),
+        "Heading4":       (MAJOR_FONT, 22, "333333", True,  False, 240, 120),
+        "Heading5":       (MAJOR_FONT, 22, "7c7c7c", False, False, 240, 120),
+        "Heading6":       (MAJOR_FONT, 22, "7c7c7c", False, True,  240, 120),
+        "Title":          (MAJOR_FONT, 52, "333333", True,  False, None, 120),
+        "Subtitle":       (MAJOR_FONT, 32, "7c7c7c", False, False, None, 240),
+        "Quote":          (MINOR_FONT, 22, "7c7c7c", False, True,  120, 120),
+        "IntenseQuote":   (MINOR_FONT, 22, "266798", False, True,  120, 120),
+        "FigureTitle":    (MINOR_FONT, 22, "333333", True,  False, 240, 60),
+        "FigureSource":   ("JetBrains Mono", 17, "7c7c7c", False, True, 60, 240),
+        "Source":         ("JetBrains Mono", 17, "7c7c7c", False, True, 60, 240),
+        "Caption":        ("JetBrains Mono", 17, "7c7c7c", False, False, 60, 120),
+        "FootnoteText":   (MINOR_FONT, 18, "7c7c7c", False, False, None, 60),
+        "Header":         ("JetBrains Mono", 16, "7c7c7c", False, False, None, None),
+        "Footer":         ("JetBrains Mono", 16, "7c7c7c", False, False, None, None),
+        "TOCHeading":     (MAJOR_FONT, 34, "333333", True,  False, 480, 120),
+        "TOC1":           (MINOR_FONT, 22, "333333", True,  False, 120, 60),
+        "TOC2":           (MINOR_FONT, 22, "333333", False, False, 60, 60),
+        "TOC3":           (MINOR_FONT, 20, "7c7c7c", False, False, 60, 60),
+    }
+
+    CHAR_STYLES = {}
+    for sid, vals in list(STYLES.items()):
+        CHAR_STYLES[sid + "Char"] = vals
+
+
+def build_variant(variant_name):
+    """Build a single template variant."""
+    apply_variant(variant_name)
+
+    output = os.path.join(SCRIPT_DIR, VARIANTS[variant_name]["output"])
+    tmp = output + ".tmp"
 
     with zipfile.ZipFile(SOURCE, 'r') as zin, \
-         zipfile.ZipFile(TMP, 'w', zipfile.ZIP_DEFLATED) as zout:
+         zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
 
         for item in zin.infolist():
             data = zin.read(item.filename)
@@ -396,8 +452,22 @@ def main():
 
             zout.writestr(item, data)
 
-    shutil.move(TMP, OUTPUT)
-    print(f"Built: {OUTPUT}")
+    shutil.move(tmp, output)
+    print(f"Built: {output}")
+
+
+def main():
+    if not os.path.exists(SOURCE):
+        print(f"Error: Source template not found at {SOURCE}")
+        sys.exit(1)
+
+    if "--all" in sys.argv:
+        for name in VARIANTS:
+            build_variant(name)
+    elif "--editorial" in sys.argv:
+        build_variant("editorial")
+    else:
+        build_variant("default")
 
 
 if __name__ == "__main__":

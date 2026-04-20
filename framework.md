@@ -7,11 +7,11 @@
 | Page size      | 8.5 × 11 in      | 8.27 × 11.69 in    |
 | Top margin     | 1.0 in            | 1.0 in              |
 | Bottom margin  | 1.0 in            | 1.0 in              |
-| Inside margin  | 1.25 in           | 1.25 in             |
-| Outside margin | 0.75 in           | 0.75 in             |
+| Left margin    | 1.0 in            | 1.0 in              |
+| Right margin   | 1.0 in            | 1.0 in              |
 | **Live area**  | **6.5 × 9.0 in** | **6.27 × 9.69 in** |
 
-Inside margins are wider to allow for binding. The default target is **US
+All margins are 1.0" for a symmetric layout. The default target is **US
 Letter**; all figure sizes below are specified for the 6.5" live width.
 
 ## 2. Grid System
@@ -61,6 +61,7 @@ grid and has a short name for use in `ggsave()`.
 | `major`      | 4.278"  | 4.0"    | ~1.07:1  | 4 col × 3.2 v-mod      | Primary chart with text beside it       |
 | `half`       | 3.167"  | 3.0"    | ~1.06:1  | 3 col × 2.4 v-mod      | Side-by-side pair                       |
 | `half_tall`  | 3.167"  | 5.0"    | ~0.63:1  | 3 col × 4 v-mod        | Portrait figure, ranked bar chart       |
+| `slide`      | 10"     | 5.625"  | 16:9     | —                       | Full slide chart (Marp, PowerPoint)     |
 
 ### R helper
 
@@ -72,7 +73,8 @@ gl_fig <- list(
     full_square = list(w = 6.5,  h = 6.5),
     major       = list(w = 4.278, h = 4.0),
     half        = list(w = 3.167, h = 3.0),
-    half_tall   = list(w = 3.167, h = 5.0)
+    half_tall   = list(w = 3.167, h = 5.0),
+    slide       = list(w = 10,    h = 5.625)
 )
 
 save_fig <- function(name, filename, plot = last_plot(), dpi = 300) {
