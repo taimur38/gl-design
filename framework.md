@@ -2,17 +2,24 @@
 
 ## 1. Page Setup
 
-| Property       | US Letter        | A4 (international) |
-|----------------|------------------|---------------------|
-| Page size      | 8.5 × 11 in      | 8.27 × 11.69 in    |
-| Top margin     | 1.0 in            | 1.0 in              |
-| Bottom margin  | 1.0 in            | 1.0 in              |
-| Left margin    | 1.0 in            | 1.0 in              |
-| Right margin   | 1.0 in            | 1.0 in              |
-| **Live area**  | **6.5 × 9.0 in** | **6.27 × 9.69 in** |
+| Property       | US Letter         | A4 (international)  |
+|----------------|-------------------|----------------------|
+| Page size      | 8.5 × 11 in       | 8.27 × 11.69 in     |
+| Top margin     | 1.0 in            | 1.0 in               |
+| Bottom margin  | 1.25 in           | 1.25 in              |
+| Left margin    | 1.0 in            | 1.0 in               |
+| Right margin   | 1.0 in            | 1.0 in               |
+| **Live area**  | **6.5 × 8.75 in** | **6.27 × 9.44 in**  |
 
-All margins are 1.0" for a symmetric layout. The default target is **US
-Letter**; all figure sizes below are specified for the 6.5" live width.
+Horizontal margins are symmetric at 1.0". The bottom margin is 1.25" — slightly
+larger than the top — for three converging reasons: (1) it hosts page numbers
+and footnotes without crowding the body, (2) it optically centers the text
+block on the page (a text block with equal vertical margins looks like it's
+sinking), and (3) it makes the live height resolve cleanly into **exactly 7 vertical
+modules** (8.75" / 1.25" = 7), rather than 7.2 with a residual.
+
+The default target is **US Letter**; all figure sizes below are specified for
+the 6.5" live width.
 
 ## 2. Grid System
 
@@ -20,7 +27,7 @@ A **6-column modular grid** governs horizontal placement of all elements.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│ 1.25"│  col  │g│  col  │g│  col  │g│  col  │g│  col  │g│  col  │0.75"│
+│ 1.0" │  col  │g│  col  │g│  col  │g│  col  │g│  col  │g│  col  │ 1.0" │
 │margin│ 0.944"│ │ 0.944"│ │ 0.944"│ │ 0.944"│ │ 0.944"│ │ 0.944"│margin│
 └─────────────────────────────────────────────────────────┘
        gutter (g) = 0.167"  ×  5 gutters = 0.833"
@@ -39,14 +46,18 @@ A **6-column modular grid** governs horizontal placement of all elements.
 
 The vertical grid is based on the body text baseline: **11pt text on 15pt
 leading** = 0.208" per baseline unit. Vertical modules are **6 baselines =
-1.250"**.
+1.250"**. The 8.75" live height is **exactly 7 modules** tall — so just as
+6 columns address every horizontal position, 7 modules address every vertical
+position, and any element on the page lives in a `(column-span × module-span)`
+cell.
 
-| V-modules | Height  | Use                                        |
-|-----------|---------|--------------------------------------------|
-| 3         | 3.750"  | Compact landscape figure                   |
-| 4         | 5.000"  | Standard figure height                     |
-| 5         | 6.250"  | Tall figure / stacked panel                |
-| 6         | 7.500"  | Near-full-page figure                      |
+| V-modules | Height  | Use                                          |
+|-----------|---------|----------------------------------------------|
+| 3         | 3.750"  | Compact landscape figure                     |
+| 4         | 5.000"  | Standard figure height                       |
+| 5         | 6.250"  | Tall figure / stacked panel                  |
+| 6         | 7.500"  | Near-full-page figure (leaves 1 mod chrome)  |
+| 7         | 8.750"  | Full-bleed figure (rare — no chrome room)    |
 
 ## 3. Named Figure Sizes
 
@@ -237,8 +248,9 @@ For trade/product data, use the official Atlas HS sector colors defined in
 ## 7. Quick Reference Card
 
 ```
-PAGE:   US Letter, margins 1.25/0.75/1.0/1.0 (in/out/top/bot)
+PAGE:   US Letter, margins 1.0/1.0/1.0/1.25 (L/R/T/B) → live 6.5 × 8.75"
 GRID:   6 columns × 0.944" + 5 gutters × 0.167" = 6.5" live width
+        7 modules × 1.25" = 8.75" live height
 FONTS:  Source Sans 3 (body/heads) + JetBrains Mono (captions/data)
 BODY:   11pt / 15pt leading
 SCALE:  × 1.25 major third → 11 → 14 → 17 → 21.5

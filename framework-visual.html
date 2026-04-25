@@ -147,9 +147,9 @@
     position: relative;
     overflow: hidden;
     display: grid;
-    /* equal margins: 1.0 / 6.5 / 1.0 = 8.5 total */
+    /* horizontal: 1.0 / 6.5 / 1.0 = 8.5" · vertical: 1.0 / 8.75 / 1.25 = 11" */
     grid-template-columns: 1fr 6.5fr 1fr;
-    grid-template-rows: 1fr 9fr 1fr; /* top margin / live / bottom margin */
+    grid-template-rows: 1fr 8.75fr 1.25fr; /* top margin / live / bottom margin */
   }
   .margin-inside {
     grid-column: 1;
@@ -837,6 +837,590 @@
     margin-left: auto;
     margin-right: auto;
   }
+
+  /* ── Baseline derivation ── */
+  .baseline-derivation {
+    display: flex;
+    gap: 48px;
+    align-items: stretch;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 40px;
+    margin-bottom: 48px;
+  }
+  .deriv-card {
+    position: relative;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 96px 28px 96px;
+    flex-shrink: 0;
+  }
+  .deriv-card .deriv-line {
+    font-size: 15px;
+    line-height: 22px;
+    color: var(--text);
+    white-space: nowrap;
+    border-bottom: 1px dashed rgba(38,103,152,0.4);
+  }
+  .deriv-dim-total-bracket {
+    position: absolute;
+    left: 22px;
+    top: 28px;
+    bottom: 28px;
+    width: 7px;
+    border-left: 1.5px solid var(--brand);
+    border-top: 1.5px solid var(--brand);
+    border-bottom: 1.5px solid var(--brand);
+  }
+  .deriv-dim-total-label {
+    position: absolute;
+    left: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--brand);
+    background: white;
+    padding: 3px 7px;
+    border-radius: 2px;
+    line-height: 1.25;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .deriv-dim-single-bracket {
+    position: absolute;
+    right: 22px;
+    top: 94px; /* padding 28 + 3 line-heights of 22 */
+    width: 7px;
+    height: 22px;
+    border-right: 1.5px solid var(--highlight);
+    border-top: 1.5px solid var(--highlight);
+    border-bottom: 1.5px solid var(--highlight);
+  }
+  .deriv-dim-single-label {
+    position: absolute;
+    right: 36px;
+    top: 94px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--highlight);
+    background: white;
+    padding: 0 7px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .deriv-math {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+  }
+  .deriv-eq {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .deriv-eq strong {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  .deriv-caption {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+
+  /* ── Vertical twin: module rows on the page ── */
+  .module-rows {
+    flex: 1;
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+    gap: 2px;
+    padding: 0;
+  }
+  .module-row {
+    background: rgba(38,103,152,0.08);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+  }
+  .module-num,
+  .module-dim {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--brand);
+    opacity: 0.75;
+  }
+
+  /* ── Module spans (vertical analogue of column spans) ── */
+  .mod-span-demos {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    margin-bottom: 48px;
+  }
+  .mod-span-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+  }
+  .mod-span-track {
+    width: 86px;
+    height: 200px; /* represents max 6 modules = 7.5" */
+    background: var(--bg);
+    border-radius: 4px;
+    display: flex;
+    align-items: flex-end;
+    padding: 4px;
+  }
+  .mod-span-bar {
+    width: 100%;
+    background: var(--brand);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    color: white;
+    transition: height 0.4s ease;
+  }
+  .mod-span-bar .mod-count {
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .mod-span-bar .mod-height {
+    font-size: 10px;
+    opacity: 0.9;
+  }
+  .mod-span-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .mod-span-use {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    max-width: 150px;
+    line-height: 1.4;
+  }
+
+  /* ── Fused 2D grid ── */
+  .live-area-fused {
+    grid-column: 2;
+    grid-row: 2;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    column-gap: 2.56%;
+    row-gap: 0;
+    padding: 0;
+  }
+  .live-area-fused::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(38,103,152,0.28) 0,
+      rgba(38,103,152,0.28) 1px,
+      transparent 1px,
+      transparent calc(100% / 7)
+    );
+    z-index: 1;
+  }
+  .fused-col-band {
+    grid-row: 1 / -1;
+    background: rgba(38,103,152,0.05);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .placed-fig {
+    position: relative;
+    background: rgba(38,103,152,0.18);
+    border: 1px solid var(--brand);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--brand);
+    text-align: center;
+    padding: 4px;
+    gap: 2px;
+    z-index: 3;
+    line-height: 1.3;
+  }
+  .placed-fig .pf-name {
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .placed-fig .pf-dim {
+    font-size: 9px;
+    opacity: 0.85;
+  }
+  /* Typographic slots on the fused grid — bars pin to the top of their module, whitespace below shows the real breathing room */
+  .placed-fig.typ-h1,
+  .placed-fig.typ-h2,
+  .placed-fig.typ-title,
+  .placed-fig.typ-caption,
+  .placed-fig.typ-body {
+    background: transparent;
+    border: 1px dashed rgba(124,124,124,0.45);
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 7px 10px;
+  }
+  /* Each text element sits inside its line-box. Within the line-box the ink (cap-height)
+     is positioned asymmetrically — small top half-leading, larger gap below baseline
+     for descender + bottom half-leading. This is why headings appear to "hang high"
+     in their module: the ink is in the upper portion of a line-box that itself
+     occupies only part of the module. */
+  .typ-linebox {
+    position: relative;
+    width: 100%;
+  }
+  .typ-linebox .typ-bar {
+    /* Bar represents the em-box — the full vertical extent the font reserves
+       (ascender-to-descender). The baseline overlay marks where the cap meets
+       the descender zone, so the asymmetry of ink-above vs ink-below the
+       baseline is visible. */
+    position: absolute;
+    top: 14%;          /* top half-leading */
+    left: 0;
+    height: 72%;       /* em-box = font-size within line-height */
+    width: 100%;
+  }
+  .typ-linebox::after {
+    /* Baseline: sits ~75% down the em-box (= cap-height / font-size). */
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    top: 68%;          /* 14% (top leading) + 54% (cap-height ≈ 0.75 × em-box) */
+    border-bottom: 1px dotted rgba(255,255,255,0.75);
+    z-index: 1;
+  }
+  .placed-fig.typ-h1 .typ-linebox { height: 33%; width: 58%; }
+  .placed-fig.typ-h1 .typ-bar {
+    background: var(--text);
+    border-radius: 2px;
+    opacity: 0.85;
+  }
+  .placed-fig.typ-h2 .typ-linebox { height: 25%; width: 45%; }
+  .placed-fig.typ-h2 .typ-bar {
+    background: var(--text);
+    border-radius: 2px;
+    opacity: 0.78;
+  }
+  .placed-fig.typ-title .typ-linebox { height: 17%; width: 70%; }
+  .placed-fig.typ-title .typ-bar {
+    background: var(--text);
+    border-radius: 1px;
+    opacity: 0.65;
+  }
+  .placed-fig.typ-caption .typ-linebox { height: 14%; width: 85%; }
+  .placed-fig.typ-caption .typ-bar {
+    background: var(--muted);
+    border-radius: 1px;
+    opacity: 0.75;
+  }
+  /* Body: stacked bars represent lines of prose. The asymmetric line-box treatment
+     is reserved for single-line headings where the metric asymmetry is legible;
+     at body scale the bars are too small for it to read. */
+  .placed-fig.typ-body { gap: 5px; }
+  .placed-fig.typ-body .typ-linebox {
+    /* Body lineboxes behave as plain stacked bars, not a line-box construction. */
+    height: 3px;
+  }
+  .placed-fig.typ-body .typ-bar {
+    position: static;
+    height: 100%;
+    background: var(--text);
+    border-radius: 1px;
+    opacity: 0.5;
+  }
+  .placed-fig.typ-body .typ-linebox::after {
+    display: none;
+  }
+  /* Figure + title: tightly coupled group — title pinned to top, figure fills the rest */
+  .fig-coupled {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 7px 10px 0 10px;
+    z-index: 3;
+    position: relative;
+  }
+  .fig-coupled-title {
+    height: 8px;
+    width: 32%;
+    background: var(--text);
+    border-radius: 1px;
+    opacity: 0.65;
+  }
+  .fig-coupled-block {
+    flex: 1;
+    background: rgba(38,103,152,0.18);
+    border: 1px solid var(--brand);
+    border-radius: 2px;
+    margin: 0 -10px; /* break back out to full cell width */
+  }
+
+  /* Fused page + side annotation rail */
+  .fused-page-wrap {
+    display: flex;
+    gap: 24px;
+    max-width: 660px;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+  .fused-page-wrap .page-frame {
+    flex: 0 1 440px;
+    margin: 0;
+  }
+  .annot-rail {
+    flex: 1 1 180px;
+    display: grid;
+    grid-template-rows: 1fr 8.75fr 1.25fr;
+    min-width: 0;
+  }
+  .annot-rail-spacer { /* top-margin & bottom-margin spacers — keep rail aligned with page */ }
+  .annot-live {
+    grid-row: 2;
+    display: grid;
+    grid-template-rows: repeat(7, 1fr);
+  }
+  .annot {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    line-height: 1.35;
+    color: var(--brand);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 16px;
+    position: relative;
+  }
+  .annot::before {
+    /* Leader line pointing back toward the page */
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 10px;
+    height: 1px;
+    background: var(--brand);
+    opacity: 0.6;
+  }
+  .annot::after {
+    /* Dot at the tip */
+    content: "";
+    position: absolute;
+    left: -3px;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    background: var(--brand);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0.85;
+  }
+  .annot .annot-name {
+    font-weight: 600;
+    color: var(--brand);
+  }
+  .annot .annot-dim {
+    font-size: 9px;
+    opacity: 0.75;
+  }
+  .annot-split > span {
+    display: block;
+    position: relative;
+  }
+  .annot-split > span + span {
+    margin-top: 4px;
+  }
+
+  /* ═══ Animated buildup: page → columns → modules ═══ */
+  .build-anim {
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 40px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .build-anim-caption {
+    text-align: center;
+    min-height: 20px;
+    margin-bottom: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--brand);
+    position: relative;
+    line-height: 1.4;
+  }
+  .build-anim-caption .cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    opacity: 0;
+  }
+  /* Part 1 — grid construction */
+  .build-anim.playing .cap-1 { animation: buildCapFade 1.6s ease 0s forwards; }
+  .build-anim.playing .cap-2 { animation: buildCapFade 1.5s ease 1.6s forwards; }
+  .build-anim.playing .cap-3 { animation: buildCapFade 1.5s ease 3.1s forwards; }
+  /* Part 2 — content snaps in */
+  .build-anim.playing .cap-4 { animation: buildCapFade 2.5s ease 4.6s forwards; }
+  .build-anim.playing .cap-5 { animation: buildCapFade 2.5s ease 7.1s forwards; }
+  .build-anim.playing .cap-6 { animation: buildCapLast 2.5s ease 9.6s forwards; }
+  @keyframes buildCapFade {
+    0%   { opacity: 0; transform: translateY(4px); }
+    15%  { opacity: 1; transform: translateY(0); }
+    80%  { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-4px); }
+  }
+  @keyframes buildCapLast {
+    0%   { opacity: 0; transform: translateY(4px); }
+    25%  { opacity: 1; transform: translateY(0); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  /* Content slides fade in/out on the grid sequentially */
+  .build-anim .slide-a,
+  .build-anim .slide-b,
+  .build-anim .slide-c {
+    opacity: 0;
+  }
+  .build-anim.playing .slide-a {
+    animation: buildSlideFade 2.5s ease 4.6s forwards;
+  }
+  .build-anim.playing .slide-b {
+    animation: buildSlideFade 2.5s ease 7.1s forwards;
+  }
+  .build-anim.playing .slide-c {
+    animation: buildSlideIn 2.5s ease 9.6s forwards;
+  }
+  @keyframes buildSlideFade {
+    0%   { opacity: 0; }
+    16%  { opacity: 1; }
+    84%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes buildSlideIn {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  .build-anim .page-frame {
+    margin: 0 auto;
+  }
+  /* Scoped: hide columns and module dividers until their phase */
+  .build-anim .fused-col-band { opacity: 0; }
+  .build-anim .live-area-fused::before { opacity: 0; }
+  .build-anim.playing .fused-col-band {
+    animation: buildFadeIn 0.8s ease 1.6s forwards;
+  }
+  .build-anim.playing .live-area-fused::before {
+    animation: buildFadeIn 0.8s ease 3.1s forwards;
+  }
+  @keyframes buildFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .build-anim-replay {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--brand);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    opacity: 0.85;
+    letter-spacing: 0.02em;
+    z-index: 10;
+  }
+  .build-anim-replay:hover { opacity: 1; }
+
+  /* ═══ Layout triad: three mini pages showing different content configurations ═══ */
+  .layout-triad {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 32px 24px;
+  }
+  .layout-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .layout-mini-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--brand);
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+  .layout-mini .page-frame {
+    max-height: 340px;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+  .layout-mini-desc {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.45;
+    max-width: 240px;
+  }
+  /* At mini scale the line-boxes auto-scale with the module. Only the body bars
+     (not linebox-based) and the fig-coupled-title need explicit sizing. */
+  .layout-mini .fig-coupled-title { height: 6px; }
+  .layout-mini .placed-fig.typ-body .typ-linebox { height: 2px; }
+  .layout-mini .placed-fig.typ-body { gap: 3px; }
+  .layout-mini .placed-fig,
+  .layout-mini .fig-coupled,
+  .layout-mini .fig-coupled-block {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .layout-mini .fig-coupled { gap: 4px; padding: 5px 6px 0 6px; }
+  .layout-mini .placed-fig.typ-h1,
+  .layout-mini .placed-fig.typ-h2,
+  .layout-mini .placed-fig.typ-title,
+  .layout-mini .placed-fig.typ-caption,
+  .layout-mini .placed-fig.typ-body {
+    padding: 5px 6px;
+  }
 </style>
 </head>
 <body>
@@ -873,9 +1457,134 @@
   <div class="section-title">The 6-column modular grid</div>
   <div class="section-desc">Every element on the page sits on a 6-column grid. Columns govern width, baseline-derived modules govern height. Nothing is placed arbitrarily.</div>
 
+  <!-- Animated buildup: page → columns → modules, then content snaps in -->
+  <div class="build-anim playing">
+    <button class="build-anim-replay" type="button" onclick="replayBuild(this)">replay &#x21bb;</button>
+    <div class="build-anim-caption">
+      <!-- Part 1 — construct the grid -->
+      <span class="cap cap-1">Start with the page &mdash; 1.0" top &amp; sides, 1.25" bottom &rarr; 6.5 &times; 8.75" live area</span>
+      <span class="cap cap-2">Divide horizontal space &mdash; 6 columns &times; 0.944" + 5 gutters &times; 0.167" = 6.5"</span>
+      <span class="cap cap-3">Divide vertical space &mdash; 7 modules &times; 1.25" = 8.75" &middot; 42 addressable cells</span>
+      <!-- Part 2 — content snaps in -->
+      <span class="cap cap-4">Layout A &mdash; H1, opening paragraph, full figure with title, full-width caption, body resumes below</span>
+      <span class="cap cap-5">Layout B &mdash; H2, paragraph, two half-width figures with their own captions, body below</span>
+      <span class="cap cap-6">Layout C &mdash; H2, longer body spanning 2 modules, figure with title, caption closes the page</span>
+    </div>
+    <div class="page-frame">
+      <div class="margin-inside">
+        <span class="page-annotation" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+      </div>
+      <div class="margin-top-area">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+      </div>
+      <div class="live-area-fused">
+        <div class="fused-col-band" style="grid-column:1;"></div>
+        <div class="fused-col-band" style="grid-column:2;"></div>
+        <div class="fused-col-band" style="grid-column:3;"></div>
+        <div class="fused-col-band" style="grid-column:4;"></div>
+        <div class="fused-col-band" style="grid-column:5;"></div>
+        <div class="fused-col-band" style="grid-column:6;"></div>
+
+        <!-- ─── Slide A: full figure under H1 ─── -->
+        <div class="placed-fig typ-h1 slide-a" style="grid-column:1 / 7; grid-row:1;">
+          <div class="typ-linebox"><div class="typ-bar"></div></div>
+        </div>
+        <div class="placed-fig typ-body slide-a" style="grid-column:1 / 7; grid-row:2;">
+          <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:92%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:64%;"></div></div>
+        </div>
+        <div class="fig-coupled slide-a" style="grid-column:1 / 7; grid-row:3 / 6;">
+          <div class="fig-coupled-title"></div>
+          <div class="fig-coupled-block"></div>
+        </div>
+        <div class="placed-fig typ-caption slide-a" style="grid-column:1 / 7; grid-row:6;">
+          <div class="typ-linebox"><div class="typ-bar"></div></div>
+        </div>
+        <div class="placed-fig typ-body slide-a" style="grid-column:1 / 7; grid-row:7;">
+          <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:88%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:71%;"></div></div>
+        </div>
+
+        <!-- ─── Slide B: paired halves under H2 ─── -->
+        <div class="placed-fig typ-h2 slide-b" style="grid-column:1 / 7; grid-row:1;">
+          <div class="typ-linebox"><div class="typ-bar"></div></div>
+        </div>
+        <div class="placed-fig typ-body slide-b" style="grid-column:1 / 7; grid-row:2;">
+          <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:92%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:58%;"></div></div>
+        </div>
+        <div class="fig-coupled slide-b" style="grid-column:1 / 4; grid-row:3 / 6;">
+          <div class="fig-coupled-title" style="width:48%;"></div>
+          <div class="fig-coupled-block"></div>
+        </div>
+        <div class="fig-coupled slide-b" style="grid-column:4 / 7; grid-row:3 / 6;">
+          <div class="fig-coupled-title" style="width:52%;"></div>
+          <div class="fig-coupled-block"></div>
+        </div>
+        <div class="placed-fig typ-caption slide-b" style="grid-column:1 / 4; grid-row:6;">
+          <div class="typ-linebox"><div class="typ-bar"></div></div>
+        </div>
+        <div class="placed-fig typ-caption slide-b" style="grid-column:4 / 7; grid-row:6;">
+          <div class="typ-linebox"><div class="typ-bar"></div></div>
+        </div>
+        <div class="placed-fig typ-body slide-b" style="grid-column:1 / 7; grid-row:7;">
+          <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:88%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:72%;"></div></div>
+        </div>
+
+        <!-- ─── Slide C: body-first, figure below ─── -->
+        <div class="placed-fig typ-h2 slide-c" style="grid-column:1 / 7; grid-row:1;">
+          <div class="typ-linebox"><div class="typ-bar"></div></div>
+        </div>
+        <div class="placed-fig typ-body slide-c" style="grid-column:1 / 7; grid-row:2 / 4;">
+          <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:92%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:94%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:88%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:96%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:90%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:93%;"></div></div>
+          <div class="typ-linebox"><div class="typ-bar" style="width:62%;"></div></div>
+        </div>
+        <div class="fig-coupled slide-c" style="grid-column:1 / 7; grid-row:4 / 7;">
+          <div class="fig-coupled-title"></div>
+          <div class="fig-coupled-block"></div>
+        </div>
+        <div class="placed-fig typ-caption slide-c" style="grid-column:1 / 7; grid-row:7;">
+          <div class="typ-linebox"><div class="typ-bar"></div></div>
+        </div>
+      </div>
+      <div class="margin-bottom-area">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.25"</span>
+      </div>
+      <div class="margin-outside">
+        <span class="page-annotation" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+      </div>
+    </div>
+  </div>
+
   <div class="page-demo">
     <div style="text-align:center;margin-bottom:16px;">
-      <span class="annotation">US Letter &middot; 8.5 &times; 11 in &middot; Equal 1.0" margins</span>
+      <span class="annotation">US Letter &middot; 8.5 &times; 11 in &middot; 1.0" sides &amp; top, 1.25" bottom</span>
     </div>
     <div class="page-frame">
       <!-- Inside margin (binding side) -->
@@ -904,7 +1613,7 @@
       </div>
       <!-- Bottom margin -->
       <div class="margin-bottom-area">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.25"</span>
       </div>
       <!-- Outside margin -->
       <div class="margin-outside">
@@ -938,33 +1647,365 @@
     </div>
   </div>
 
-  <!-- Vertical rhythm -->
-  <h3 style="font-size:22px;font-weight:600;margin-bottom:8px;">Vertical rhythm</h3>
-  <p style="color:var(--muted);margin-bottom:24px;">Body text at 11pt on 15pt leading = 0.208" per baseline. A vertical module is 6 baselines = 1.250".</p>
+  <!-- ─── Baseline derivation ─── -->
+  <h3 style="font-size:22px;font-weight:600;margin-bottom:8px;">From baseline to vertical module</h3>
+  <p style="color:var(--muted);margin-bottom:24px;">Vertical rhythm starts with the body text. Leading becomes a baseline, six baselines become a module, and that module governs every vertical measurement that follows.</p>
 
-  <div class="vr-demo">
-    <div class="vr-stack">
-      <div class="vr-block" style="height:60px;width:80px;">3</div>
-      <div class="vr-height">3.750"</div>
-      <div class="vr-label">Compact</div>
+  <div class="baseline-derivation">
+    <div class="deriv-card">
+      <div class="deriv-dim-total-bracket"></div>
+      <span class="deriv-dim-total-label">1.25"<br>module</span>
+      <div class="deriv-line">The baseline is the</div>
+      <div class="deriv-line">imaginary line that</div>
+      <div class="deriv-line">text sits on. Setting</div>
+      <div class="deriv-line">11pt type on 15pt</div>
+      <div class="deriv-line">leading puts each</div>
+      <div class="deriv-line">line 0.208" apart.</div>
+      <div class="deriv-dim-single-bracket"></div>
+      <span class="deriv-dim-single-label">0.208"</span>
     </div>
-    <div class="vr-stack">
-      <div class="vr-block filled" style="height:80px;width:80px;">4</div>
-      <div class="vr-height">5.000"</div>
-      <div class="vr-label">Standard</div>
+
+    <div class="deriv-math">
+      <div class="deriv-eq">11pt body &times; 1.36 leading = <strong>15pt line-height</strong></div>
+      <div class="deriv-eq">15pt &divide; 72 pt/in = <strong>0.208" per baseline</strong></div>
+      <div class="deriv-eq">0.208" &times; 6 baselines = <strong>1.25" vertical module</strong></div>
+      <div class="deriv-caption">
+        Six is the smallest count of baselines that reads as a coherent block of text &mdash; large enough to feel like a unit, small enough that figures can snap to meaningful multiples of it. From this one decision, every vertical measurement in the framework descends.
+      </div>
     </div>
-    <div class="vr-stack">
-      <div class="vr-block filled" style="height:100px;width:80px;">5</div>
-      <div class="vr-height">6.250"</div>
-      <div class="vr-label">Tall</div>
+  </div>
+
+  <!-- ─── Vertical twin: the page in modules ─── -->
+  <h3 style="font-size:22px;font-weight:600;margin-bottom:8px;">The page, in modules</h3>
+  <p style="color:var(--muted);margin-bottom:24px;">Just as the horizontal grid divides the 6.5" live width into 6 columns of 0.944", the vertical system divides the 8.75" live height into exactly 7 modules of 1.25". The slightly larger 1.25" bottom margin &mdash; a convention borrowed from classical editorial design &mdash; optically centers the text block and leaves room for page numbers and footnotes.</p>
+
+  <div class="page-demo">
+    <div style="text-align:center;margin-bottom:16px;">
+      <span class="annotation">US Letter &middot; 8.5 &times; 11 in &middot; 8.75" live height = 7 modules &times; 1.25"</span>
     </div>
-    <div class="vr-stack">
-      <div class="vr-block" style="height:120px;width:80px;">6</div>
-      <div class="vr-height">7.500"</div>
-      <div class="vr-label">Full-page</div>
+    <div class="page-frame">
+      <div class="margin-inside">
+        <span class="page-annotation" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+      </div>
+      <div class="margin-top-area">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+      </div>
+      <div class="live-area">
+        <div class="module-rows">
+          <div class="module-row"><span class="module-num">module 1</span><span class="module-dim">1.25"</span></div>
+          <div class="module-row"><span class="module-num">module 2</span></div>
+          <div class="module-row"><span class="module-num">module 3</span></div>
+          <div class="module-row"><span class="module-num">module 4</span></div>
+          <div class="module-row"><span class="module-num">module 5</span></div>
+          <div class="module-row"><span class="module-num">module 6</span></div>
+          <div class="module-row"><span class="module-num">module 7</span></div>
+        </div>
+      </div>
+      <div class="margin-bottom-area">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.25"</span>
+      </div>
+      <div class="margin-outside">
+        <span class="page-annotation" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+      </div>
     </div>
-    <div style="margin-left:24px;font-size:14px;color:var(--muted);max-width:240px;align-self:center;">
-      Figure heights snap to multiples of the vertical module, keeping text reflow predictable across pages.
+  </div>
+
+  <!-- Module spans: vertical analogue of column spans -->
+  <h3 style="font-size:22px;font-weight:600;margin-bottom:8px;">Module spans</h3>
+  <p style="color:var(--muted);margin-bottom:24px;">Figure heights snap to whole numbers of modules &mdash; the vertical counterpart to column spans.</p>
+
+  <div class="mod-span-demos">
+    <div class="mod-span-item">
+      <div class="mod-span-track">
+        <div class="mod-span-bar" style="height:50%;">
+          <span class="mod-count">3 mods</span>
+          <span class="mod-height">3.75"</span>
+        </div>
+      </div>
+      <div class="mod-span-name">Compact</div>
+      <div class="mod-span-use">Slim bars, icon strips</div>
+    </div>
+    <div class="mod-span-item">
+      <div class="mod-span-track">
+        <div class="mod-span-bar" style="height:66.7%;">
+          <span class="mod-count">4 mods</span>
+          <span class="mod-height">5.00"</span>
+        </div>
+      </div>
+      <div class="mod-span-name">Standard</div>
+      <div class="mod-span-use">Default chart height</div>
+    </div>
+    <div class="mod-span-item">
+      <div class="mod-span-track">
+        <div class="mod-span-bar" style="height:83.3%;">
+          <span class="mod-count">5 mods</span>
+          <span class="mod-height">6.25"</span>
+        </div>
+      </div>
+      <div class="mod-span-name">Tall</div>
+      <div class="mod-span-use">Stacked panels, ranked bars</div>
+    </div>
+    <div class="mod-span-item">
+      <div class="mod-span-track">
+        <div class="mod-span-bar" style="height:100%;">
+          <span class="mod-count">6 mods</span>
+          <span class="mod-height">7.50"</span>
+        </div>
+      </div>
+      <div class="mod-span-name">Full-page</div>
+      <div class="mod-span-use">Hero chart, full-bleed map</div>
+    </div>
+  </div>
+
+  <!-- ─── Fused 2D grid ─── -->
+  <h3 style="font-size:22px;font-weight:600;margin-bottom:8px;">Grid and modules, fused</h3>
+  <p style="color:var(--muted);margin-bottom:24px;">Every element on a page occupies a 2D cell: a column span by a module span. Headings, body paragraphs, figure titles, figures, and captions all obey the same grammar &mdash; pick a cell, place the element, and the page composes itself.</p>
+
+  <div class="page-demo">
+    <div style="text-align:center;margin-bottom:16px;">
+      <span class="annotation">6 columns &times; 7 modules &middot; 42 addressable cells on every page</span>
+    </div>
+    <div class="fused-page-wrap">
+      <div class="page-frame">
+        <div class="margin-inside">
+          <span class="page-annotation" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+        </div>
+        <div class="margin-top-area">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+        </div>
+        <div class="live-area-fused">
+          <div class="fused-col-band" style="grid-column:1;"></div>
+          <div class="fused-col-band" style="grid-column:2;"></div>
+          <div class="fused-col-band" style="grid-column:3;"></div>
+          <div class="fused-col-band" style="grid-column:4;"></div>
+          <div class="fused-col-band" style="grid-column:5;"></div>
+          <div class="fused-col-band" style="grid-column:6;"></div>
+
+          <!-- Row 1: H1 heading -->
+          <div class="placed-fig typ-h1" style="grid-column:1 / 7; grid-row:1;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+
+          <!-- Row 2: body paragraph -->
+          <div class="placed-fig typ-body" style="grid-column:1 / 7; grid-row:2;">
+            <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:92%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:64%;"></div></div>
+          </div>
+
+          <!-- Rows 3-5: figure title + full figure (tightly coupled group) -->
+          <div class="fig-coupled" style="grid-column:1 / 7; grid-row:3 / 6;">
+            <div class="fig-coupled-title"></div>
+            <div class="fig-coupled-block"></div>
+          </div>
+
+          <!-- Row 6: caption, full width -->
+          <div class="placed-fig typ-caption" style="grid-column:1 / 7; grid-row:6;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+
+          <!-- Row 7: body resumes on a new row, never beside the caption -->
+          <div class="placed-fig typ-body" style="grid-column:1 / 7; grid-row:7;">
+            <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:88%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:71%;"></div></div>
+          </div>
+        </div>
+        <div class="margin-bottom-area">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.25"</span>
+        </div>
+        <div class="margin-outside">
+          <span class="page-annotation" style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+        </div>
+      </div>
+
+      <!-- Side annotation rail: labels live outside the page and point back at each element -->
+      <div class="annot-rail">
+        <div class="annot-rail-spacer"></div>
+        <div class="annot-live">
+          <div class="annot" style="grid-row:1;">
+            <span class="annot-name">H1 heading</span>
+            <span class="annot-dim">6 &times; 1</span>
+          </div>
+          <div class="annot" style="grid-row:2;">
+            <span class="annot-name">body paragraph</span>
+            <span class="annot-dim">6 &times; 1</span>
+          </div>
+          <div class="annot" style="grid-row:3 / 6;">
+            <span class="annot-name">figure title + full figure</span>
+            <span class="annot-dim">tightly coupled</span>
+            <span class="annot-dim">6 &times; 3 &middot; 6.5 &times; 3.75"</span>
+          </div>
+          <div class="annot" style="grid-row:6;">
+            <span class="annot-name">caption</span>
+            <span class="annot-dim">6 &times; 1 &middot; full width, never beside body</span>
+          </div>
+          <div class="annot" style="grid-row:7;">
+            <span class="annot-name">body resumes</span>
+            <span class="annot-dim">6 &times; 1 &middot; new row after caption</span>
+          </div>
+        </div>
+        <div class="annot-rail-spacer"></div>
+      </div>
+    </div>
+    <div class="annotation" style="text-align:center;margin-top:16px;">
+      Heading, text, figure, caption &mdash; every slot is a (column span &times; module span) cell. Same grammar top-to-bottom as left-to-right.
+    </div>
+  </div>
+
+  <!-- ─── Layout triad: three page configurations on the same grid ─── -->
+  <h3 style="font-size:22px;font-weight:600;margin-bottom:8px;">Layouts built on the same grid</h3>
+  <p style="color:var(--muted);margin-bottom:24px;">The grammar stays constant &mdash; heading sits in its own module, figures couple with their titles, the caption takes a full-width row below the figure, and body text only resumes on a new row after the caption. Content changes; the rhythm doesn't.</p>
+
+  <div class="layout-triad">
+    <!-- A — Full figure under H1 -->
+    <div class="layout-mini">
+      <div class="layout-mini-label">A &middot; full figure under H1</div>
+      <div class="page-frame">
+        <div class="margin-inside"></div>
+        <div class="margin-top-area"></div>
+        <div class="live-area-fused">
+          <div class="fused-col-band" style="grid-column:1;"></div>
+          <div class="fused-col-band" style="grid-column:2;"></div>
+          <div class="fused-col-band" style="grid-column:3;"></div>
+          <div class="fused-col-band" style="grid-column:4;"></div>
+          <div class="fused-col-band" style="grid-column:5;"></div>
+          <div class="fused-col-band" style="grid-column:6;"></div>
+
+          <div class="placed-fig typ-h1" style="grid-column:1 / 7; grid-row:1;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+          <div class="placed-fig typ-body" style="grid-column:1 / 7; grid-row:2;">
+            <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:92%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:64%;"></div></div>
+          </div>
+          <div class="fig-coupled" style="grid-column:1 / 7; grid-row:3 / 6;">
+            <div class="fig-coupled-title"></div>
+            <div class="fig-coupled-block"></div>
+          </div>
+          <div class="placed-fig typ-caption" style="grid-column:1 / 7; grid-row:6;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+          <div class="placed-fig typ-body" style="grid-column:1 / 7; grid-row:7;">
+            <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:88%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:72%;"></div></div>
+          </div>
+        </div>
+        <div class="margin-bottom-area"></div>
+        <div class="margin-outside"></div>
+      </div>
+      <div class="layout-mini-desc">H1 opens the section. A full-width figure (rows 3&ndash;5) with caption on row 6 below. Body resumes on row 7 &mdash; never beside the caption.</div>
+    </div>
+
+    <!-- B — H2 + paired halves -->
+    <div class="layout-mini">
+      <div class="layout-mini-label">B &middot; paired halves under H2</div>
+      <div class="page-frame">
+        <div class="margin-inside"></div>
+        <div class="margin-top-area"></div>
+        <div class="live-area-fused">
+          <div class="fused-col-band" style="grid-column:1;"></div>
+          <div class="fused-col-band" style="grid-column:2;"></div>
+          <div class="fused-col-band" style="grid-column:3;"></div>
+          <div class="fused-col-band" style="grid-column:4;"></div>
+          <div class="fused-col-band" style="grid-column:5;"></div>
+          <div class="fused-col-band" style="grid-column:6;"></div>
+
+          <div class="placed-fig typ-h2" style="grid-column:1 / 7; grid-row:1;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+          <div class="placed-fig typ-body" style="grid-column:1 / 7; grid-row:2;">
+            <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:92%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:58%;"></div></div>
+          </div>
+          <!-- Two halves side by side, each coupled with its own title -->
+          <div class="fig-coupled" style="grid-column:1 / 4; grid-row:3 / 6;">
+            <div class="fig-coupled-title" style="width:48%;"></div>
+            <div class="fig-coupled-block"></div>
+          </div>
+          <div class="fig-coupled" style="grid-column:4 / 7; grid-row:3 / 6;">
+            <div class="fig-coupled-title" style="width:52%;"></div>
+            <div class="fig-coupled-block"></div>
+          </div>
+          <!-- Two captions in row 6, one per half -->
+          <div class="placed-fig typ-caption" style="grid-column:1 / 4; grid-row:6;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+          <div class="placed-fig typ-caption" style="grid-column:4 / 7; grid-row:6;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+          <!-- Body resumes -->
+          <div class="placed-fig typ-body" style="grid-column:1 / 7; grid-row:7;">
+            <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:88%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:72%;"></div></div>
+          </div>
+        </div>
+        <div class="margin-bottom-area"></div>
+        <div class="margin-outside"></div>
+      </div>
+      <div class="layout-mini-desc">H2 subhead. Two half-width figures share rows 3&ndash;5, each with its own title above. Captions line up in row 6, body returns below.</div>
+    </div>
+
+    <!-- C — H2 + longer body, then full figure -->
+    <div class="layout-mini">
+      <div class="layout-mini-label">C &middot; body-first, figure below</div>
+      <div class="page-frame">
+        <div class="margin-inside"></div>
+        <div class="margin-top-area"></div>
+        <div class="live-area-fused">
+          <div class="fused-col-band" style="grid-column:1;"></div>
+          <div class="fused-col-band" style="grid-column:2;"></div>
+          <div class="fused-col-band" style="grid-column:3;"></div>
+          <div class="fused-col-band" style="grid-column:4;"></div>
+          <div class="fused-col-band" style="grid-column:5;"></div>
+          <div class="fused-col-band" style="grid-column:6;"></div>
+
+          <div class="placed-fig typ-h2" style="grid-column:1 / 7; grid-row:1;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+          <!-- Two-module body paragraph -->
+          <div class="placed-fig typ-body" style="grid-column:1 / 7; grid-row:2 / 4;">
+            <div class="typ-linebox"><div class="typ-bar" style="width:98%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:95%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:92%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:97%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:94%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:100%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:88%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:96%;"></div></div>
+            <div class="typ-linebox"><div class="typ-bar" style="width:62%;"></div></div>
+          </div>
+          <div class="fig-coupled" style="grid-column:1 / 7; grid-row:4 / 7;">
+            <div class="fig-coupled-title"></div>
+            <div class="fig-coupled-block"></div>
+          </div>
+          <div class="placed-fig typ-caption" style="grid-column:1 / 7; grid-row:7;">
+            <div class="typ-linebox"><div class="typ-bar"></div></div>
+          </div>
+        </div>
+        <div class="margin-bottom-area"></div>
+        <div class="margin-outside"></div>
+      </div>
+      <div class="layout-mini-desc">H2 opens with a longer body span (rows 2&ndash;3). The figure takes rows 4&ndash;6 and the caption closes the page on row 7 &mdash; no body runs beside it.</div>
     </div>
   </div>
 </section>
@@ -1439,6 +2480,15 @@
   <h2>Growth Lab Report Design Framework</h2>
   <p>A spatial, typographic, and chromatic system where every decision traces back to a root principle &mdash; so the design stays coherent even as the content changes.</p>
 </div>
+
+<script>
+  function replayBuild(btn) {
+    const w = btn.closest('.build-anim');
+    w.classList.remove('playing');
+    void w.offsetWidth; /* force reflow so animations restart */
+    w.classList.add('playing');
+  }
+</script>
 
 </body>
 </html>

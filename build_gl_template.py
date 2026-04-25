@@ -8,7 +8,7 @@ Growth Lab-branded reference document (gl-report.docx).
 Changes:
   - Theme: GL color scheme + Source Sans 3 / JetBrains Mono fonts
   - Styles: font names, sizes, colors, spacing per framework.md
-  - Page setup: 1" margins all sides → 6.5" live width
+  - Page setup: 1" top/left/right, 1.25" bottom → 6.5 × 8.75" live area
   - Header: GL logo + simplified running head
   - Footer: page number in JetBrains Mono
 
@@ -338,10 +338,15 @@ def transform_styles_xml(content):
 # ---------------------------------------------------------------------------
 
 def transform_document_xml(content):
-    """Update page margins to 1" all sides (1440 twips) → 6.5" live width."""
+    """Update page margins: 1" top/left/right, 1.25" bottom → 6.5 × 8.75" live area.
+
+    Twips: 1440 = 1", 1800 = 1.25". The 1.25" bottom margin optically centers
+    the text block, hosts page numbers and footnotes, and makes the 8.75" live
+    height resolve into exactly 7 vertical modules of 1.25".
+    """
     content = re.sub(
         r'<w:pgMar[^/]*/>',
-        '<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" '
+        '<w:pgMar w:top="1440" w:right="1440" w:bottom="1800" w:left="1440" '
         'w:header="720" w:footer="720" w:gutter="0" />',
         content
     )

@@ -36,7 +36,7 @@ framework-deck.md               # Slide deck version (Marp markdown)
 
 All values are defined in `framework.md`. Quick reference:
 
-- **Page**: US Letter, 1.0" margins all sides, 6.5 × 9.0" live area
+- **Page**: US Letter, 1.0" margins on top/left/right, 1.25" bottom margin → 6.5 × 8.75" live area (exactly 7 vertical modules)
 - **Grid**: 6 columns × 0.944" + 5 gutters × 0.167"
 - **Fonts**: Source Sans 3 (body/headings) + JetBrains Mono (captions/data)
 - **Body**: 11pt / 15pt leading (1.36 line height)

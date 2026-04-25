@@ -149,9 +149,9 @@
     position: relative;
     overflow: hidden;
     display: grid;
-    /* equal margins: 1.0 / 6.5 / 1.0 = 8.5 total */
+    /* horizontal: 1.0 / 6.5 / 1.0 = 8.5" · vertical: 1.0 / 8.75 / 1.25 = 11" */
     grid-template-columns: 1fr 6.5fr 1fr;
-    grid-template-rows: 1fr 9fr 1fr; /* top margin / live / bottom margin */
+    grid-template-rows: 1fr 8.75fr 1.25fr; /* top margin / live / bottom margin */
   }
   .margin-inside {
     grid-column: 1;
@@ -882,7 +882,7 @@
 
   <div class="page-demo">
     <div style="text-align:center;margin-bottom:16px;">
-      <span class="annotation">US Letter &middot; 8.5 &times; 11 in &middot; Equal 1.0" margins</span>
+      <span class="annotation">US Letter &middot; 8.5 &times; 11 in &middot; 1.0" sides &amp; top, 1.25" bottom</span>
     </div>
     <div class="page-frame">
       <!-- Inside margin (binding side) -->
@@ -911,7 +911,7 @@
       </div>
       <!-- Bottom margin -->
       <div class="margin-bottom-area">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.0"</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--brand);opacity:0.8;">1.25"</span>
       </div>
       <!-- Outside margin -->
       <div class="margin-outside">

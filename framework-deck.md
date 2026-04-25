@@ -37,15 +37,15 @@ The framework gives every element **a clear home on the page** — so researcher
 
 ### Asymmetric margins for binding
 
-The page uses **asymmetric margins** — wider on the inside for binding, narrower outside to maximize reading space.
+The page uses **asymmetric vertical margins** — slightly wider at the bottom to optically center the text block, host page numbers and footnotes, and resolve the live height into a whole number of vertical modules.
 
 | Property | Value |
 |----------|-------|
 | Page size | US Letter (8.5 x 11 in) |
-| Top / Bottom | 1.0 in each |
-| Inside (binding) | 1.25 in |
-| Outside | 0.75 in |
-| **Live area** | **6.5 x 9.0 in** |
+| Top margin | 1.0 in |
+| Bottom margin | 1.25 in |
+| Left / Right | 1.0 in each |
+| **Live area** | **6.5 x 8.75 in** (exactly 7 vertical modules) |
 
 This mirrors the layouts of Foreign Affairs, World Bank flagships, and academic journals — generous margins that let the content breathe.
 
@@ -58,7 +58,7 @@ This mirrors the layouts of Foreign Affairs, World Bank flagships, and academic 
 Every element on the page is placed on a **6-column grid** with consistent gutters.
 
 ```
-  1.25"  │  col  │ g │  col  │ g │  col  │ g │  col  │ g │  col  │ g │  col  │  0.75"
+  1.0"   │  col  │ g │  col  │ g │  col  │ g │  col  │ g │  col  │ g │  col  │  1.0"
  margin  │0.944" │   │0.944" │   │0.944" │   │0.944" │   │0.944" │   │0.944" │ margin
           ─────── gutter = 0.167"  ×  5 gutters = 0.833" ────────
           ─────── 6 columns × 0.944" = 5.667" ───────────────────
@@ -98,8 +98,9 @@ A vertical module is **6 baselines = 1.250"** — the building block for figure 
 | 4 | 5.000" | Standard figure height |
 | 5 | 6.250" | Tall / stacked panel |
 | 6 | 7.500" | Near-full-page figure |
+| 7 | 8.750" | Full-bleed (fills live height) |
 
-Figures don't just fit the width — they **snap to the vertical rhythm** too, keeping text flow predictable.
+The 8.75" live height is **exactly 7 modules** tall, so every element on the page lives in a `(column-span × module-span)` cell. Figures don't just fit the width — they **snap to the vertical rhythm** too, keeping text flow predictable.
 
 ---
 
@@ -501,9 +502,9 @@ The framework synthesizes these influences into a system purpose-built for **dat
 <div>
 
 **Page & Grid**
-- US Letter, 6.5 x 9.0" live area
+- US Letter, 6.5 × 8.75" live area (1" top/sides, 1.25" bottom)
 - 6 columns at 0.944" + 0.167" gutters
-- Vertical module: 6 baselines = 1.250"
+- 7 vertical modules × 1.250" = 8.75" live height
 
 **Typography**
 - Source Sans 3 (body) + JetBrains Mono (data)
