@@ -1,0 +1,151 @@
+/* Growth Lab brand fonts — drop-in @font-face declarations.
+ * Adjust the url() paths to match where you upload the files. */
+
+/* ---------- Source Sans 3 ---------- */
+
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-Light.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-LightIt.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-It.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-Semibold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-SemiboldIt.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("source-sans-3/woff2/SourceSans3-BoldIt.woff2") format("woff2");
+}
+
+/* ---------- JetBrains Mono ---------- */
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("jetbrains-mono/woff2/JetBrainsMono-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("jetbrains-mono/woff2/JetBrainsMono-Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("jetbrains-mono/woff2/JetBrainsMono-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url("jetbrains-mono/woff2/JetBrainsMono-MediumItalic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("jetbrains-mono/woff2/JetBrainsMono-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("jetbrains-mono/woff2/JetBrainsMono-BoldItalic.woff2") format("woff2");
+}
+
+/* ---------- Crimson Pro (editorial variant — headings) ---------- */
+
+@font-face {
+  font-family: "Crimson Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("crimson-pro/woff2/CrimsonPro-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Crimson Pro";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("crimson-pro/woff2/CrimsonPro-Italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Crimson Pro";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("crimson-pro/woff2/CrimsonPro-SemiBold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Crimson Pro";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("crimson-pro/woff2/CrimsonPro-SemiBoldItalic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Crimson Pro";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("crimson-pro/woff2/CrimsonPro-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Crimson Pro";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("crimson-pro/woff2/CrimsonPro-BoldItalic.woff2") format("woff2");
+}
