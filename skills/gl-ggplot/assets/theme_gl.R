@@ -185,6 +185,15 @@ save_fig <- function(size_name, filename, plot = last_plot(), dpi = 300) {
 
 #' Initialize the GL design system: load fonts, set theme and palette defaults
 #'
+#' When called inside a knitr knit, also registers a chunk hook that re-applies
+#' the theme and palette defaults before every chunk runs. This is necessary
+#' because knitr's caching does not replay session-state side effects: if the
+#' chunk that called `gl_setup()` is cached, the theme registration is not
+#' restored on a re-knit, and any newly-rendered chunks would otherwise pick
+#' up the default ggplot2 theme. The hook ensures every chunk starts with the
+#' GL theme active. Note: it cannot re-style chunks whose plot output is
+#' already cached — those need to be invalidated or rebuilt.
+#'
 #' @param mode "report" (suppresses title/subtitle/caption) or "slide" (default)
 #' @param base_size Base font size (default 12)
 gl_setup <- function(mode = "report", base_size = 12) {
@@ -193,12 +202,25 @@ gl_setup <- function(mode = "report", base_size = 12) {
     showtext_auto()
     showtext_opts(dpi = 300)
 
-    theme_set(theme_gl(base_size = base_size, mode = mode))
+    apply_gl_defaults <- function() {
+        theme_set(theme_gl(base_size = base_size, mode = mode))
+        options(
+            ggplot2.discrete.colour = gl$palette,
+            ggplot2.discrete.fill   = gl$palette
+        )
+    }
 
-    options(
-        ggplot2.discrete.colour = gl$palette,
-        ggplot2.discrete.fill   = gl$palette
-    )
+    apply_gl_defaults()
+
+    # Self-installing knitr hook: re-apply defaults before every chunk so that
+    # knitr's caching cannot leave a chunk rendering against default ggplot2.
+    if (isTRUE(getOption("knitr.in.progress")) &&
+        requireNamespace("knitr", quietly = TRUE)) {
+        knitr::knit_hooks$set(gl_theme = function(before, options, envir) {
+            if (before) apply_gl_defaults()
+        })
+        knitr::opts_chunk$set(gl_theme = TRUE)
+    }
 
     invisible(NULL)
 }
