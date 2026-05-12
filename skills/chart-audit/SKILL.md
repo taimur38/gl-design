@@ -1,7 +1,7 @@
 ---
 name: chart-audit
-description: Audit ggplot2 charts against the Growth Lab design framework. Use this skill after generating or modifying charts to flag visual issues — legend sizing, color misuse, dimension mismatches, highlight consistency, and readability problems.
-compatibility: Requires R script with ggplot2 charts and the GL design framework (framework.md).
+description: Audit ggplot2 charts against the Growth Lab design grammar. Use this skill after generating or modifying charts to flag visual issues — legend sizing, color misuse, dimension mismatches, highlight consistency, and readability problems.
+compatibility: Requires R script with ggplot2 charts and the GL design grammar (grammar.md + recipes/report.md).
 metadata:
   author: taimur-shah
   version: "1.0"

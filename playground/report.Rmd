@@ -89,7 +89,7 @@ options(
     ggplot2.discrete.fill   = gl$palette
 )
 
-# ---- Figure sizes (from framework.md) ----------------------------------------
+# ---- Figure sizes (from recipes/report.md) ----------------------------------------
 
 gl_fig <- list(
     full        = list(w = 6.5,   h = 4.0),

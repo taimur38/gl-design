@@ -10,7 +10,7 @@
 --   5. Fenced-div boxes → GL-styled callout (brand-blue left border)
 --   6. Citeproc bibliography gets a "References" H1 heading
 --
--- Grid reference (framework.md):
+-- Grid reference (recipes/report.md):
 --   Live width: 6.5"  (US Letter, 1" margins)
 --   6 columns × 0.944" + 5 gutters × 0.167"
 --   Full (6 col) = 6.500"   Half (3 col) = 3.167"
@@ -126,7 +126,7 @@ end
 --------------------------------------------------------------------------------
 -- Box builder — GL call-out style
 --
--- Visual spec (framework.md § 6, "Pull quotes / call-out boxes"):
+-- Visual spec (recipes/report.md § 5, "Pull quotes / call-out boxes"):
 --   Background: #F3F3F3
 --   Left border: 3pt solid #266798 (brand blue)
 --   Other borders: none (clean left-accent style)

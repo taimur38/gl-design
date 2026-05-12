@@ -2,7 +2,7 @@
 #
 # render_report_charts.R
 #
-# Re-renders the FM meeting charts at report dimensions (framework.md sizes)
+# Re-renders the FM meeting charts at report dimensions (recipes/report.md sizes)
 # with title/subtitle/caption suppressed (handled by document styles).
 #
 # Run from the pakistan-explore directory:
@@ -117,7 +117,7 @@ options(
     ggplot2.discrete.fill   = gl$palette
 )
 
-# Report figure sizes (from framework.md)
+# Report figure sizes (from recipes/report.md)
 gl_fig <- list(
     full        = list(w = 6.5,   h = 4.0),
     full_tall   = list(w = 6.5,   h = 6.0),

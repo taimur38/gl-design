@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Growth Lab Report — Typography Spec</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+    --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+    --paper: #FAF8F4;
+    --paper-warm: #F4F1EA;
+    --rule: #DDDDDD;
+    --ink: #1A1714;
+    --ink-2: #2C2823;
+    --ink-3: #6B645A;
+    --ink-4: #9A9389;
+
+    --accent: #015C9C;
+    --accent-deep: #003E6B;
+    --accent-soft: #3A85B8;
+    --accent-tint: #E1F0FA;
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 16px; }
+  body {
+    margin: 0;
+    background: white;
+    color: var(--ink-2);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.75in 0.85in;
+    margin: 0 auto 16px;
+    background: white;
+    box-shadow: 0 0 0 1px #DDDDDD;
+    page-break-after: always;
+    position: relative;
+  }
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; margin: 0; }
+  }
+
+  /* Cover */
+  .cover { background: #f3f2ea; }
+  .cover .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    font-weight: 600;
+  }
+  .cover .date {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  .cover h1 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 56px;
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin: 96px 0 24px;
+    font-variation-settings: "opsz" 60;
+  }
+  .cover hr {
+    border: none;
+    border-top: 2px solid var(--ink);
+    margin: 0 0 32px;
+  }
+  .cover .authors {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #6b645a;
+  }
+
+  /* Section heading on each content page */
+  h1.section {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 1.08;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    margin: 0 0 8px;
+    font-variation-settings: "opsz" 36;
+  }
+  h2.subhead {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin: 28px 0 12px;
+  }
+  .lead-copy {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 65ch;
+  }
+
+  /* Spec card layout */
+  .spec {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 26px 32px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .spec:last-child { border-bottom: 0; }
+  .spec .sample {
+    padding: 6px 0;
+  }
+  .spec .meta dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    row-gap: 4px;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .spec .meta dt {
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 9px;
+    font-weight: 600;
+    padding-top: 2px;
+  }
+  .spec .meta dd { margin: 0; color: var(--ink); }
+  .spec .meta dd code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 10.5px;
+    color: var(--ink);
+  }
+  .spec .name {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin: 0 0 8px;
+  }
+  .spec .usage {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--ink-3);
+    margin-top: 10px;
+  }
+
+  /* Foundations panels */
+  .foundation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    margin-top: 18px;
+  }
+  .foundation {
+    border: 1px solid var(--rule);
+    padding: 18px 20px;
+  }
+  .foundation h3 {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  .foundation .label {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--ink-3);
+    margin-top: 14px;
+  }
+  .foundation .sans-sample {
+    font-family: var(--font-sans);
+    font-size: 22px;
+    color: var(--ink);
+    margin-top: 4px;
+    letter-spacing: -0.005em;
+  }
+  .foundation .serif-sample {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    color: var(--ink);
+    margin-top: 4px;
+    line-height: 1;
+  }
+
+  .scale ul, .colors ul { list-style: none; padding: 0; margin: 0; }
+  .scale li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--ink-2);
+  }
+  .scale li:last-child { border-bottom: 0; }
+  .scale .px { width: 56px; font-weight: 600; color: var(--ink); }
+  .scale .demo { flex: 1; }
+  .scale .role { color: var(--ink-3); font-size: 10px; }
+
+  .colors li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    color: var(--ink-2);
+  }
+  .colors .swatch {
+    width: 22px; height: 22px;
+    border: 1px solid var(--rule);
+    flex: 0 0 22px;
+  }
+  .colors .token {
+    font-family: ui-monospace, monospace;
+    font-size: 10.5px;
+    color: var(--ink);
+    width: 80px;
+    flex: 0 0 80px;
+  }
+  .colors .hex { color: var(--ink-3); font-family: ui-monospace, monospace; font-size: 10.5px; width: 80px; }
+  .colors .role { color: var(--ink-3); }
+
+  /* TOC for the spec itself */
+  .toc {
+    margin-top: 18px;
+    border-top: 1px solid var(--ink);
+  }
+  .toc-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .toc-row .title { flex: 1 1 auto; color: var(--ink); }
+  .toc-row .pg { font-variant-numeric: tabular-nums; color: var(--ink-3); }
+
+  /* Sample-specific styles to render at real size */
+  .smp-display {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: 56px;
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 60;
+  }
+  .smp-h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 1.08;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 36;
+  }
+  .smp-h2 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 22;
+  }
+  .smp-eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .smp-subhead {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .smp-lead {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1.4;
+    font-weight: 300;
+    color: var(--ink-2);
+    font-variation-settings: "opsz" 18;
+    margin: 0;
+  }
+  .smp-body {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0;
+  }
+  .smp-colophon {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    font-variation-settings: "opsz" 14;
+    margin: 0;
+  }
+  .smp-figure-label {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .smp-chart-title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    margin: 0;
+  }
+  .smp-chart-subtitle {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-3);
+    line-height: 1.4;
+    margin: 0;
+  }
+  .smp-chart-source {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 10px;
+    color: var(--ink-2);
+    line-height: 1.45;
+    margin: 0;
+  }
+  .smp-axis-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .smp-axis-tick {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .smp-series-label {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .smp-annotation {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .smp-table-head {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .smp-table-cell {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .smp-toc-major {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .smp-toc-sub {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-2);
+    font-weight: 400;
+  }
+  .smp-toc-sub-sub {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--ink-3);
+    font-style: italic;
+  }
+  .smp-running-head {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .smp-folio-num {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    color: var(--ink-3);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .smp-folio-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 10px;
+    color: var(--ink-3);
+    line-height: 1.4;
+  }
+  .smp-footnote {
+    font-family: var(--font-sans);
+    font-size: 9px;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+  .smp-sup-anchor {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═════════ COVER ═════════ -->
+<div class="page cover">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+    <div>
+      <div class="eyebrow">Growth Lab Working Paper Series</div>
+      <div class="date">May 2026</div>
+    </div>
+  </div>
+  <h1>Typography specification &mdash; Growth Lab report design system</h1>
+  <hr/>
+  <div class="authors">A practical reference for every type style used in the report, with the rules for where each one applies.</div>
+</div>
+
+<!-- ═════════ TABLE OF CONTENTS ═════════ -->
+<div class="page">
+  <h1 class="section">Contents</h1>
+  <div class="toc">
+    <div class="toc-row"><span class="title">1 &nbsp;&nbsp;Foundations</span><span class="pg">3</span></div>
+    <div class="toc-row"><span class="title">2 &nbsp;&nbsp;Display &amp; cover type</span><span class="pg">5</span></div>
+    <div class="toc-row"><span class="title">3 &nbsp;&nbsp;Section headings</span><span class="pg">6</span></div>
+    <div class="toc-row"><span class="title">4 &nbsp;&nbsp;Body copy</span><span class="pg">7</span></div>
+    <div class="toc-row"><span class="title">5 &nbsp;&nbsp;Lead paragraph</span><span class="pg">8</span></div>
+    <div class="toc-row"><span class="title">6 &nbsp;&nbsp;Chart typography</span><span class="pg">9</span></div>
+    <div class="toc-row"><span class="title">7 &nbsp;&nbsp;Table typography</span><span class="pg">11</span></div>
+    <div class="toc-row"><span class="title">8 &nbsp;&nbsp;Table of contents styles</span><span class="pg">12</span></div>
+    <div class="toc-row"><span class="title">9 &nbsp;&nbsp;Page chrome (running head, folio, footnotes)</span><span class="pg">13</span></div>
+    <div class="toc-row"><span class="title">10 &nbsp;Decision rules</span><span class="pg">14</span></div>
+  </div>
+</div>
+
+<!-- ═════════ FOUNDATIONS ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 1</h2>
+  <h1 class="section">Foundations</h1>
+  <p class="lead-copy">
+    The system stands on two type families and a small set of ink colors. Everything else &mdash;
+    every heading, label, and caption &mdash; is built by varying the size, weight, and case of
+    these two families against the ink palette. Resist adding a third family or new colors; reach
+    for the existing tokens first.
+  </p>
+
+  <div class="foundation-grid">
+    <div class="foundation">
+      <h3>Serif &mdash; long-form, display</h3>
+      <div class="serif-sample">Source Serif 4</div>
+      <div class="label">Italic and optical sizes:</div>
+      <div style="font-family:var(--font-serif); font-size:18px; color:var(--ink); margin-top:4px;">
+        Aa <em style="font-style:italic;">Aa</em> &middot;
+        <span style="font-variation-settings:'opsz' 8;">Aa</span>
+        <span style="font-variation-settings:'opsz' 36;">Aa</span>
+        <span style="font-variation-settings:'opsz' 60;">Aa</span>
+      </div>
+      <div class="label">Weights used: 300, 400, 500, 600</div>
+      <p style="font-family:var(--font-sans); font-size:11px; color:var(--ink-3); line-height:1.5; margin-top:14px;">
+        Use the serif for the cover title, all section &amp; subsection headings, chart titles,
+        the lead paragraph, footnote markers, and chart source lines. Always honor
+        the optical-size axis: the cover title sits at <code>opsz 60</code>, section heads at
+        <code>opsz 36</code>, body and captions at <code>opsz 14&ndash;18</code>.
+      </p>
+    </div>
+
+    <div class="foundation">
+      <h3>Sans &mdash; UI, labels, body</h3>
+      <div class="sans-sample">Inter</div>
+      <div class="label">Weights used: 400, 500, 600, 700</div>
+      <div style="font-family:var(--font-sans); font-size:18px; color:var(--ink); margin-top:4px;">
+        <span style="font-weight:400;">Aa</span>
+        <span style="font-weight:500;">Aa</span>
+        <span style="font-weight:600;">Aa</span>
+        <span style="font-weight:700;">Aa</span>
+      </div>
+      <p style="font-family:var(--font-sans); font-size:11px; color:var(--ink-3); line-height:1.5; margin-top:14px;">
+        Use Inter for body copy, all chart labels &amp; ticks, annotations, table headers and cells,
+        TOC sub-entries, page chrome (running head, folio, footnotes), eyebrows, figure labels,
+        and any small uppercase label. Always pair tabular numerics
+        (<code>font-variant-numeric: tabular-nums</code>) on numeric columns.
+      </p>
+    </div>
+  </div>
+
+  <h2 class="smp-subhead" style="margin-top:32px;">Type scale</h2>
+  <div class="scale">
+    <ul>
+      <li><span class="px">56&nbsp;px</span><span class="demo" style="font-family:var(--font-serif); font-weight:400; letter-spacing:-0.025em; font-variation-settings:'opsz' 60;">Cover display</span><span class="role">.display</span></li>
+      <li><span class="px">34&nbsp;px</span><span class="demo" style="font-family:var(--font-serif); font-weight:500; letter-spacing:-0.018em; font-variation-settings:'opsz' 36;">Section heading</span><span class="role">h1.section</span></li>
+      <li><span class="px">20&nbsp;px</span><span class="demo" style="font-family:var(--font-serif); font-weight:500; letter-spacing:-0.01em; font-variation-settings:'opsz' 22;">Subsection heading</span><span class="role">h2.subsection</span></li>
+      <li><span class="px">17&nbsp;px</span><span class="demo" style="font-family:var(--font-serif); font-weight:300; font-variation-settings:'opsz' 18;">Lead paragraph</span><span class="role">p.lead</span></li>
+      <li><span class="px">14&nbsp;px</span><span class="demo" style="font-family:var(--font-serif); font-variation-settings:'opsz' 14;">Colophon body / chart title</span><span class="role">.colophon p / .chart-title</span></li>
+      <li><span class="px">12&nbsp;px</span><span class="demo" style="font-family:var(--font-sans);">Body copy, chart text, table cells</span><span class="role">p, axis, table</span></li>
+      <li><span class="px">11&nbsp;px</span><span class="demo" style="font-family:var(--font-sans); text-transform:uppercase; letter-spacing:0.18em; color:var(--ink-3); font-weight:600;">Cover meta (series / date)</span><span class="role">cover only</span></li>
+      <li><span class="px">10&nbsp;px</span><span class="demo" style="font-family:var(--font-sans); text-transform:uppercase; letter-spacing:0.14em; color:var(--accent); font-weight:600;">Figure label / chart source</span><span class="role">h3.figure-label / .chart-source</span></li>
+      <li><span class="px">9&nbsp;px</span><span class="demo" style="font-family:var(--font-sans); text-transform:uppercase; letter-spacing:0.16em; color:var(--ink-3); font-weight:500;">Running head / folio / footnotes</span><span class="role">.running-head, .folio, .footnotes</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═════════ COLOR ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 1 &middot; continued</h2>
+  <h1 class="section">Ink &amp; accent palette</h1>
+  <p class="lead-copy">
+    Text is layered: black for emphasis (<code>--ink</code>), near-black for body
+    (<code>--ink-2</code>), warm grey for secondary/captions (<code>--ink-3</code>), and a paler
+    grey for hairlines &amp; markers (<code>--ink-4</code>). The accent blue is reserved for
+    eyebrows, figure labels, brand marks, and the cover date.
+  </p>
+  <div class="colors">
+    <ul>
+      <li><span class="swatch" style="background:#1A1714;"></span><span class="token">--ink</span><span class="hex">#1A1714</span><span class="role">Cover title, section &amp; subsection heads, table emphasis, strong</span></li>
+      <li><span class="swatch" style="background:#2C2823;"></span><span class="token">--ink-2</span><span class="hex">#2C2823</span><span class="role">Body copy default, axis text, table cells</span></li>
+      <li><span class="swatch" style="background:#6B645A;"></span><span class="token">--ink-3</span><span class="hex">#6B645A</span><span class="role">Captions, eyebrow on cover, page chrome, sub-sub TOC</span></li>
+      <li><span class="swatch" style="background:#9A9389;"></span><span class="token">--ink-4</span><span class="hex">#9A9389</span><span class="role">Hairline rules, trendlines, secondary markers</span></li>
+      <li><span class="swatch" style="background:#015C9C;"></span><span class="token">--accent</span><span class="hex">#015C9C</span><span class="role">Cover date, eyebrows, figure labels, primary chart series</span></li>
+      <li><span class="swatch" style="background:#f3f2ea; border-color:#cdc8b5;"></span><span class="token">cover bg</span><span class="hex">#F3F2EA</span><span class="role">Cover page paper color only &mdash; do not use on content pages</span></li>
+    </ul>
+  </div>
+
+  <h2 class="smp-subhead" style="margin-top:28px;">Chart palette (categorical)</h2>
+  <div class="colors">
+    <ul>
+      <li><span class="swatch" style="background:#015c9c;"></span><span class="token">c-1</span><span class="hex">#015C9C</span><span class="role">Primary &mdash; single-series default</span></li>
+      <li><span class="swatch" style="background:#c77a20;"></span><span class="token">c-2</span><span class="hex">#C77A20</span><span class="role">Contrast / lead-finding amber</span></li>
+      <li><span class="swatch" style="background:#cec96b;"></span><span class="token">c-3</span><span class="hex">#CEC96B</span><span class="role">Third series</span></li>
+      <li><span class="swatch" style="background:#51b196;"></span><span class="token">c-4</span><span class="hex">#51B196</span><span class="role">Fourth series</span></li>
+      <li><span class="swatch" style="background:#a8352c;"></span><span class="token">c-5</span><span class="hex">#A8352C</span><span class="role">Fifth series</span></li>
+      <li><span class="swatch" style="background:#918bed;"></span><span class="token">c-6</span><span class="hex">#918BED</span><span class="role">Sixth series</span></li>
+    </ul>
+  </div>
+
+  <h2 class="smp-subhead" style="margin-top:28px;">Muted (de-emphasis encoding)</h2>
+  <div class="colors">
+    <ul>
+      <li><span class="swatch" style="background:#7e8a99;"></span><span class="token">c-muted</span><span class="hex">#7E8A99</span><span class="role">Background data &mdash; paints the &ldquo;everyone else&rdquo; series when one is highlighted</span></li>
+    </ul>
+  </div>
+  <p style="font-family:var(--font-sans); font-size:11px; color:var(--ink-3); line-height:1.55; margin-top:10px; max-width:60ch;">
+    Use <code>#7E8A99</code> to mute non-focus data points so a single highlighted series stands
+    out. Typical pattern: paint every line / dot in <code>--c-muted</code>, then re-paint the
+    focus series on top in <code>--c-2</code> (or another accent). The muted layer carries the
+    general trend; the highlight carries the story.
+  </p>
+
+  <!-- Tiny illustration of the pattern -->
+  <div style="margin-top:14px; border:1px solid var(--rule); padding:14px;">
+    <svg viewBox="0 0 600 160" style="width:100%; height:auto; display:block;" aria-hidden="true">
+      <!-- muted background series -->
+      <polyline fill="none" stroke="#7E8A99" stroke-width="1.4" points="20,110 70,102 120,108 170,96 220,100 270,88 320,92 370,80 420,86 470,74 520,80 570,72"/>
+      <polyline fill="none" stroke="#7E8A99" stroke-width="1.4" points="20,130 70,124 120,128 170,118 220,122 270,114 320,118 370,108 420,112 470,102 520,108 570,100"/>
+      <polyline fill="none" stroke="#7E8A99" stroke-width="1.4" points="20,90 70,84 120,90 170,80 220,84 270,76 320,80 370,70 420,74 470,64 520,70 570,62"/>
+      <!-- highlighted series -->
+      <polyline fill="none" stroke="#C77A20" stroke-width="2.4" points="20,140 70,130 120,118 170,100 220,82 270,64 320,52 370,44 420,40 470,34 520,28 570,22"/>
+      <text x="574" y="22" font-family="Inter" font-size="11" font-weight="600" fill="#C77A20">Focus series</text>
+      <text x="574" y="62" font-family="Inter" font-size="10" fill="#7E8A99">Everyone else</text>
+    </svg>
+  </div>
+
+  <h2 class="smp-subhead" style="margin-top:32px;">Rules for using color</h2>
+  <ol style="font-family:var(--font-sans); font-size:12px; line-height:1.6; color:var(--ink-2); padding-left:18px; margin: 12px 0 0; max-width:62ch;">
+    <li style="margin-bottom:8px;">
+      <strong style="color:var(--ink);">Color encodes meaning, not decoration.</strong>
+      Every color in a chart must carry a specific function &mdash; a category, a series, a
+      threshold, a highlight. If a color is not earning its keep, remove it.
+    </li>
+    <li style="margin-bottom:8px;">
+      <strong style="color:var(--ink);">Keep most charts to two to four colors.</strong>
+      A reader can hold only a few categories in working memory at once. When a chart
+      truly needs more series, encode the rest with the muted color and let the focus
+      series carry the story.
+    </li>
+    <li style="margin-bottom:8px;">
+      <strong style="color:var(--ink);">Use color to highlight; mute the rest.</strong>
+      Paint the focus series in an accent (typically <code>--c-1</code> or
+      <code>--c-2</code>) and the supporting data in <code>--c-muted</code>
+      (<code>#7E8A99</code>). The muted layer carries the trend; the highlight carries
+      the finding.
+    </li>
+  </ol>
+</div>
+
+<!-- ═════════ DISPLAY ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 2</h2>
+  <h1 class="section">Display &amp; cover type</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Display</div>
+      <div class="smp-display">New Mexico&rsquo;s Economy<br/>Over Time and Space</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Use once per document &mdash; the cover title only. Always pair with a 2-px black rule below and the author byline. Never wrap to more than three lines.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.display</code></dd>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>56&nbsp;px</dd>
+        <dt>Weight</dt><dd>400</dd>
+        <dt>Leading</dt><dd>0.96</dd>
+        <dt>Tracking</dt><dd>-0.025em</dd>
+        <dt>opsz</dt><dd>60</dd>
+        <dt>Color</dt><dd><code>--ink</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Cover meta &mdash; series</div>
+      <div class="smp-eyebrow" style="font-size:11px; letter-spacing:0.18em; font-weight:600; color:var(--ink-3);">Growth Lab Working Paper Series</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Sits in the top-left corner of the cover, above the date.</p>
+      <dl>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>11&nbsp;px</dd>
+        <dt>Weight</dt><dd>600</dd>
+        <dt>Case</dt><dd>Uppercase, 0.18em tracking</dd>
+        <dt>Color</dt><dd><code>#6B645A</code> (<code>--ink-3</code>)</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Cover meta &mdash; date</div>
+      <div class="smp-eyebrow" style="font-size:11px; letter-spacing:0.18em; font-weight:700; color:var(--accent);">May 2026</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Always immediately below the series line, in accent blue at weight 700.</p>
+      <dl>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>11&nbsp;px</dd>
+        <dt>Weight</dt><dd>700</dd>
+        <dt>Case</dt><dd>Uppercase, 0.18em tracking</dd>
+        <dt>Color</dt><dd><code>--accent</code> (#015C9C)</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Cover authors</div>
+      <div style="font-family:var(--font-serif); font-size:14px; line-height:1.5; color:#6b645a;">Juan Carlos Orrego Zamudio and Tim O&rsquo;Brien</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">A single line below the title rule. Comma-separated; use &ldquo;and&rdquo; before the last author.</p>
+      <dl>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>14&nbsp;px</dd>
+        <dt>Weight</dt><dd>400</dd>
+        <dt>Leading</dt><dd>1.5</dd>
+        <dt>Color</dt><dd><code>#6B645A</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ SECTION HEADINGS ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 3</h2>
+  <h1 class="section">Section headings</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Section title</div>
+      <div class="smp-h1">A boom built on two minerals</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">First element inside <code>.page-inner</code>. Spans the full content row (<code>grid-column: 1 / -1</code>). Always sentence case &mdash; never trailing period. Avoid manual <code>&lt;br&gt;</code>.</p>
+      <dl>
+        <dt>Class</dt><dd><code>h1.section</code></dd>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>34&nbsp;px</dd>
+        <dt>Weight</dt><dd>500</dd>
+        <dt>Leading</dt><dd>1.08</dd>
+        <dt>Tracking</dt><dd>-0.018em</dd>
+        <dt>opsz</dt><dd>36</dd>
+        <dt>Color</dt><dd><code>--ink</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Subsection</div>
+      <div class="smp-h2">The Herfindahl-Hirschman story</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Within a section, marks a thematic break. Sentence case, no trailing period. Top margin 28&nbsp;px from preceding paragraph; use <code>style=&quot;margin-top:0&quot;</code> when first in a page.</p>
+      <dl>
+        <dt>Class</dt><dd><code>h2.subsection</code></dd>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>20&nbsp;px</dd>
+        <dt>Weight</dt><dd>500</dd>
+        <dt>Leading</dt><dd>1.2</dd>
+        <dt>Tracking</dt><dd>-0.01em</dd>
+        <dt>opsz</dt><dd>22</dd>
+        <dt>Color</dt><dd><code>--ink</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ BODY ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 4</h2>
+  <h1 class="section">Body copy</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Body paragraph</div>
+      <p class="smp-body">Two things explain almost everything about Mongolia&rsquo;s economy since 2003: the price of copper, and the appetite of Chinese steel-makers for coking coal. When both rose, Mongolia ran one of the fastest growth rates on Earth. When either stalled, so did the country.</p>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Default paragraph for all narrative text inside <code>.page-inner</code> (except the colophon and the cover). One blank line between paragraphs.</p>
+      <dl>
+        <dt>Selector</dt><dd><code>p</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>12&nbsp;px</dd>
+        <dt>Weight</dt><dd>400</dd>
+        <dt>Leading</dt><dd>1.6</dd>
+        <dt>Color</dt><dd><code>--ink-2</code></dd>
+        <dt>Emphasis</dt><dd><code>&lt;strong&gt;</code> &rarr; 600, <code>--ink</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Colophon body (page 2)</div>
+      <p class="smp-colophon">This research was conducted by the Growth Lab through a grant from Resilient Energy Economies. It was done in partnership with New Mexico&rsquo;s Economic Development Department.</p>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Used only on the colophon (imprint / page&nbsp;2). Serif, slightly bigger and more open than the default sans body.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.colophon p</code></dd>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>14&nbsp;px</dd>
+        <dt>Weight</dt><dd>400</dd>
+        <dt>Leading</dt><dd>1.55</dd>
+        <dt>opsz</dt><dd>14</dd>
+        <dt>Color</dt><dd><code>--ink-2</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Footnote</div>
+      <p class="smp-footnote"><span class="smp-sup-anchor"><sup>1</sup></span>Source: Growth Lab analysis. See methodology appendix for definitions and data sources.</p>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Anchor in serif italic accent. Note text in 9-px sans, ink-3. Rendered at the bottom of the page next to the folio.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.folio-note</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>9&nbsp;px</dd>
+        <dt>Leading</dt><dd>1.5</dd>
+        <dt>Color</dt><dd><code>--ink-3</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ LEAD ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 5</h2>
+  <h1 class="section">Lead paragraph</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Lead paragraph</div>
+      <p class="smp-lead">Mongolia rode the 2003&ndash;2013 commodity supercycle into the upper-middle income bracket. The boom built schools, paved Ulaanbaatar, and lifted eight hundred thousand people out of poverty.</p>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Lifts the opening paragraph of a section, the executive summary, or any standout intro. One per section, immediately under the heading.</p>
+      <dl>
+        <dt>Class</dt><dd><code>p.lead</code></dd>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>17&nbsp;px</dd>
+        <dt>Weight</dt><dd>300</dd>
+        <dt>Leading</dt><dd>1.4</dd>
+        <dt>opsz</dt><dd>18</dd>
+        <dt>Color</dt><dd><code>--ink-2</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ CHART TYPE ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 6</h2>
+  <h1 class="section">Chart typography</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Figure label</div>
+      <div class="smp-figure-label">Figure 4</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Top of every figure block. Accent blue, uppercase. Always numbered sequentially.</p>
+      <dl>
+        <dt>Class</dt><dd><code>h3.figure-label</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>10&nbsp;px</dd>
+        <dt>Weight</dt><dd>600</dd>
+        <dt>Case</dt><dd>Uppercase, 0.14em</dd>
+        <dt>Color</dt><dd><code>--accent</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Chart title</div>
+      <div class="smp-chart-title">Six-series line chart, solid strokes.</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Headline of a chart. Always ends in a period because it&rsquo;s a finding-statement, not a label.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.chart-title</code></dd>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>14&nbsp;px</dd>
+        <dt>Weight</dt><dd>500</dd>
+        <dt>Leading</dt><dd>1.25</dd>
+        <dt>Tracking</dt><dd>-0.005em</dd>
+        <dt>Color</dt><dd><code>--ink</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Chart subtitle</div>
+      <div class="smp-chart-subtitle">Share of merchandise exports by category, 2003&ndash;2024, percent.</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Optional. Gives the chart units, the period covered, and the unit of analysis. Omit when redundant with the title.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.chart-subtitle</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>12&nbsp;px</dd>
+        <dt>Weight</dt><dd>400</dd>
+        <dt>Leading</dt><dd>1.4</dd>
+        <dt>Color</dt><dd><code>--ink-3</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Axis label &amp; tick</div>
+      <div>
+        <div class="smp-axis-label">% real GDP growth</div>
+        <div class="smp-axis-tick" style="margin-top:6px;">0&nbsp;&nbsp;25&nbsp;&nbsp;50&nbsp;&nbsp;75&nbsp;&nbsp;100</div>
+      </div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Axis labels sit above (Y) or below (X) the plot area. Use tabular-nums for ticks so numbers align.</p>
+      <dl>
+        <dt>Selector</dt><dd><code>.axis-label, .axis-tick</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>12&nbsp;px</dd>
+        <dt>Weight</dt><dd>Label 500 / tick 400</dd>
+        <dt>Color</dt><dd><code>--ink-2</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- chart type continued -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 6 &middot; continued</h2>
+  <h1 class="section">Chart typography</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Series label</div>
+      <div>
+        <span class="smp-series-label" style="color:#015c9c;">Series 1</span>
+        &nbsp;&nbsp;
+        <span class="smp-series-label" style="color:#c77a20;">Series 2</span>
+      </div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Two options: direct labels at the end of each line, or a small legend below the chart. Color matches the series stroke. Avoid both at once.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.series-label</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>12&nbsp;px</dd>
+        <dt>Weight</dt><dd>600</dd>
+        <dt>Color</dt><dd>matches series</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">In-chart annotation</div>
+      <div class="smp-annotation">2018 commodity reflation</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Use sparingly &mdash; only to call out a single, story-driving data point. Pair with a hairline marker. Sans (no italic).</p>
+      <dl>
+        <dt>Class</dt><dd><code>.annotation</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>12&nbsp;px</dd>
+        <dt>Color</dt><dd><code>--ink-2</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Chart source</div>
+      <div class="smp-chart-source">Source: Growth Lab analysis of UN&nbsp;Comtrade. Categories: Coal (HS&nbsp;2701, 2702); Copper (HS&nbsp;2603, 7402).</div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Always required. One line below the chart. Italic serif distinguishes provenance from the data narrative.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.chart-source</code></dd>
+        <dt>Family</dt><dd>Source Serif 4 italic</dd>
+        <dt>Size</dt><dd>10&nbsp;px</dd>
+        <dt>Leading</dt><dd>1.45</dd>
+        <dt>Color</dt><dd><code>--ink-2</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ TABLE ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 7</h2>
+  <h1 class="section">Table typography</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Table sample</div>
+      <table style="width:100%; border-collapse:collapse; font-family:var(--font-sans); font-size:12px; color:var(--ink-2);">
+        <thead>
+          <tr>
+            <th style="font-weight:600; color:var(--ink); text-align:left; padding:10px 12px 8px; border-bottom:1px solid var(--ink); line-height:1.3;">Sector</th>
+            <th style="font-weight:600; color:var(--ink); text-align:right; padding:10px 12px 8px; border-bottom:1px solid var(--ink); line-height:1.3;">2024 exports (USD&nbsp;m)</th>
+            <th style="font-weight:600; color:var(--ink); text-align:right; padding:10px 12px 8px; border-bottom:1px solid var(--ink); line-height:1.3;">Strategic value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:11px 12px; border-bottom:1px solid var(--rule);"><strong style="color:var(--ink); font-weight:600;">Processed meat &amp; dairy</strong></td>
+            <td style="padding:11px 12px; border-bottom:1px solid var(--rule); text-align:right; font-variant-numeric:tabular-nums; color:var(--ink);">142</td>
+            <td style="padding:11px 12px; border-bottom:1px solid var(--rule); text-align:right; font-variant-numeric:tabular-nums; color:var(--ink);">0.84</td>
+          </tr>
+          <tr>
+            <td style="padding:11px 12px; border-bottom:1px solid var(--ink);"><strong style="color:var(--ink); font-weight:600;">Cashmere garments</strong></td>
+            <td style="padding:11px 12px; border-bottom:1px solid var(--ink); text-align:right; font-variant-numeric:tabular-nums; color:var(--ink);">218</td>
+            <td style="padding:11px 12px; border-bottom:1px solid var(--ink); text-align:right; font-variant-numeric:tabular-nums; color:var(--ink);">0.79</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Sentence-case headers (never all caps). Text columns left-aligned; numeric columns right-aligned with <code>tabular-nums</code>. Top &amp; bottom rules in ink; row dividers in <code>--rule</code>.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.report-table</code></dd>
+        <dt>Family</dt><dd>Inter (both head and body)</dd>
+        <dt>Size</dt><dd>12&nbsp;px throughout</dd>
+        <dt>Weight</dt><dd>Header 600 / body 400</dd>
+        <dt>Leading</dt><dd>1.45</dd>
+        <dt>Color</dt><dd>Head <code>--ink</code>; body <code>--ink-2</code></dd>
+        <dt>Strong</dt><dd>First column emphasis <code>--ink</code> 600</dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ TOC ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 8</h2>
+  <h1 class="section">Table of contents styles</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">TOC major entry</div>
+      <div style="display:flex; padding:14px 0 8px; border-bottom:1px solid var(--ink); gap:12px;">
+        <span class="smp-toc-major" style="flex:1;">Long-term perspective (1900&ndash;2020)</span>
+        <span style="font-family:var(--font-sans); font-size:11px; color:var(--ink); font-weight:700; font-variant-numeric:tabular-nums;">4</span>
+      </div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Top-level section in the TOC. Serif 14&nbsp;px, semibold ink, sentence case (no all caps). Top border in ink.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.toc-row.major</code></dd>
+        <dt>Family</dt><dd>Source Serif 4</dd>
+        <dt>Size</dt><dd>14&nbsp;px</dd>
+        <dt>Weight</dt><dd>600</dd>
+        <dt>Color</dt><dd><code>--ink</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">TOC sub-entry</div>
+      <div style="display:flex; padding:10px 0; border-bottom:1px solid var(--rule); gap:12px;">
+        <span class="smp-toc-sub" style="flex:1; padding-left:18px;">Overview of 120 years of population growth</span>
+        <span style="font-family:var(--font-sans); font-size:11px; color:var(--ink-2); font-weight:500; font-variant-numeric:tabular-nums;">4</span>
+      </div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Nested under a major entry. Sans 12&nbsp;px, ink-2, 18-px indent.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.toc-row.sub</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>12&nbsp;px</dd>
+        <dt>Weight</dt><dd>400</dd>
+        <dt>Color</dt><dd><code>--ink-2</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">TOC sub-sub entry</div>
+      <div style="display:flex; padding:10px 0; border-bottom:1px solid var(--rule); gap:12px;">
+        <span class="smp-toc-sub-sub" style="flex:1; padding-left:36px;">Perspective on urban areas</span>
+        <span style="font-family:var(--font-sans); font-size:11px; color:var(--ink-2); font-weight:500; font-variant-numeric:tabular-nums;">32</span>
+      </div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">For two-level deep nesting. Italic, ink-3, deeper indent.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.toc-row.sub-sub</code></dd>
+        <dt>Family</dt><dd>Inter italic</dd>
+        <dt>Size</dt><dd>12&nbsp;px</dd>
+        <dt>Color</dt><dd><code>--ink-3</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ PAGE CHROME ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 9</h2>
+  <h1 class="section">Page chrome</h1>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Running head</div>
+      <div style="border-bottom:1px solid var(--rule); padding-bottom:8px; display:flex; justify-content:space-between;">
+        <span class="smp-running-head">Growth Lab Working Paper No.&nbsp;264</span>
+        <span class="smp-running-head" style="color:var(--ink);">[ GL ]</span>
+      </div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Sits at the top of every content page (omitted on cover). Series tag on the left, 25-px Growth Lab logo on the right.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.running-head</code></dd>
+        <dt>Family</dt><dd>Inter</dd>
+        <dt>Size</dt><dd>9&nbsp;px</dd>
+        <dt>Weight</dt><dd>500</dd>
+        <dt>Case</dt><dd>Uppercase, 0.16em tracking</dd>
+        <dt>Color</dt><dd><code>--ink-3</code></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="spec">
+    <div class="sample">
+      <div class="name">Folio &amp; folio-note</div>
+      <div style="display:flex; justify-content:space-between; gap:16px;">
+        <span class="smp-folio-note"><sup style="color:var(--accent); font-style:italic;">1</sup>&nbsp;Source: Growth Lab analysis. See methodology appendix.</span>
+        <span class="smp-folio-num">8</span>
+      </div>
+    </div>
+    <div class="meta">
+      <p class="usage" style="margin-top:0;">Bottom of every content page (omitted on cover, TOC, colophon, references). Page number flush right; optional footnote on the left.</p>
+      <dl>
+        <dt>Class</dt><dd><code>.folio</code> / <code>.folio-note</code></dd>
+        <dt>Family</dt><dd>Number: Inter / Note: Source Serif 4 italic</dd>
+        <dt>Size</dt><dd>Number 9&nbsp;px / note 10&nbsp;px</dd>
+        <dt>Color</dt><dd><code>--ink-3</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ DECISION RULES ═════════ -->
+<div class="page">
+  <h2 class="smp-eyebrow">Section 10</h2>
+  <h1 class="section">Decision rules</h1>
+
+  <p class="lead-copy">
+    The system is small on purpose. Before introducing a new style, work through this list.
+  </p>
+
+  <ol style="font-family:var(--font-sans); font-size:12px; line-height:1.6; color:var(--ink-2); padding-left:18px; margin-top:18px;">
+    <li><strong style="color:var(--ink);">Serif or sans?</strong> Serif for the cover, all headings, the lead, the colophon, chart titles, and chart sources. Sans for everything else.</li>
+    <li><strong style="color:var(--ink);">Body size is 12&nbsp;px.</strong> Do not push body text below 12&nbsp;px. Footnotes (9&nbsp;px) are the only exception, and they live next to the folio.</li>
+    <li><strong style="color:var(--ink);">No trailing periods on headings.</strong> Section headings, subsection headings, and TOC entries end without a period. Chart titles end with a period (they read as a finding).</li>
+    <li><strong style="color:var(--ink);">No all-caps body or headings.</strong> Uppercase is reserved for eyebrows, figure labels, running heads, and similar 9&ndash;11&nbsp;px chrome.</li>
+    <li><strong style="color:var(--ink);">Color is for emphasis, not decoration.</strong> Default ink layers: <code>--ink</code> (titles, strong), <code>--ink-2</code> (body), <code>--ink-3</code> (captions, chrome), <code>--ink-4</code> (hairlines). Reach for <code>--accent</code> only for eyebrows, figure labels, the cover date, and the primary chart series.</li>
+    <li><strong style="color:var(--ink);">Tabular numerals in tables and charts.</strong> Always set <code>font-variant-numeric: tabular-nums</code> on numeric cells, axis ticks, page numbers, and TOC page numbers.</li>
+    <li><strong style="color:var(--ink);">One lead per section.</strong> A <code>p.lead</code> never appears twice on the same page.</li>
+    <li><strong style="color:var(--ink);">Cover meta is two lines.</strong> Series name in ink-3 weight 600; date in accent weight 700. Never combine them on one line.</li>
+    <li><strong style="color:var(--ink);">Subtitle is optional, source is required.</strong> Every chart needs a <code>.chart-source</code>. The <code>.chart-subtitle</code> can be omitted when redundant.</li>
+    <li><strong style="color:var(--ink);">No monospace.</strong> Numerals use Inter with tabular figures. Avoid mono fonts in body, charts, and tables.</li>
+  </ol>
+</div>
+
+</body>
+</html>

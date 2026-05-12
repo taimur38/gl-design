@@ -5,9 +5,6 @@ Thumbs.db
 # Archives (keep source files, not zips)
 *.zip
 
-# Binary outputs that can be regenerated
-framework-deck.pdf
-
 # Editor / IDE
 .vscode/
 .idea/

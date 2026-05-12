@@ -15,8 +15,7 @@ Body            : Source Sans 3   (same as above)
 Captions / data : JetBrains Mono  (same as above)
 
 The editorial variant swaps in a serif (Crimson Pro) for headings while
-keeping Source Sans 3 for body text. See framework-visual-b-editorial.html
-in the gl-design repo for the full visual specimen.
+keeping Source Sans 3 for body text.
 
 License
 -------

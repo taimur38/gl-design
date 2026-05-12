@@ -1,70 +1,79 @@
-# Growth Lab Report Design Framework — Intention
+# Growth Lab Design System — Intention
 
 ## Purpose
 
-Establish a cohesive design framework for Growth Lab reports. These reports are
-typically long-form documents containing prose, data visualizations (ggplot
-charts), tables, and Zotero-managed references. The authoring pipeline is
-Markdown → Word/PDF via pandoc (using the `/md2docx` skill), but the **final
-deliverable is always a PDF**.
+Establish a **visual grammar** for all Growth Lab outputs — reports, slide
+decks, briefs, standalone charts, web pages, social cards — so that anything
+the lab ships feels coherent and identifiably ours. The grammar codifies the
+shared parts (color, type, chart conventions); **recipes** apply the grammar
+to specific media (each artifact has a clear home on its page or screen); and
+**tools** encode both as runnable artifacts that researchers can use without
+design training.
 
 ## Problem
 
-The current Word theme works but lacks the visual refinement expected of a
-flagship research output. There is no systematic grid, no defined relationship
-between figure dimensions and page layout, and typography choices are ad-hoc
-across headings, captions, and body text.
+Lab outputs don't currently feel like they come from the same place. Each
+medium reinvents its typography, sizing, and figure conventions ad-hoc.
+Reports have one set of chart sizes, slides another; brand colors get
+re-picked by hand; the relationship between page geometry and figure
+dimensions is loose; researchers without design background have no
+opinionated default to fall back on.
 
-## Goals
+## Approach
 
-1. **Modular grid for PDF pages** — a spatial system that governs margins,
-   column widths, and vertical rhythm so every element (text blocks, figures,
-   tables, pull quotes) has a clear home on the page.
+Three layers, each separable:
 
-2. **Typographic scale** — a coherent set of font choices and sizes for every
-   text role: H1–H4 headings, body text, figure titles, figure captions, table
-   headers, footnotes, block quotes, and page headers/footers. Built on the GL
-   design library's primary font (Source Sans 3) with JetBrains Mono for
-   technical/caption elements.
+1. **Grammar** ([`grammar.md`](grammar.md)) — medium-agnostic primitives.
+   Color tokens, type stack, type scale ratio, role hierarchy, in-chart
+   typography. The decisions that hold true across every artifact.
 
-3. **Figure specification system** — defined aspect ratios and pixel/inch
-   dimensions for charts so they snap cleanly to the grid. Currently slides use
-   11 × 5.5 in and standalone reports default to 9 × 6 in; the framework should
-   unify these into a small set of named figure sizes.
+2. **Recipes** ([`recipes/`](recipes/)) — applications of the grammar to a
+   specific medium. Each recipe pins page geometry, body anchor, figure
+   sizes, spacing, and element patterns. Today: long-form report. Future:
+   slide deck, one-page brief, web/standalone chart, possibly LaTeX paper.
 
-4. **Color system alignment** — ensure the report palette is consistent with
-   the Growth Lab design library (brand colors, product-space clusters,
-   Atlas/Metroverse/Greenplexity palettes).
+3. **Tools** — codified, runnable artifacts that implement grammar + recipe
+   so other people can absorb them by using them, not by reading
+   specifications:
+   - **R functions** in [`skills/gl-ggplot/`](skills/gl-ggplot/) — theme,
+     palettes, named figure sizes.
+   - **Pandoc filters and templates** in [`skills/md2docx/`](skills/md2docx/)
+     and [`assets/gl-report.docx`](assets/gl-report.docx) — markdown to Word
+     with GL styling.
+   - **Claude skills** — `gl-ggplot`, `md2docx`, `chart-audit` — so AI
+     assistants apply the grammar automatically.
+   - **Static assets** in [`assets/`](assets/) — fonts, logos, color CSVs
+     consumed by all of the above.
 
-5. **Practical templates** — a reference Rmd/Quarto setup and a pandoc/Word
-   reference document that implement the framework, so new reports start right.
-
-## Design Inspirations
+## Design inspirations
 
 - **Foreign Affairs** — clean, authoritative layouts; strong typographic
-  hierarchy; generous margins that let the text breathe
+  hierarchy; generous margins that let the text breathe.
 - **World Bank flagship reports** — professional data presentation; effective
-  use of sidebars, call-out boxes, and structured figure placement
-- **The Economist** — data-dense but highly readable; disciplined use of color;
-  excellent chart typography
-- **QJE (Quarterly Journal of Economics)** — academic rigor; clean, no-nonsense
-  typesetting; well-integrated figures and tables
+  use of sidebars, call-out boxes, and structured figure placement.
+- **The Economist** — data-dense but highly readable; disciplined use of
+  color; excellent chart typography.
+- **QJE (Quarterly Journal of Economics)** — academic rigor; clean,
+  no-nonsense typesetting; well-integrated figures and tables.
 
-## Existing Assets
+## Existing assets
 
-- **Growth Lab Design Library** (`growthlab.app/design-library`) — brand colors,
-  visualization palettes, logos, flags. Downloaded to `design-library/`.
-- **Pakistan FM meeting materials** (`~/dev/pakistan-explore/`) — a real-world
-  example of GL slides and consolidated Rmd with `theme_gl()`, design tokens,
-  and figure output conventions.
-- **Source Sans 3** — GL's primary typeface (Google Fonts).
-- **JetBrains Mono** — used for captions, axis labels, technical annotations.
+- **Growth Lab Design Library** (`growthlab.app/design-library`) — brand
+  colors, visualization palettes, logos, flags. Downloaded to
+  [`assets/design-library/`](assets/design-library/).
+- **Source Sans 3** — GL's primary typeface, bundled locally in
+  [`assets/fonts/`](assets/fonts/).
+- **JetBrains Mono** — for captions, axis labels, technical annotations.
+- **Pakistan FM meeting materials** ([`playground/`](playground/)) — a
+  working dogfood example of the report recipe, with embedded ggplot code
+  and rendered output.
 
 ## Constraints
 
-- Final output is PDF (via Word/pandoc or direct LaTeX).
-- Authors write in Markdown or Rmd/Quarto.
-- Figures are generated in R (ggplot2) and saved as PNG at 300 DPI.
+- Output formats vary by recipe: PDF (reports, briefs), PPTX/PDF (slides),
+  PNG/SVG (charts), HTML (web). The grammar holds across all of them.
+- Researchers author in Markdown / Rmd / Quarto; figures are generated in R
+  (ggplot2) and saved as PNG at 300 DPI.
 - References managed via Zotero → CSL/BibTeX.
-- The framework must be simple enough that a researcher can follow it without
-  design training.
+- The system must be simple enough that a researcher can follow it without
+  design training — the tools should make the right defaults automatic.

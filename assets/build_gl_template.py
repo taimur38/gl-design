@@ -7,15 +7,13 @@ Growth Lab-branded reference document (gl-report.docx).
 
 Changes:
   - Theme: GL color scheme + Source Sans 3 / JetBrains Mono fonts
-  - Styles: font names, sizes, colors, spacing per framework.md
+  - Styles: font names, sizes, colors, spacing per grammar.md + recipes/report.md
   - Page setup: 1" top/left/right, 1.25" bottom → 6.5 × 8.75" live area
   - Header: GL logo + simplified running head
   - Footer: page number in JetBrains Mono
 
 Usage:
-    python3 build_gl_template.py              # builds gl-report.docx
-    python3 build_gl_template.py --editorial  # builds gl-report-editorial.docx
-    python3 build_gl_template.py --all        # builds both
+    python3 build_gl_template.py
 """
 
 import zipfile
@@ -26,6 +24,7 @@ import os
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SOURCE = os.path.expanduser("~/dev/taimur-skills/md2docx/assets/template.docx")
+OUTPUT = os.path.join(SCRIPT_DIR, "gl-report.docx")
 
 # ---------------------------------------------------------------------------
 # GL Design Tokens
@@ -46,21 +45,7 @@ GL_COLORS = {
     "folHlink": "7c7c7c",  # Followed link = muted
 }
 
-# Typography variants
-VARIANTS = {
-    "default": {
-        "major": "Source Sans 3",
-        "minor": "Source Sans 3",
-        "output": "gl-report.docx",
-    },
-    "editorial": {
-        "major": "Crimson Pro",
-        "minor": "Source Sans 3",
-        "output": "gl-report-editorial.docx",
-    },
-}
-
-# Font: Source Sans 3 for both heading and body (default, overridden per variant)
+# Font: Source Sans 3 for both heading and body
 MAJOR_FONT = "Source Sans 3"
 MINOR_FONT = "Source Sans 3"
 
@@ -93,9 +78,7 @@ STYLES = {
 }
 
 # Also update the corresponding "Char" styles for linked styles
-CHAR_STYLES = {}
-for sid, vals in list(STYLES.items()):
-    CHAR_STYLES[sid + "Char"] = vals
+CHAR_STYLES = {sid + "Char": vals for sid, vals in STYLES.items()}
 
 
 # ---------------------------------------------------------------------------
@@ -301,9 +284,7 @@ def transform_styles_xml(content):
     )
 
     # 2. Transform individual styles
-    all_mods = {}
-    all_mods.update(STYLES)
-    all_mods.update(CHAR_STYLES)
+    all_mods = {**STYLES, **CHAR_STYLES}
 
     for sid, (font, size, color, bold, italic, sp_before, sp_after) in all_mods.items():
         # Find this style's XML block
@@ -366,70 +347,15 @@ def transform_header_xml(content):
         '',
         content
     )
-    # Update header style font
-    content = re.sub(
-        r'(<w:pStyle w:val="Header"/>)',
-        r'\1',
-        content
-    )
     return content
-
-
-# ---------------------------------------------------------------------------
-# Box styling: update the Lua filter's box colors to match GL tokens
-# The box colors are hardcoded in the Lua filter, but we can update the
-# shading color in existing boxes in the template showcase document.
-# ---------------------------------------------------------------------------
 
 
 # ---------------------------------------------------------------------------
 # Main: unzip → transform → rezip
 # ---------------------------------------------------------------------------
 
-def apply_variant(variant_name):
-    """Set the global MAJOR_FONT/MINOR_FONT and rebuild STYLES for a variant."""
-    global MAJOR_FONT, MINOR_FONT, STYLES, CHAR_STYLES
-
-    v = VARIANTS[variant_name]
-    MAJOR_FONT = v["major"]
-    MINOR_FONT = v["minor"]
-
-    STYLES = {
-        "Normal":         (MINOR_FONT, 22, "333333", False, False, None, 120),
-        "Heading1":       (MAJOR_FONT, 43, "333333", True,  False, 480, 120),
-        "Heading2":       (MAJOR_FONT, 34, "333333", True,  False, 360, 120),
-        "Heading3":       (MAJOR_FONT, 28, "333333", True,  False, 240, 120),
-        "Heading4":       (MAJOR_FONT, 22, "333333", True,  False, 240, 120),
-        "Heading5":       (MAJOR_FONT, 22, "7c7c7c", False, False, 240, 120),
-        "Heading6":       (MAJOR_FONT, 22, "7c7c7c", False, True,  240, 120),
-        "Title":          (MAJOR_FONT, 52, "333333", True,  False, None, 120),
-        "Subtitle":       (MAJOR_FONT, 32, "7c7c7c", False, False, None, 240),
-        "Quote":          (MINOR_FONT, 22, "7c7c7c", False, True,  120, 120),
-        "IntenseQuote":   (MINOR_FONT, 22, "266798", False, True,  120, 120),
-        "FigureTitle":    (MINOR_FONT, 22, "333333", True,  False, 240, 60),
-        "FigureSource":   ("JetBrains Mono", 17, "7c7c7c", False, True, 60, 240),
-        "Source":         ("JetBrains Mono", 17, "7c7c7c", False, True, 60, 240),
-        "Caption":        ("JetBrains Mono", 17, "7c7c7c", False, False, 60, 120),
-        "FootnoteText":   (MINOR_FONT, 18, "7c7c7c", False, False, None, 60),
-        "Header":         ("JetBrains Mono", 16, "7c7c7c", False, False, None, None),
-        "Footer":         ("JetBrains Mono", 16, "7c7c7c", False, False, None, None),
-        "TOCHeading":     (MAJOR_FONT, 34, "333333", True,  False, 480, 120),
-        "TOC1":           (MINOR_FONT, 22, "333333", True,  False, 120, 60),
-        "TOC2":           (MINOR_FONT, 22, "333333", False, False, 60, 60),
-        "TOC3":           (MINOR_FONT, 20, "7c7c7c", False, False, 60, 60),
-    }
-
-    CHAR_STYLES = {}
-    for sid, vals in list(STYLES.items()):
-        CHAR_STYLES[sid + "Char"] = vals
-
-
-def build_variant(variant_name):
-    """Build a single template variant."""
-    apply_variant(variant_name)
-
-    output = os.path.join(SCRIPT_DIR, VARIANTS[variant_name]["output"])
-    tmp = output + ".tmp"
+def build_template():
+    tmp = OUTPUT + ".tmp"
 
     with zipfile.ZipFile(SOURCE, 'r') as zin, \
          zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zout:
@@ -457,22 +383,15 @@ def build_variant(variant_name):
 
             zout.writestr(item, data)
 
-    shutil.move(tmp, output)
-    print(f"Built: {output}")
+    shutil.move(tmp, OUTPUT)
+    print(f"Built: {OUTPUT}")
 
 
 def main():
     if not os.path.exists(SOURCE):
         print(f"Error: Source template not found at {SOURCE}")
         sys.exit(1)
-
-    if "--all" in sys.argv:
-        for name in VARIANTS:
-            build_variant(name)
-    elif "--editorial" in sys.argv:
-        build_variant("editorial")
-    else:
-        build_variant("default")
+    build_template()
 
 
 if __name__ == "__main__":
