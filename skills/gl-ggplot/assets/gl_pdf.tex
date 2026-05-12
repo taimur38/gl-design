@@ -1,0 +1,126 @@
+% gl_pdf.tex — Growth Lab design system for R Markdown PDF output
+%
+% Usage in a YAML header:
+%   output:
+%     pdf_document:
+%       latex_engine: xelatex
+%       includes:
+%         in_header: ~/dev/gl-design/skills/gl-ggplot/assets/gl_pdf.tex
+%
+% Requires: xelatex (or lualatex). Will not work with pdflatex because of
+% fontspec / system font loading.
+%
+% This preamble uses only LaTeX packages that ship with a stock TinyTeX
+% install (fontspec, xcolor, hyperref, caption, framed, booktabs). It
+% deliberately avoids titlesec, tocloft, setspace, parskip so it works on
+% machines that haven't kept tlmgr up to date.
+
+% ---- Fonts ------------------------------------------------------------------
+% Source Sans 3 for body text (matches theme_gl's "gl_sans"); JetBrains Mono
+% for code and captions (matches theme_gl's "gl_mono"). Both shipped in
+% ~/dev/gl-design/fonts/ so no system installation is needed.
+
+\usepackage{fontspec}
+
+\setmainfont{SourceSans3}[
+  Path           = /home/taimur/dev/gl-design/fonts/source-sans-3/ttf/,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  ItalicFont     = *-It,
+  BoldItalicFont = *-BoldIt,
+  Extension      = .ttf
+]
+
+\setsansfont{SourceSans3}[
+  Path           = /home/taimur/dev/gl-design/fonts/source-sans-3/ttf/,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  ItalicFont     = *-It,
+  BoldItalicFont = *-BoldIt,
+  Extension      = .ttf
+]
+
+\setmonofont{JetBrainsMono}[
+  Path           = /home/taimur/dev/gl-design/fonts/jetbrains-mono/ttf/,
+  UprightFont    = *-Regular,
+  BoldFont       = *-Bold,
+  ItalicFont     = *-Italic,
+  BoldItalicFont = *-BoldItalic,
+  Extension      = .ttf,
+  Scale          = 0.92
+]
+
+% ---- Colours ----------------------------------------------------------------
+% Mirrors the `gl` palette in theme_gl.R.
+
+\usepackage{xcolor}
+\definecolor{glblue}{HTML}{266798}
+\definecolor{glred}{HTML}{C64646}
+\definecolor{gldark}{HTML}{333333}
+\definecolor{glmuted}{HTML}{7C7C7C}
+\definecolor{glborder}{HTML}{DCDCDC}
+\definecolor{glbg}{HTML}{F3F3F3}
+\definecolor{glcodebg}{HTML}{F7F7F5}
+
+% ---- Headings ---------------------------------------------------------------
+% Brand-blue section headings, plain dark subsections, muted sub-subsections.
+% Avoids titlesec — uses LaTeX's built-in \@startsection redefinition via
+% \makeatletter so we keep the dependency surface small.
+
+\makeatletter
+\renewcommand\section{%
+  \@startsection{section}{1}{\z@}%
+    {-2.6ex \@plus -1ex \@minus -.2ex}%
+    {1.0ex \@plus.2ex}%
+    {\sffamily\Large\bfseries\color{glblue}}}
+\renewcommand\subsection{%
+  \@startsection{subsection}{2}{\z@}%
+    {-2.0ex \@plus -1ex \@minus -.2ex}%
+    {0.6ex \@plus.2ex}%
+    {\sffamily\large\bfseries\color{gldark}}}
+\renewcommand\subsubsection{%
+  \@startsection{subsubsection}{3}{\z@}%
+    {-1.5ex \@plus -1ex \@minus -.2ex}%
+    {0.5ex \@plus.2ex}%
+    {\sffamily\normalsize\bfseries\color{glmuted}}}
+\makeatother
+
+% ---- Links ------------------------------------------------------------------
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = glblue,
+  citecolor  = glblue,
+  urlcolor   = glblue
+}
+
+% ---- Body text and spacing --------------------------------------------------
+% Use plain LaTeX primitives instead of parskip/setspace.
+
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+\linespread{1.1}
+
+% ---- Captions ---------------------------------------------------------------
+
+\usepackage{caption}
+\captionsetup{
+  font       = {small, color=glmuted},
+  labelfont  = {bf, color=gldark},
+  labelsep   = colon,
+  margin     = 4pt
+}
+
+% ---- Code blocks ------------------------------------------------------------
+% Pandoc renders highlighted code in the `Shaded` environment with
+% `\colorbox{shadecolor}{...}`. Override `shadecolor` to a soft grey.
+
+\definecolor{shadecolor}{HTML}{F7F7F5}
+
+% Inline code (\texttt) is mapped to JetBrains Mono via \setmonofont above.
+
+% ---- Tables -----------------------------------------------------------------
+
+\usepackage{booktabs}
+\renewcommand{\arraystretch}{1.15}
