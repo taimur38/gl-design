@@ -27,54 +27,78 @@ SOURCE = os.path.expanduser("~/dev/taimur-skills/md2docx/assets/template.docx")
 OUTPUT = os.path.join(SCRIPT_DIR, "gl-report.docx")
 
 # ---------------------------------------------------------------------------
-# GL Design Tokens
+# GL Design Tokens (nil-design)
 # ---------------------------------------------------------------------------
+#
+# Office theme slots: dk1/lt1 are "Text/Background dark/light" — system
+# colors at the user's level. dk2/lt2 are "Text/Background 2". accent1-6
+# feed Word's color picker and Office chart defaults.
+#
+# Note on weight: Word's <w:b/> is a boolean — there's no native weight 500.
+# Styles that nil specifies at weight 500 (H1, H2, chart title) are rendered
+# with <w:b/>, which the user's Word installation maps to whatever bold face
+# the font system can provide (typically weight 700 for Source Serif 4). The
+# visual hierarchy is still carried mostly by size; the 500-vs-700 mismatch
+# is a known compromise — see followups.md.
 
 GL_COLORS = {
-    "dk1": "333333",       # Primary text
-    "lt1": "FFFFFF",       # White background
-    "dk2": "266798",       # Brand blue (dark variant)
-    "lt2": "F3F3F3",       # Light background
-    "accent1": "266798",   # Brand blue
-    "accent2": "C64646",   # Red (highlight)
-    "accent3": "36B250",   # Green
-    "accent4": "EAC218",   # Yellow
-    "accent5": "D1852A",   # Orange
-    "accent6": "52E2DE",   # Teal
-    "hlink": "266798",     # Hyperlink = brand blue
-    "folHlink": "7c7c7c",  # Followed link = muted
+    "dk1":      "1A1714",  # ink — primary text / headings
+    "lt1":      "FFFFFF",  # white background
+    "dk2":      "015C9C",  # accent blue (dark slot)
+    "lt2":      "F4F1EA",  # paper-warm
+    "accent1":  "015C9C",  # c-1 primary blue
+    "accent2":  "C77A20",  # c-2 amber (highlight / lead-finding)
+    "accent3":  "CEC96B",  # c-3
+    "accent4":  "51B196",  # c-4
+    "accent5":  "A8352C",  # c-5
+    "accent6":  "918BED",  # c-6
+    "hlink":    "015C9C",  # hyperlinks → accent
+    "folHlink": "6B645A",  # followed links → ink-3
 }
 
-# Font: Source Sans 3 for both heading and body
-MAJOR_FONT = "Source Sans 3"
-MINOR_FONT = "Source Sans 3"
+# Fonts: Source Serif 4 for headings/display ("major"); Inter for body ("minor").
+MAJOR_FONT = "Source Serif 4"
+MINOR_FONT = "Inter"
 
-# Sizes in half-points (Word convention: 22 = 11pt, 28 = 14pt, etc.)
+# Sizes in half-points (Word convention: 24 = 12pt, 28 = 14pt, 68 = 34pt, etc.)
+# Spacing in twips (20 twips = 1pt).
 STYLES = {
     # styleId: (font, size_halfpt, color, bold, italic, space_before_twips, space_after_twips)
     # None = don't change that attribute
-    "Normal":         (MINOR_FONT, 22, "333333", False, False, None, 120),
-    "Heading1":       (MAJOR_FONT, 43, "333333", True,  False, 480, 120),  # 21.5pt
-    "Heading2":       (MAJOR_FONT, 34, "333333", True,  False, 360, 120),  # 17pt
-    "Heading3":       (MAJOR_FONT, 28, "333333", True,  False, 240, 120),  # 14pt
-    "Heading4":       (MAJOR_FONT, 22, "333333", True,  False, 240, 120),  # 11pt semibold
-    "Heading5":       (MAJOR_FONT, 22, "7c7c7c", False, False, 240, 120),
-    "Heading6":       (MAJOR_FONT, 22, "7c7c7c", False, True,  240, 120),
-    "Title":          (MAJOR_FONT, 52, "333333", True,  False, None, 120),  # 26pt
-    "Subtitle":       (MAJOR_FONT, 32, "7c7c7c", False, False, None, 240),  # 16pt
-    "Quote":          (MINOR_FONT, 22, "7c7c7c", False, True,  120, 120),
-    "IntenseQuote":   (MINOR_FONT, 22, "266798", False, True,  120, 120),
-    "FigureTitle":    (MINOR_FONT, 22, "333333", True,  False, 240, 60),
-    "FigureSource":   ("JetBrains Mono", 17, "7c7c7c", False, True, 60, 240),  # 8.5pt
-    "Source":         ("JetBrains Mono", 17, "7c7c7c", False, True, 60, 240),
-    "Caption":        ("JetBrains Mono", 17, "7c7c7c", False, False, 60, 120),
-    "FootnoteText":   (MINOR_FONT, 18, "7c7c7c", False, False, None, 60),  # 9pt
-    "Header":         ("JetBrains Mono", 16, "7c7c7c", False, False, None, None),  # 8pt
-    "Footer":         ("JetBrains Mono", 16, "7c7c7c", False, False, None, None),
-    "TOCHeading":     (MAJOR_FONT, 34, "333333", True,  False, 480, 120),
-    "TOC1":           (MINOR_FONT, 22, "333333", True,  False, 120, 60),
-    "TOC2":           (MINOR_FONT, 22, "333333", False, False, 60, 60),
-    "TOC3":           (MINOR_FONT, 20, "7c7c7c", False, False, 60, 60),
+
+    # Body and document title
+    "Normal":         (MINOR_FONT,  24, "2C2823", False, False, None, 120),  # 12pt Inter ink-2
+    "Title":          (MAJOR_FONT, 112, "1A1714", False, False, None, 480),  # 56pt Display (cover only)
+    "Subtitle":       (MAJOR_FONT,  34, "2C2823", False, False, None, 240),  # 17pt lead-paragraph style
+
+    # Section headings (nil specifies 3 levels; H4–H6 are mild fallbacks)
+    "Heading1":       (MAJOR_FONT,  68, "1A1714", True,  False, 480, 160),   # 34pt H1
+    "Heading2":       (MAJOR_FONT,  40, "1A1714", True,  False, 560, 160),   # 20pt H2
+    "Heading3":       (MAJOR_FONT,  28, "1A1714", True,  False, 280, 160),   # 14pt H3 — improvised, followups #1
+    "Heading4":       (MINOR_FONT,  24, "6B645A", True,  False, 240, 120),
+    "Heading5":       (MINOR_FONT,  24, "6B645A", False, False, 240, 120),
+    "Heading6":       (MINOR_FONT,  24, "6B645A", False, True,  240, 120),
+
+    # Quotes
+    "Quote":          (MAJOR_FONT,  28, "2C2823", False, True,  120, 120),   # 14pt italic serif blockquote
+    "IntenseQuote":   (MAJOR_FONT,  34, "015C9C", False, False, 120, 120),   # 17pt accent lead-style emphasis
+
+    # Figures
+    "FigureTitle":    (MAJOR_FONT,  28, "1A1714", True,  False, 240, 60),    # 14pt chart title (Source Serif 4 500)
+    "FigureSource":   (MAJOR_FONT,  20, "2C2823", False, True,  60, 240),    # 10pt italic serif chart source
+    "Source":         (MAJOR_FONT,  20, "2C2823", False, True,  60, 240),    # alias
+    "Caption":        (MAJOR_FONT,  20, "2C2823", False, True,  60, 120),    # 10pt italic serif generic caption
+
+    # Page chrome
+    "FootnoteText":   (MINOR_FONT,  18, "6B645A", False, False, None, 60),   # 9pt Inter ink-3
+    "Header":         (MINOR_FONT,  18, "6B645A", False, False, None, None), # 9pt Inter running head
+    "Footer":         (MINOR_FONT,  18, "6B645A", False, False, None, None), # 9pt Inter folio
+
+    # Table of contents
+    "TOCHeading":     (MAJOR_FONT,  68, "1A1714", True,  False, 480, 160),   # Like H1
+    "TOC1":           (MAJOR_FONT,  28, "1A1714", True,  False, 120, 60),    # 14pt TOC major (Source Serif 4 600)
+    "TOC2":           (MINOR_FONT,  24, "2C2823", False, False, 60, 60),     # 12pt Inter TOC sub
+    "TOC3":           (MINOR_FONT,  24, "6B645A", False, True,  60, 60),     # 12pt Inter italic TOC sub-sub
 }
 
 # Also update the corresponding "Char" styles for linked styles
@@ -271,11 +295,11 @@ def transform_styles_xml(content):
         '<w:rPrDefault><w:rPr>'
         f'<w:rFonts w:ascii="{MINOR_FONT}" w:hAnsi="{MINOR_FONT}" '
         f'w:eastAsia="{MINOR_FONT}" w:cs="{MINOR_FONT}"/>'
-        '<w:sz w:val="22"/><w:szCs w:val="22"/>'  # 11pt
-        '<w:color w:val="333333"/>'
+        '<w:sz w:val="24"/><w:szCs w:val="24"/>'  # 12pt
+        '<w:color w:val="2C2823"/>'  # ink-2
         '</w:rPr></w:rPrDefault>'
         '<w:pPrDefault><w:pPr>'
-        '<w:spacing w:after="120" w:line="300" w:lineRule="auto"/>'  # ~15pt leading at 11pt
+        '<w:spacing w:after="120" w:line="384" w:lineRule="auto"/>'  # 1.6 line-height at 12pt
         '<w:jc w:val="both"/>'  # Justified text
         '</w:pPr></w:pPrDefault>'
         '</w:docDefaults>',

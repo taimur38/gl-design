@@ -61,15 +61,17 @@ for full usage.
 
 Key rules:
 
+- **Two-family stack**: Source Serif 4 (voice) + Inter (function). Never
+  monospace — neither JetBrains Mono nor any `family = "mono"` fallback.
 - **Do not override the theme per chart** — only adjust `legend.position` or
   `guides()` when needed.
-- **Highlight color**: always use `highlight` variable (`#C64646`), never
-  `"red"`.
-- **Highlighted elements**: paint the geom twice — once for all data, once
-  filtered with `color = highlight` and larger `size`.
-- **Color scales**: default palette applies automatically; use
+- **Highlight by muting**: paint *every* series in `c_muted` (`#7E8A99`)
+  first, then re-paint the focus series on top in `highlight` (amber
+  `#C77A20`) or `accent` (blue `#015C9C`). Never use `"red"` or arbitrary
+  colors for emphasis.
+- **Color scales**: default 6-color palette applies automatically; use
   `scale_color_gl("hs_sectors")` / `scale_fill_gl("hs_sectors")` for named
-  palettes.
+  external palettes.
 - **Figure sizes**: use `save_fig("full", "filename.png")` with named sizes:
   `full`, `full_tall`, `full_square`, `major`, `half`, `half_tall`, `slide`
   (sizes defined in [`recipes/report.md`](recipes/report.md)).
@@ -77,7 +79,7 @@ Key rules:
 - **Mode**: `gl_setup()` defaults to report mode (suppresses title / subtitle
   / caption). Use `gl_setup(mode = "slide")` for standalone charts.
 - **Legend**: report mode defaults to bottom-left. Override to
-  `legend.position = "right"` only for charts with >8 categories. Use
+  `legend.position = "right"` only for charts with >6 categories. Use
   `guide_legend(nrow = 2)` if bottom labels clip.
 - **Chart audit**: after generating charts, run the
   [`skills/chart-audit/`](skills/chart-audit/) checklist.

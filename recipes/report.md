@@ -15,20 +15,17 @@ authoring pipeline is Markdown → Word via pandoc (see
 | Left margin    | 1.0 in              | 1.0 in              |
 | Right margin   | 1.0 in              | 1.0 in              |
 | **Live area**  | **6.5 × 8.75 in**   | **6.27 × 9.44 in**  |
+| Paper color    | `paper` (#FAF8F4)   | warm white          |
+| Cover paper    | `cover-bg` (#F3F2EA)| reserved for cover  |
 
-Horizontal margins are symmetric at 1.0". The bottom margin is 1.25" — slightly
-larger than the top — for three converging reasons: (1) it hosts page numbers
-and footnotes without crowding the body, (2) it optically centers the text
-block on the page (a text block with equal vertical margins looks like it's
-sinking), and (3) it makes the live height resolve cleanly into **exactly 7
-vertical modules** (8.75" / 1.25" = 7), rather than 7.2 with a residual.
-
-The default target is **US Letter**; all figure sizes below are specified for
-the 6.5" live width.
+The bottom margin is 1.25" — slightly larger than the top — so (1) it hosts
+page numbers and footnotes without crowding the body, (2) it optically
+centers the text block on the page, and (3) the live height resolves cleanly
+into **exactly 7 vertical modules** (8.75" / 1.25" = 7).
 
 ## 2. Grid
 
-A **6-column modular grid** governs horizontal placement of all elements.
+A **6-column modular grid** governs horizontal placement.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -40,21 +37,20 @@ A **6-column modular grid** governs horizontal placement of all elements.
        total live width: 5.667" + 0.833" = 6.5"
 ```
 
-| Span    | Columns | Width   | Use                                    |
-|---------|---------|---------|----------------------------------------|
-| Full    | 6       | 6.500"  | Hero figures, full-width tables        |
-| Major   | 4       | 4.278"  | Primary figures with text wrap         |
-| Half    | 3       | 3.167"  | Side-by-side figure pairs              |
-| Minor   | 2       | 2.056"  | Small inset charts, margin figures     |
+| Span  | Columns | Width   | Use                                    |
+|-------|---------|---------|----------------------------------------|
+| Full  | 6       | 6.500"  | Hero figures, full-width tables        |
+| Major | 4       | 4.278"  | Primary figures with text wrap         |
+| Half  | 3       | 3.167"  | Side-by-side figure pairs              |
+| Minor | 2       | 2.056"  | Small inset charts, margin figures     |
 
 ### Vertical modules
 
-The vertical grid is based on the body text baseline: **11pt text on 15pt
-leading** = 0.208" per baseline unit. Vertical modules are **6 baselines =
-1.250"**. The 8.75" live height is **exactly 7 modules** tall — so just as
-6 columns address every horizontal position, 7 modules address every vertical
-position, and any element on the page lives in a `(column-span × module-span)`
-cell.
+Vertical modules are **1.250" tall**; the 8.75" live height is exactly 7
+modules. The figure-size table below snaps to this grid. Body text under
+nil's typography (12pt / 19.2pt leading) sets its own baseline rhythm at
+0.267" per line — independent of the module grid, which exists for figure
+and block placement.
 
 | V-modules | Height  | Use                                          |
 |-----------|---------|----------------------------------------------|
@@ -64,43 +60,170 @@ cell.
 | 6         | 7.500"  | Near-full-page figure (leaves 1 mod chrome)  |
 | 7         | 8.750"  | Full-bleed figure (rare — no chrome room)    |
 
-## 3. Type at report sizes
+## 3. Type sizes
 
-This recipe anchors the [grammar's ×1.25 scale](../grammar.md#type-scale-the-system)
-at **11pt body / 15pt leading** (1.36 line-height). The full scale unwraps to:
+Applies the [grammar's role hierarchy](../grammar.md#role-hierarchy) at
+report sizes. Anchor body at **12pt / 19.2pt leading**.
 
-| Step | Size    | Role                          |
-|------|---------|-------------------------------|
-| +3   | 21.5pt  | H1 (title), one per doc       |
-| +3   | 21.5pt  | H2 (section)                  |
-| +2   | 17pt    | (unused)                      |
-| +1   | 14pt    | H3 (subsection)               |
-| 0    | 11pt    | H4, Body, Body emphasis       |
-| 0    | 11pt    | Figure title                  |
-| −0.5 | 10pt    | Table header, Table body      |
-| −1   | 9pt     | Footnote                      |
-| −1.5 | 8.5pt   | Figure caption, Table note    |
-| −2   | 8pt     | Page header / footer          |
+### Display tier
 
-(Note: H1/H2 share the +3 step; H3 lands at +1, not +2, to keep the heading
-ladder visually distinct without dramatic jumps. Sizes are rounded to the
-nearest 0.5pt for clean rendering.)
+| Role             | Family         | Size | Weight | Leading | opsz | Tracking  |
+|------------------|----------------|------|--------|---------|------|-----------|
+| Display          | Source Serif 4 | 56pt | 400    | 0.96    | 60   | -0.025em  |
+| H1 (section)     | Source Serif 4 | 34pt | 500    | 1.08    | 36   | -0.018em  |
+| H2 (subsection)  | Source Serif 4 | 20pt | 500    | 1.20    | 22   | -0.010em  |
 
-### Spacing rules
+### Body tier
 
-- **Above H2:** 24pt (roughly 2 baselines of breathing room)
-- **Above H3:** 18pt
-- **Above H4:** 12pt
-- **Below all headings:** 6pt
-- **Paragraph spacing:** 6pt after each paragraph (no first-line indent); body
-  text is **justified**
-- **Figure/table spacing:** 12pt above, 6pt below caption
+| Role            | Family                | Size  | Weight | Leading |
+|-----------------|-----------------------|-------|--------|---------|
+| Lead paragraph  | Source Serif 4        | 17pt  | 300    | 1.40    |
+| Colophon body   | Source Serif 4        | 14pt  | 400    | 1.55    |
+| Body            | Inter                 | 12pt  | 400    | 1.60    |
+| Body emphasis   | Inter                 | 12pt  | 600    | 1.60    |
+| Footnote        | Inter                 | 9pt   | 400    | 1.50    |
+| Footnote anchor | Source Serif 4 italic | 12pt  | 400    | —       |
 
-## 4. Named figure sizes
+### Chart-adjacent tier (figure block)
 
-These are the canonical figure dimensions for ggplot output in a report. Each
-snaps to the grid and has a short name for use in `save_fig()` (see
-[`skills/gl-ggplot/`](../skills/gl-ggplot/)).
+| Role            | Family                 | Size  | Weight | Case      |
+|-----------------|------------------------|-------|--------|-----------|
+| Figure label    | Inter                  | 10pt  | 600    | UPPERCASE |
+| Chart title     | Source Serif 4         | 14pt  | 500    | Sentence  |
+| Chart subtitle  | Inter                  | 12pt  | 400    | Sentence  |
+| Chart source    | Source Serif 4 italic  | 10pt  | 400    | Sentence  |
+
+### Tables
+
+| Role           | Family                | Size  | Weight |
+|----------------|-----------------------|-------|--------|
+| Table header   | Inter                 | 12pt  | 600    |
+| Table cell     | Inter                 | 12pt  | 400    |
+| Table emphasis | Inter                 | 12pt  | 600    |
+| Table note     | Source Serif 4 italic | 10pt  | 400    |
+
+### TOC
+
+| Role         | Family                | Size  | Weight | Indent |
+|--------------|-----------------------|-------|--------|--------|
+| TOC major    | Source Serif 4        | 14pt  | 600    | 0      |
+| TOC sub      | Inter                 | 12pt  | 400    | 0.25in |
+| TOC sub-sub  | Inter italic          | 12pt  | 400    | 0.50in |
+| TOC page #   | Inter                 | 11pt  | 500    | —      |
+
+### Page chrome
+
+| Role         | Family                | Size  | Weight | Case      |
+|--------------|-----------------------|-------|--------|-----------|
+| Running head | Inter                 | 9pt   | 500    | UPPERCASE |
+| Folio        | Inter                 | 9pt   | 500    | —         |
+| Folio note   | Source Serif 4 italic | 10pt  | 400    | Sentence  |
+
+### Cover meta (cover only)
+
+| Role             | Family | Size | Weight | Color   | Case      |
+|------------------|--------|------|--------|---------|-----------|
+| Series eyebrow   | Inter  | 11pt | 600    | `ink-3` | UPPERCASE |
+| Cover date       | Inter  | 11pt | 700    | `accent`| UPPERCASE |
+| Cover authors    | Source Serif 4 | 14pt | 400 | `ink-3` | Sentence  |
+
+Tracking 0.18em for the eyebrow and date.
+
+## 4. Spacing
+
+- **Above H1 / display:** generous breathing room — start on its own line,
+  leave at least 24pt above any prior block.
+- **Above H2:** 28pt
+- **Below all headings:** 8pt
+- **Paragraph spacing:** 6pt after each paragraph; body text is **justified**;
+  no first-line indent.
+- **Figure block:** 12pt above figure label, 6pt below chart source.
+- **Table block:** 12pt above table header, 6pt below table note.
+
+Body text is one paragraph per logical idea, separated by 6pt of space —
+not by a blank line of text.
+
+## 5. Element patterns
+
+### Cover page
+
+Distinct paper color (`cover-bg`), no page chrome.
+
+```
+┌─────────────────────────────────────┐
+│  GROWTH LAB WORKING PAPER SERIES    │  ← eyebrow, 11pt Inter 600 ink-3 UPPER
+│  MAY 2026                           │  ← date,    11pt Inter 700 accent UPPER
+│                                     │
+│  (vertical space, ~96pt)            │
+│                                     │
+│  New Mexico's Economy               │  ← display, 56pt Source Serif 4 400
+│  Over Time and Space                │     opsz 60, leading 0.96, ink
+│                                     │
+│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │  ← 2pt rule, ink
+│                                     │
+│  Juan Carlos Orrego Zamudio         │  ← authors, 14pt Source Serif 4
+│  and Tim O'Brien                    │     ink-3, leading 1.5
+│                                     │
+└─────────────────────────────────────┘
+```
+
+Cover meta is **two lines** — series eyebrow and date — never combined.
+Display title never wraps to more than three lines. Authors comma-separated;
+"and" before the last name.
+
+### Figure block
+
+```
+FIGURE 4                                          ← figure label
+Mongolia rode the commodity supercycle.           ← chart title (ends in .)
+Share of merchandise exports, 2003–2024, percent. ← chart subtitle (optional)
+
+[ chart image — at a named figure size ]
+
+Source: Growth Lab analysis of UN Comtrade.       ← chart source (italic)
+```
+
+- Caption (chart source) sits **full-width below the figure**. Body prose
+  resumes only on a new row — never wraps beside a figure.
+- Chart titles **end with a period** (they are findings, not labels).
+- Chart subtitle is optional; omit when redundant with the title.
+- Chart source is **required** on every figure.
+
+### Table
+
+- Top and bottom rules in `ink` (heavier).
+- Row dividers in `rule` (`#DDDDDD`).
+- Header row: sentence case (never UPPERCASE), Inter 12pt weight 600 `ink`.
+- Numeric columns right-aligned with tabular-nums.
+- Text columns left-aligned.
+- Last row of body has a heavier (`ink`) bottom rule.
+- First-column emphasis: Inter 12pt weight 600 `ink`.
+- Table note below in Source Serif 4 italic 10pt `ink-2`.
+
+### Page chrome
+
+```
+GROWTH LAB WORKING PAPER NO. 264                                       [ GL ]
+─────────────────────────────────────────────────────────────────────────────
+
+  (body content)
+
+─────────────────────────────────────────────────────────────────────────────
+¹ Source: Growth Lab analysis. See methodology appendix.                    8
+```
+
+- Running head: top of every content page (omitted on cover, TOC,
+  colophon, references). Series tag flush left in Inter 9pt 500 UPPERCASE
+  `ink-3` (0.16em tracking); Growth Lab logo flush right.
+- Folio: bottom flush right, Inter 9pt 500 `ink-3`, tabular-nums.
+- Folio note (optional): Source Serif 4 italic 10pt `ink-3`, flush left,
+  beside the folio.
+
+### Named figure sizes
+
+Standard ggplot output dimensions for this recipe, snapped to the grid.
+Use via `save_fig("full", "filename.png")` — see
+[`skills/gl-ggplot/`](../skills/gl-ggplot/).
 
 | Name          | Width   | Height  | Aspect   | Grid fit            | Use case                          |
 |---------------|---------|---------|----------|---------------------|-----------------------------------|
@@ -111,72 +234,60 @@ snaps to the grid and has a short name for use in `save_fig()` (see
 | `half`        | 3.167"  | 3.0"    | ~1.06:1  | 3 col × 2.4 v-mod   | Side-by-side pair                 |
 | `half_tall`   | 3.167"  | 5.0"    | ~0.63:1  | 3 col × 4 v-mod     | Portrait figure, ranked bar chart |
 
-(`slide` — 10 × 5.625", 16:9 — also lives in the gl-ggplot helper today, but
-will move into a slide recipe once that exists.)
+(`slide` — 10 × 5.625", 16:9 — lives in the gl-ggplot helper for now; will
+move to a slide recipe when one exists.)
 
-## 5. Element patterns
+## 6. Recipe-specific rules
 
-### Figures
+These extend the [grammar's general rules](../grammar.md#4-rules) with values
+specific to the report.
 
-```markdown
-**Figure 1.** GDP per capita growth, 2000–2023
+1. **Body size is 12pt.** Do not push body text below 12pt. Footnotes (9pt)
+   are the only exception, and they live next to the folio.
 
-![](imgs/gdp_growth.png)
+2. **One lead per section.** A lead paragraph never appears twice on the
+   same page; it opens its section and that's it.
 
-*Source: World Bank WDI. Authors' calculations.*
-```
+3. **Cover meta is two lines.** Series name in `ink-3` weight 600; date in
+   `accent` weight 700. Never combine them on one line.
 
-- Title above the image in **bold body text** (Source Sans 3, 11pt SemiBold)
-- Caption below in *italic* monospace (JetBrains Mono, 8.5pt)
-- Image saved at the appropriate named size (usually `full`)
-- 12pt space above the figure title, 6pt below the caption
-- Caption always sits full-width below the figure; body prose only resumes on
-  a new row (never wraps beside a figure)
+4. **Subtitle is optional, source is required.** Every figure must have a
+   chart source. Omit the chart subtitle when redundant with the title.
 
-### Tables
+5. **Captions sit full-width below the figure.** Body prose never wraps
+   beside a figure — it only resumes on a new row.
 
-- Light top and bottom rules (border color `#dcdcdc`)
-- No vertical rules
-- Header row in SemiBold with a heavier bottom rule
-- Alternating row shading optional (use `#f3f3f3`)
-- Table notes below in the same style as figure captions
-
-### Pull quotes / call-out boxes
-
-- Background: `#f3f3f3`
-- Left border: 3pt solid `#266798` (brand blue)
-- Text: Body style, optionally italic
-- Padding: 12pt all sides
-
-### Horizontal rules
-
-- Color: `#dcdcdc`
-- Weight: 0.5pt
-- Full live width
-- 12pt above and below
-
-## 6. Quick reference
+## 7. Quick reference
 
 ```
 PAGE:   US Letter, margins 1.0/1.0/1.0/1.25 (L/R/T/B) → live 6.5 × 8.75"
+        Paper FAF8F4; cover paper F3F2EA
 GRID:   6 columns × 0.944" + 5 gutters × 0.167" = 6.5" live width
         7 modules × 1.25" = 8.75" live height
-FONTS:  Source Sans 3 (body/heads) + JetBrains Mono (captions/data)
-BODY:   11pt / 15pt leading
-SCALE:  × 1.25 major third → 11 → 14 → 17 → 21.5
+FONTS:  Source Serif 4 (voice) + Inter (function)
+BODY:   12pt Inter / 19.2pt leading
+DISPLAY:56 / 34 / 20 (display / H1 / H2, Source Serif 4)
+LEAD:   17pt Source Serif 4 weight 300
+
+CHART BLOCK (top-down):
+  Figure label (Inter 10pt 600 UPPER accent)
+  Chart title  (Source Serif 4 14pt 500 ink, ends with period)
+  Chart subtitle [optional] (Inter 12pt 400 ink-3)
+  [ figure image ]
+  Source (Source Serif 4 italic 10pt ink-2)
 
 FIGURE SIZES (width × height):
-  full        6.5 × 4.0"     Standard chart
-  full_tall   6.5 × 6.0"     Stacked / patchwork
-  full_square 6.5 × 6.5"     Heatmaps
-  major       4.278 × 4.0"   Chart + text wrap
-  half        3.167 × 3.0"   Side-by-side pair
-  half_tall   3.167 × 5.0"   Portrait chart
+  full         6.5 × 4.0"     Standard chart
+  full_tall    6.5 × 6.0"     Stacked / patchwork
+  full_square  6.5 × 6.5"     Heatmaps
+  major        4.278 × 4.0"   Chart + text wrap
+  half         3.167 × 3.0"   Side-by-side pair
+  half_tall    3.167 × 5.0"   Portrait chart
 
-COLORS:
-  Text:      #333333 / #7c7c7c (muted)
-  Border:    #dcdcdc
-  BG:        #f3f3f3
-  Highlight: #C64646
-  Brand:     #266798
+INK:        ink #1A1714 / ink-2 #2C2823 / ink-3 #6B645A / ink-4 #9A9389
+ACCENT:     #015C9C
+CATEGORICAL: c-1 #015C9C  c-2 #C77A20  c-3 #CEC96B
+             c-4 #51B196  c-5 #A8352C  c-6 #918BED
+MUTED:      #7E8A99 (paint everyone-else, then highlight focus in c-2)
+PAPER:      paper #FAF8F4  cover-bg #F3F2EA  rule #DDDDDD
 ```

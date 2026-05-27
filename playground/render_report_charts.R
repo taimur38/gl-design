@@ -12,31 +12,20 @@
 # Output: ~/dev/gl-design/playground/imgs/fm_meeting/*.png
 
 library(tidyverse)
-library(ggthemes)
 library(ggrepel)
 library(arrow)
 library(jsonlite)
 library(readxl)
-library(showtext)
-library(sysfonts)
 library(scales)
 
 source('utils.R')
 
-# ---- GL design tokens --------------------------------------------------------
+# ---- Growth Lab design system ------------------------------------------------
 
-gl <- list(
-    text_dark   = "#333333",
-    text_muted  = "#7c7c7c",
-    border      = "#dcdcdc",
-    background  = "#f3f3f3",
-    brand_blue  = "#266798",
-    palette = c(
-        "#266798", "#C64646", "#36B250", "#EAC218", "#D1852A",
-        "#52E2DE", "#A42DE2", "#7C6760", "#757777"
-    )
-)
+source("~/dev/gl-design/skills/gl-ggplot/assets/theme_gl.R")
+gl_setup(mode = "report")
 
+# Atlas-style sector palette, kept locally for this report's specific buckets.
 gl_cluster_colors <- c(
     "Agriculture"      = "#e5c21a",
     "Mineral Products" = "#a88b7d",
@@ -55,78 +44,8 @@ gl_cluster_colors <- c(
     "Unspecified"      = "#b23c6f"
 )
 
-highlight    <- "#C64646"
-highlight_sz <- 1.1
-
-# ---- Fonts -------------------------------------------------------------------
-
-font_add_google("Source Sans 3", "gl_sans")
-font_add_google("JetBrains Mono", "gl_mono")
-showtext_auto()
-showtext_opts(dpi = 300)
-
-# ---- theme_gl with mode support ----------------------------------------------
-
-theme_gl <- function(base_size = 12, mode = "slide") {
-    t <- theme_few(base_size = base_size) %+replace%
-    theme(
-        text          = element_text(family = "gl_sans", color = gl$text_dark),
-        plot.title    = element_text(family = "gl_sans", face = "plain",
-                                     size = rel(1.35), hjust = 0,
-                                     margin = margin(b = 4)),
-        plot.subtitle = element_text(family = "gl_sans", color = gl$text_muted,
-                                     size = rel(1.0), hjust = 0,
-                                     margin = margin(b = 10)),
-        plot.caption  = element_text(family = "gl_mono", color = gl$text_muted,
-                                     size = rel(0.75), hjust = 1,
-                                     margin = margin(t = 8)),
-        axis.title    = element_text(family = "gl_mono", color = gl$text_muted,
-                                     size = rel(0.85)),
-        axis.title.x  = element_text(margin = margin(t = 6)),
-        axis.title.y  = element_text(margin = margin(r = 6), angle = 90),
-        axis.text     = element_text(family = "gl_sans", color = gl$text_dark,
-                                     size = rel(0.85)),
-        legend.title  = element_text(family = "gl_mono", color = gl$text_muted,
-                                     size = rel(0.8)),
-        legend.text   = element_text(family = "gl_sans", size = rel(0.85)),
-        strip.text    = element_text(family = "gl_mono", color = gl$text_dark,
-                                     size = rel(0.85))
-    )
-
-    if (mode == "report") {
-        t <- t + theme(
-            plot.title      = element_blank(),
-            plot.subtitle   = element_blank(),
-            plot.caption    = element_blank(),
-            legend.position = "bottom",
-            legend.justification = "left",
-            legend.margin   = margin(t = 4),
-            legend.key.size = unit(0.4, "cm")
-        )
-    }
-
-    t
-}
-
-# ---- REPORT MODE: suppress titles, use report figure sizes -------------------
-
-theme_set(theme_gl(mode = "report"))
-
-options(
-    ggplot2.discrete.colour = gl$palette,
-    ggplot2.discrete.fill   = gl$palette
-)
-
-# Report figure sizes (from recipes/report.md)
-gl_fig <- list(
-    full        = list(w = 6.5,   h = 4.0),
-    full_tall   = list(w = 6.5,   h = 6.0),
-    full_square = list(w = 6.5,   h = 6.5),
-    major       = list(w = 4.278, h = 4.0),
-    half        = list(w = 3.167, h = 3.0),
-    half_tall   = list(w = 3.167, h = 5.0)
-)
-
+# Override save_fig to write into the playground's image directory instead of
+# the default `imgs/` next to the working directory.
 img_dir <- file.path(Sys.getenv("HOME"), "dev/gl-design/playground/imgs/fm_meeting")
 dir.create(img_dir, showWarnings = FALSE, recursive = TRUE)
 
@@ -292,9 +211,9 @@ sbp |>
     geom_line() +
     scale_color_manual(values = c(
         "Net foreign assets"               = highlight,
-        "Net claims on central government" = gl$brand_blue,
-        "Claims on banks (ODCs)"           = "#D1852A",
-        "Claims on private sector"         = "#36B250"
+        "Net claims on central government" = gl$accent,
+        "Claims on banks (ODCs)"           = gl$c_3,
+        "Claims on private sector"         = gl$c_4
     )) +
     guides(color = guide_legend(nrow = 2)) +
     scale_y_continuous(labels = percent) +

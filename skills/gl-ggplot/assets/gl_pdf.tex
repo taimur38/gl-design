@@ -7,41 +7,49 @@
 %       includes:
 %         in_header: ~/dev/gl-design/skills/gl-ggplot/assets/gl_pdf.tex
 %
-% Requires: xelatex (or lualatex). Will not work with pdflatex because of
-% fontspec / system font loading.
+% Requires: xelatex (or lualatex). Variable fonts work in both engines.
 %
-% This preamble uses only LaTeX packages that ship with a stock TinyTeX
-% install (fontspec, xcolor, hyperref, caption, framed, booktabs). It
-% deliberately avoids titlesec, tocloft, setspace, parskip so it works on
-% machines that haven't kept tlmgr up to date.
+% Fonts (nil-design):
+%   Inter             — main / sans / body (variable file)
+%   Source Serif 4    — headings + display (registered as \glserif; variable)
+%   JetBrains Mono    — code blocks only (kept in assets/fonts/legacy/)
+%
+% The variable-font opsz axis (Source Serif 4) is not addressed here; faces
+% default to the text-cut shapes. See followups.md #3.
 
 % ---- Fonts ------------------------------------------------------------------
-% Source Sans 3 for body text (matches theme_gl's "gl_sans"); JetBrains Mono
-% for code and captions (matches theme_gl's "gl_mono"). Both shipped in
-% ~/dev/gl-design/assets/fonts/ so no system installation is needed.
 
 \usepackage{fontspec}
 
-\setmainfont{SourceSans3}[
-  Path           = /home/taimur/dev/gl-design/assets/fonts/source-sans-3/ttf/,
-  UprightFont    = *-Regular,
-  BoldFont       = *-Bold,
-  ItalicFont     = *-It,
-  BoldItalicFont = *-BoldIt,
-  Extension      = .ttf
+\setmainfont{InterVariable}[
+  Path           = /home/taimur/dev/gl-design/assets/fonts/inter/ttf/,
+  Extension      = .ttf,
+  UprightFont    = *,
+  ItalicFont     = *-Italic,
+  BoldFont       = *,
+  BoldItalicFont = *-Italic
 ]
 
-\setsansfont{SourceSans3}[
-  Path           = /home/taimur/dev/gl-design/assets/fonts/source-sans-3/ttf/,
-  UprightFont    = *-Regular,
-  BoldFont       = *-Bold,
-  ItalicFont     = *-It,
-  BoldItalicFont = *-BoldIt,
-  Extension      = .ttf
+\setsansfont{InterVariable}[
+  Path           = /home/taimur/dev/gl-design/assets/fonts/inter/ttf/,
+  Extension      = .ttf,
+  UprightFont    = *,
+  ItalicFont     = *-Italic,
+  BoldFont       = *,
+  BoldItalicFont = *-Italic
+]
+
+\newfontfamily\glserif{SourceSerif4Variable-Roman}[
+  Path           = /home/taimur/dev/gl-design/assets/fonts/source-serif-4/ttf/,
+  Extension      = .ttf,
+  UprightFont    = *,
+  ItalicFont     = SourceSerif4Variable-Italic,
+  BoldFont       = *,
+  BoldItalicFont = SourceSerif4Variable-Italic
 ]
 
 \setmonofont{JetBrainsMono}[
-  Path           = /home/taimur/dev/gl-design/assets/fonts/jetbrains-mono/ttf/,
+  Path           = /home/taimur/dev/gl-design/assets/fonts/legacy/jetbrains-mono/ttf/,
   UprightFont    = *-Regular,
   BoldFont       = *-Bold,
   ItalicFont     = *-Italic,
@@ -54,35 +62,47 @@
 % Mirrors the `gl` palette in theme_gl.R.
 
 \usepackage{xcolor}
-\definecolor{glblue}{HTML}{266798}
-\definecolor{glred}{HTML}{C64646}
-\definecolor{gldark}{HTML}{333333}
-\definecolor{glmuted}{HTML}{7C7C7C}
-\definecolor{glborder}{HTML}{DCDCDC}
-\definecolor{glbg}{HTML}{F3F3F3}
-\definecolor{glcodebg}{HTML}{F7F7F5}
+\definecolor{glink}{HTML}{1A1714}     % ink   — strong / headings / titles
+\definecolor{glink2}{HTML}{2C2823}    % ink-2 — body
+\definecolor{glink3}{HTML}{6B645A}    % ink-3 — captions, eyebrows, chrome
+\definecolor{glink4}{HTML}{9A9389}    % ink-4 — hairlines
+
+\definecolor{glaccent}{HTML}{015C9C}  % accent blue
+\definecolor{glamber}{HTML}{C77A20}   % amber accent / story-highlight
+\definecolor{glmuted}{HTML}{7E8A99}   % muted gray — "everyone-else" in charts
+
+\definecolor{glrule}{HTML}{DDDDDD}    % hairline rules
+\definecolor{glpaper}{HTML}{FAF8F4}   % page paper
+\definecolor{glcodebg}{HTML}{F4F1EA}  % code-block tint
+
+% Compatibility aliases (older docs may reference these)
+\colorlet{glblue}{glaccent}
+\colorlet{glred}{glamber}
+\colorlet{gldark}{glink}
+\colorlet{glborder}{glrule}
+\colorlet{glbg}{glcodebg}
 
 % ---- Headings ---------------------------------------------------------------
-% Brand-blue section headings, plain dark subsections, muted sub-subsections.
-% Avoids titlesec — uses LaTeX's built-in \@startsection redefinition via
-% \makeatletter so we keep the dependency surface small.
+% Display title (cover) handled via the Word/Pandoc `\title` mechanism, not
+% by section commands. Section commands here render H1 / H2 / H3.
+% Heading weights 500/600 not directly representable — accept system bold.
 
 \makeatletter
 \renewcommand\section{%
   \@startsection{section}{1}{\z@}%
-    {-2.6ex \@plus -1ex \@minus -.2ex}%
-    {1.0ex \@plus.2ex}%
-    {\sffamily\Large\bfseries\color{glblue}}}
+    {-3.0ex \@plus -1ex \@minus -.2ex}%
+    {1.5ex \@plus.2ex}%
+    {\glserif\LARGE\mdseries\color{glink}}}
 \renewcommand\subsection{%
   \@startsection{subsection}{2}{\z@}%
     {-2.0ex \@plus -1ex \@minus -.2ex}%
     {0.6ex \@plus.2ex}%
-    {\sffamily\large\bfseries\color{gldark}}}
+    {\glserif\large\mdseries\color{glink}}}
 \renewcommand\subsubsection{%
   \@startsection{subsubsection}{3}{\z@}%
     {-1.5ex \@plus -1ex \@minus -.2ex}%
     {0.5ex \@plus.2ex}%
-    {\sffamily\normalsize\bfseries\color{glmuted}}}
+    {\glserif\normalsize\bfseries\color{glink}}}  % followups #1 — H3 improvised
 \makeatother
 
 % ---- Links ------------------------------------------------------------------
@@ -90,35 +110,34 @@
 \usepackage{hyperref}
 \hypersetup{
   colorlinks = true,
-  linkcolor  = glblue,
-  citecolor  = glblue,
-  urlcolor   = glblue
+  linkcolor  = glaccent,
+  citecolor  = glaccent,
+  urlcolor   = glaccent
 }
 
 % ---- Body text and spacing --------------------------------------------------
-% Use plain LaTeX primitives instead of parskip/setspace.
 
 \setlength{\parskip}{0.6em}
 \setlength{\parindent}{0pt}
-\linespread{1.1}
+\linespread{1.33}   % ~1.6 perceived line-height with xelatex's extra metrics
 
 % ---- Captions ---------------------------------------------------------------
+% Chart sources: italic serif distinguishes provenance from the data narrative.
 
 \usepackage{caption}
 \captionsetup{
-  font       = {small, color=glmuted},
-  labelfont  = {bf, color=gldark},
+  font       = {small, color=glink2},
+  labelfont  = {bf, color=glaccent},
+  textfont   = {it},
   labelsep   = colon,
   margin     = 4pt
 }
 
 % ---- Code blocks ------------------------------------------------------------
 % Pandoc renders highlighted code in the `Shaded` environment with
-% `\colorbox{shadecolor}{...}`. Override `shadecolor` to a soft grey.
+% `\colorbox{shadecolor}{...}`. Override `shadecolor` to a soft warm grey.
 
-\definecolor{shadecolor}{HTML}{F7F7F5}
-
-% Inline code (\texttt) is mapped to JetBrains Mono via \setmonofont above.
+\definecolor{shadecolor}{HTML}{F4F1EA}
 
 % ---- Tables -----------------------------------------------------------------
 
