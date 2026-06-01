@@ -10,7 +10,8 @@ metadata:
 # GL ggplot Design System
 
 This skill tells you how to produce ggplot2 charts that follow the Growth Lab
-visual grammar (Source Serif 4 + Inter; 4-layer warm ink ramp; mute-then-highlight).
+visual grammar (Source Serif 4 + Inter; 4-layer warm ink ramp; categorical
+palette with light/main/dark tones; mute-then-highlight).
 
 ## Setup
 
@@ -34,13 +35,16 @@ After calling `gl_setup()`, the following are available:
 | Object | What it is |
 |--------|-----------|
 | `gl` | Full list of design tokens — see below |
-| `highlight` | `gl$c_2` (`#C77A20`) — the amber highlight / lead-finding accent |
-| `c_muted` | `gl$c_muted` (`#7E8A99`) — "everyone-else" gray for de-emphasis |
-| `accent` | `gl$accent` (`#015C9C`) — primary blue |
+| `highlight` | `gl$accent` (`#1A5A8E`) — blue popout, the default focus color |
+| `accent` | `gl$accent` (`#1A5A8E`) — same hex as `highlight`; used for non-data UI (eyebrows, figure labels, links) |
+| `lead_finding` | `gl$c_2` (`#CC4948`) — red, for stark / lead-finding emphasis (sparingly) |
+| `c_muted` | `gl$c_muted` (`#999FA8`) — "everyone-else" gray for de-emphasis |
 | `highlight_sz` | Standard line width for highlighted geoms (`1.8`) |
 | `theme_gl()` | The theme function (already applied via `theme_set`) |
 | `scale_color_gl()` | Discrete color scale using GL palettes |
 | `scale_fill_gl()` | Discrete fill scale using GL palettes |
+| `scale_color_gl_gradient()` | Continuous color scale (sequential / diverging) |
+| `scale_fill_gl_gradient()` | Continuous fill scale (sequential / diverging) |
 | `gl_palettes` | Named list of all available palettes |
 | `gl_fig` | Named figure sizes for `save_fig()` |
 | `save_fig()` | Save at a named size to `imgs/` at 300 DPI |
@@ -50,12 +54,16 @@ After calling `gl_setup()`, the following are available:
 | Token        | Hex       | Use                                                   |
 |--------------|-----------|-------------------------------------------------------|
 | `gl$ink`     | `#1A1714` | Headings, strong emphasis                             |
-| `gl$ink_2`   | `#2C2823` | Body, axis text, table cells                          |
-| `gl$ink_3`   | `#6B645A` | Captions, eyebrows, chrome                            |
-| `gl$ink_4`   | `#9A9389` | Hairlines, secondary markers                          |
-| `gl$accent`  | `#015C9C` | Primary chart series, eyebrows, links                 |
-| `gl$c_1`..`gl$c_6` | (palette) | Individual categorical colors                  |
-| `gl$c_muted` | `#7E8A99` | "Everyone else" gray for the mute-then-highlight move |
+| `gl$ink_2`   | `#2C2823` | Body, axis text, table cells, axis lines / ticks      |
+| `gl$ink_3`   | `#4F4A42` | Captions, eyebrows, chrome, chart subtitles           |
+| `gl$ink_4`   | `#9A9389` | In-chart faint markers, sparse trendlines             |
+| `gl$accent`  | `#1A5A8E` | Eyebrows, figure labels, links — = `gl$c_1_dark`      |
+| `gl$gridline`| `#ECE9E2` | In-chart major gridlines                              |
+| `gl$c_1`..`gl$c_6` | (palette) | Categorical main tones (fills)                 |
+| `gl$c_1_dark`..`gl$c_6_dark` | (palette) | Dark tones — strokes + labels         |
+| `gl$c_1_light`..`gl$c_6_light` | (palette) | Light tones — backgrounds, faded    |
+| `gl$c_muted` | `#999FA8` | "Everyone else" gray for the mute-then-highlight move |
+| `gl$c_muted_dark` | `#5F6773` | Strokes / labels for muted series                |
 
 ## Core rules
 
@@ -69,24 +77,40 @@ to individual plots. The only per-chart theme adjustments allowed are:
 
 ### 2. Highlight with the mute-then-paint technique
 
-The canonical Growth Lab chart move: paint **every** series in `c_muted`
-first, then re-paint the focus series on top in `highlight` (amber) or
-`accent` (blue). The muted layer carries the trend; the highlight carries
-the finding. Never use `"red"` or arbitrary colors for emphasis.
+The canonical Growth Lab chart move: untyped geoms are already muted (see
+rule 3), so the pattern collapses to *overpainting the focus*. The muted
+layer carries the trend; the highlight carries the finding. Never use
+`"red"` or arbitrary hex for emphasis.
 
 ```r
 data |>
     ggplot(aes(x = year, y = value, group = country)) +
-    geom_line(color = c_muted, linewidth = 0.6) +
+    geom_line() +                                          # muted, default
     geom_line(data = \(d) filter(d, country == focus),
               color = highlight, linewidth = highlight_sz)
 ```
 
 This works with any geom: `geom_point`, `geom_col`, `geom_bar`, `geom_text`, etc.
 
-Use `highlight` (amber `#C77A20`) when the focus *is* the finding. Use
-`accent` (blue `#015C9C`) when the focus is the lab's primary subject
-(institutional voice).
+**Layer order matters: highlights go LAST.** ggplot draws geoms in the
+order you add them, so the last layer sits on top. If you mix a muted
+backdrop, a trend line, and a highlighted point, the highlight call must
+come *after* `geom_smooth`/`stat_smooth`, otherwise the smooth ribbon will
+occlude the focus dot.
+
+```r
+ggplot(data, aes(x, y)) +
+    geom_point(alpha = 0.3) +                              # 1. muted backdrop
+    geom_smooth() +                                        # 2. trend
+    geom_point(data = filter(., focus),                    # 3. highlight on top
+               color = highlight, size = 3) +
+    geom_text_repel(data = filter(., focus),               # 4. label on top of dot
+                    aes(label = name), color = highlight)
+```
+
+Use `highlight` (blue `#1A5A8E` = `accent`) for the default focus — the
+institutional voice. Use `lead_finding` (red `#CC4948` = `c_2`) when the
+finding is stark — gains vs. losses, alarm, exception. Use sparingly.
 
 ### 3. Use the default palette by doing nothing
 
@@ -105,6 +129,37 @@ The 6-color palette is deliberately small. If you have 7+ categories,
 consider whether mute-then-highlight would tell the story better than seven
 distinct colors.
 
+**Untyped geoms default to muted, not a saturated color** — this is the
+GL popout pattern: paint everyone in `c_muted` first (no aesthetic mapping
+needed), then re-paint the focus series in `highlight` or `accent`.
+Authors opt *in* to color, never out of it.
+
+```r
+data |>
+    ggplot(aes(x = country, y = value)) +
+    geom_col() +                                  # all bars c_muted grey
+    geom_col(data = \(d) filter(d, focus),
+             fill = highlight)                    # focus bar red
+```
+
+After `gl_setup()` the relevant defaults are:
+
+| Geom | Default |
+|------|---------|
+| `geom_line` / `geom_path` / `geom_step` / `geom_point` | colour = `c_muted_dark` |
+| `geom_col` / `geom_bar` / `geom_area` | fill = `c_muted` (lighter — "backdrop") |
+| `geom_smooth` | line `c_muted_dark`, ribbon `c_muted_light` |
+| `geom_ribbon` | fill = `c_muted_light`, alpha 0.5 |
+| `geom_boxplot` | white fill, `c_muted_dark` stroke |
+| `geom_hline` / `geom_vline` | dashed `ink_3` (reference line) |
+| `geom_text` / `geom_label` | `ink_2`, sans family |
+
+The line/point grey is *darker* than the bar grey because lines and points
+read as "the data" — a single-series time series should feel substantive.
+Bars are typically a row of comparators where one will be highlighted, so
+they sit on a softer backdrop. For an institutional-voice single-series
+chart where the line should be blue, override: `geom_line(color = accent)`.
+
 ### 4. Use `scale_color_gl()` / `scale_fill_gl()` for named palettes
 
 When you need a specific named palette (e.g., Atlas HS sector colors), use:
@@ -121,6 +176,11 @@ Available palettes:
 | Name | Colors | Use case |
 |------|--------|----------|
 | `"categorical"` | 6 | Default. General purpose. Used automatically. |
+| `"sequential_1"`..`"sequential_6"` | 5 each | Single-hue ramp low → high (one per c-N) |
+| `"diverging_2_1"` | 6 | Red ↔ blue, midpoint-centered (default diverging) |
+| `"diverging_3_1"` | 6 | Teal ↔ blue |
+| `"diverging_5_1"` | 6 | Orange ↔ blue |
+| `"diverging_6_1"` | 6 | Yellow ↔ blue |
 | `"hs_sectors"` | 11 | Atlas HS product sectors (named) — external standard |
 | `"sitc_sectors"` | 11 | Atlas SITC product sectors (named) — external standard |
 | `"product_space"` | 8 | Product space clusters (named) — external standard |
@@ -131,6 +191,22 @@ about that specific data taxonomy.
 
 For named palettes, the values are matched by name — your data's factor
 levels must match the palette names (e.g., "Agriculture", "Metals").
+
+**Sequential vs. diverging:**
+
+- Use **sequential** for any ordered encoding without a natural midpoint
+  (population, GDP, complexity, count). Darker = higher.
+- Use **diverging** *only* when the data has a real reference point — gains
+  vs. losses, above vs. below baseline. Never on a purely positive scale.
+
+For continuous data (e.g. choropleth fill), use `*_gl_gradient()`:
+
+```r
+states |>
+    ggplot(aes(geometry = geom, fill = gdp_per_cap)) +
+    geom_sf() +
+    scale_fill_gl_gradient("sequential_1")
+```
 
 ### 5. Save figures at named sizes
 
@@ -156,7 +232,41 @@ save_fig("half", "small-sidebar-chart.png")
 
 When GDP per capita is on the x-axis, always use `scale_x_log10()`.
 
-### 7. Report vs slide mode
+### 7. Three tones, three jobs
+
+Each `c-N` hue has light / main / dark variants. They are not
+interchangeable:
+
+- **Main** (`gl$c_1`, `gl$c_2`, ...) — fills (bars, lines, treemap tiles,
+  scatter circles, choropleth polygons).
+- **Dark** (`gl$c_1_dark`, ...) — strokes on overlapping marks, and every
+  text element tied to the series: direct labels, legend marks, callouts,
+  annotations. Required for WCAG AA contrast against paper. **Do not use
+  the main tone for text** — it fails contrast.
+- **Light** (`gl$c_1_light`, ...) — backgrounds, faded states, the lighter
+  end of a sequential ramp.
+
+The only place dark is used as a *fill* is the three-tone stacked area
+(light / main / dark of one hue, when three bands belong to the same parent
+variable).
+
+### 8. Opacity on overlapping marks
+
+When marks can overlap, set both fill and stroke opacity to 0.8 — overlapping
+points then darken together rather than washing out.
+
+```r
+ggplot(data, aes(x, y, color = group, fill = group)) +
+    geom_point(shape = 21, size = 3, alpha = 0.8, stroke = 0.6)
+```
+
+Single-layer marks (bars, treemap tiles, choropleths) stay at full opacity —
+overlap isn't a risk and lowering opacity just dilutes the color.
+
+Radar polygons are the exception: fill at 0.25 so gridlines and labels read
+through the polygon.
+
+### 9. Report vs slide mode
 
 - **Report mode** (`gl_setup()` or `gl_setup(mode = "report")`): the chart's
   plot.title, plot.subtitle, and plot.caption are suppressed — the
@@ -164,7 +274,7 @@ When GDP per capita is on the x-axis, always use `scale_x_log10()`.
   Word styles. Legend defaults to bottom-left.
 - **Slide mode** (`gl_setup(mode = "slide")`): plot.title (Source Serif 4
   14pt), plot.subtitle (Inter 12pt), and plot.caption (Source Serif 4
-  italic 10pt) all render inside the chart. Use for standalone charts or
+  italic 12pt) all render inside the chart. Use for standalone charts or
   presentations.
 
 ## Complete example
@@ -193,11 +303,16 @@ save_fig("full", "mongolia-exports-vs-peers.png")
 If you need the color vectors directly:
 
 ```r
-gl_palettes$categorical      # 6-color unnamed vector
-gl_palettes$hs_sectors       # named vector: "Agriculture" = "#e5c21a", ...
-gl$accent                    # "#015C9C"
-gl$c_muted                   # "#7E8A99"
-gl$ink                       # "#1A1714"
+gl_palettes$categorical          # 6-color unnamed vector
+gl_palettes$sequential_1         # 5-color blue ramp, low → high
+gl_palettes$diverging_2_1        # 6-color red ↔ blue
+gl_palettes$hs_sectors           # named: "Agriculture" = "#e5c21a", ...
+gl$accent                        # "#1A5A8E"  (= gl$c_1_dark, = highlight)
+gl$c_muted                       # "#999FA8"  (muted bars / "everyone else")
+gl$c_muted_dark                  # "#5F6773"  (lines, points, boxplot strokes)
+gl$c_1                           # "#2F87C8"  (main tone)
+gl$c_2                           # "#CC4948"  (= lead_finding red)
+gl$ink                           # "#1A1714"
 ```
 
 ## Checklist before finalizing charts
@@ -205,9 +320,13 @@ gl$ink                       # "#1A1714"
 - [ ] `gl_setup()` called at top of script
 - [ ] No per-chart theme overrides (except legend position)
 - [ ] No monospace anywhere (no JetBrains Mono, no `font.family = "mono"`)
-- [ ] Highlights use `highlight` (amber) or `accent` (blue), not `"red"`
+- [ ] Highlights use `highlight` (blue) or `lead_finding` (red), not `"red"` or arbitrary hex
 - [ ] Highlights use mute-then-paint — supporting data is `c_muted`
 - [ ] Most charts have 2–4 colors; bigger palettes use the muted base
+- [ ] Series labels / direct annotations use the **dark tone** (`c_N_dark`),
+      not the main tone — WCAG AA contrast
+- [ ] Overlapping marks (scatter, radar) use 0.8 fill+stroke opacity
+- [ ] Sequential ramp for ordered values; diverging only with a real midpoint
 - [ ] Figures saved with `save_fig()` at named sizes
 - [ ] GDP per capita axes use `scale_x_log10()`
 - [ ] Legend fits without clipping (use `nrow = 2` or `position = "right"` if needed)

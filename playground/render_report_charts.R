@@ -210,10 +210,10 @@ sbp |>
     geom_hline(yintercept = 0) +
     geom_line() +
     scale_color_manual(values = c(
-        "Net foreign assets"               = highlight,
-        "Net claims on central government" = gl$accent,
-        "Claims on banks (ODCs)"           = gl$c_3,
-        "Claims on private sector"         = gl$c_4
+        "Net foreign assets"               = gl$c_2,   # red — declining (the alarm)
+        "Net claims on central government" = gl$c_1,   # blue — the source of the problem
+        "Claims on banks (ODCs)"           = gl$c_3,   # teal
+        "Claims on private sector"         = gl$c_4    # purple
     )) +
     guides(color = guide_legend(nrow = 2)) +
     scale_y_continuous(labels = percent) +
@@ -540,12 +540,12 @@ scatter_energy <- fuel_all |>
 
 scatter_energy |>
     ggplot(aes(x = gdppc_ppp, y = fuel_percap)) +
-    geom_point(alpha = 0.3) +
+    geom_point(alpha = 0.3) +                                    # muted backdrop
+    geom_smooth() +                                              # trend
     geom_point(data = . %>% filter(country_iso3_code == main_country),
-               color = highlight, size = 3) +
+               color = highlight, size = 3) +                    # highlight on top
     geom_text_repel(data = . %>% filter(country_iso3_code == main_country),
                     aes(label = 'Pakistan'), color = highlight) +
-    geom_smooth() +
     scale_x_log10(labels = dollar) +
     scale_y_log10(labels = dollar) +
     labs(title = "unused", subtitle = "unused",
@@ -568,12 +568,12 @@ scatter_fuel_burden <- fuel_all |>
 
 scatter_fuel_burden |>
     ggplot(aes(x = gdppc_ppp, y = fuel_pct_exports)) +
-    geom_point(alpha = 0.3) +
+    geom_point(alpha = 0.3) +                                    # muted backdrop
+    geom_smooth() +                                              # trend
     geom_point(data = . %>% filter(country_iso3_code == main_country),
-               color = highlight, size = 3) +
+               color = highlight, size = 3) +                    # highlight on top
     geom_text_repel(data = . %>% filter(country_iso3_code == main_country),
                     aes(label = 'Pakistan'), color = highlight) +
-    geom_smooth() +
     scale_x_log10(labels = dollar) +
     scale_y_continuous(limits = c(0, 100)) +
     labs(title = "unused", subtitle = "unused",
@@ -618,9 +618,10 @@ elc_scatter |>
     filter(gdppc_ppp >= 1000) |>
     filter(elc_price_cents_kwh <= 100) |>
     ggplot(aes(x = gdppc_ppp, y = elc_price_cents_kwh)) +
-    geom_point(alpha = 0.3) +
-    geom_point(data = . %>% filter(iso3c == main_country), color = highlight, size = 3) +
-    geom_smooth() +
+    geom_point(alpha = 0.3) +                                    # muted backdrop
+    geom_smooth() +                                              # trend
+    geom_point(data = . %>% filter(iso3c == main_country),       # highlight on top
+               color = highlight, size = 3) +
     geom_text_repel(data = . %>% filter(iso3c == main_country),
                     aes(label = 'Pakistan'), color = highlight) +
     scale_x_log10(labels = dollar) +

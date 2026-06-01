@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 443 413.5">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #5dc4e2;
+      }
+
+      .cls-3 {
+        stroke-width: .6px;
+      }
+
+      .cls-3, .cls-4 {
+        stroke: #787878;
+      }
+
+      .cls-3, .cls-4, .cls-5, .cls-6, .cls-7 {
+        fill: none;
+      }
+
+      .cls-4 {
+        stroke-width: .7px;
+      }
+
+      .cls-8, .cls-9, .cls-10, .cls-11, .cls-12, .cls-2, .cls-13 {
+        isolation: isolate;
+      }
+
+      .cls-8, .cls-9, .cls-14 {
+        fill: #f2c32f;
+      }
+
+      .cls-8, .cls-12 {
+        opacity: .8;
+      }
+
+      .cls-9, .cls-10, .cls-11, .cls-13 {
+        opacity: .7;
+      }
+
+      .cls-10, .cls-12, .cls-15 {
+        fill: #5ca75b;
+      }
+
+      .cls-11 {
+        fill: #578cc9;
+      }
+
+      .cls-5 {
+        stroke: #878787;
+        stroke-width: .5px;
+      }
+
+      .cls-2 {
+        opacity: .6;
+      }
+
+      .cls-13, .cls-16 {
+        fill: #e55d5c;
+      }
+
+      .cls-6 {
+        stroke: #404040;
+        stroke-dasharray: 2 3;
+        stroke-width: .4px;
+      }
+
+      .cls-17 {
+        fill: #2d2d2c;
+      }
+
+      .cls-7 {
+        stroke: #578cc9;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </defs>
+  <g>
+    <line class="cls-6" x1="86.5" y1="37" x2="256.5" y2="22"/>
+    <line class="cls-6" x1="256.5" y1="22" x2="376.5" y2="77"/>
+    <line class="cls-6" x1="376.5" y1="77" x2="366.5" y2="237"/>
+    <line class="cls-6" x1="366.5" y1="237" x2="206.5" y2="177"/>
+    <line class="cls-6" x1="206.5" y1="177" x2="41.5" y2="177"/>
+    <line class="cls-6" x1="41.5" y1="177" x2="86.5" y2="317"/>
+    <line class="cls-6" x1="86.5" y1="317" x2="276.5" y2="347"/>
+    <line class="cls-6" x1="276.5" y1="347" x2="406.5" y2="367"/>
+    <line class="cls-6" x1="206.5" y1="177" x2="276.5" y2="347"/>
+    <line class="cls-6" x1="86.5" y1="37" x2="41.5" y2="177"/>
+  </g>
+  <circle class="cls-2" cx="166.5" cy="102" r="2"/>
+  <circle class="cls-8" cx="311.5" cy="52" r="1.5"/>
+  <circle class="cls-10" cx="131.5" cy="127" r="1.5"/>
+  <circle class="cls-13" cx="426.5" cy="147" r="2"/>
+  <circle class="cls-9" cx="131.5" cy="237" r="1.5"/>
+  <circle class="cls-2" cx="296.5" cy="127" r="2"/>
+  <circle class="cls-12" cx="166.5" cy="267" r="1.5"/>
+  <circle class="cls-13" cx="311.5" cy="287" r="1.5"/>
+  <circle class="cls-8" cx="331.5" cy="312" r="1.5"/>
+  <circle class="cls-11" cx="166.5" cy="397" r="1.5"/>
+  <circle class="cls-9" cx="351.5" cy="397" r="1.5"/>
+  <circle class="cls-2" cx="221.5" cy="282" r="1.5"/>
+  <circle class="cls-10" cx="236.5" cy="92" r="1.5"/>
+  <circle class="cls-13" cx="56.5" cy="102" r="1.5"/>
+  <circle class="cls-8" cx="441.5" cy="287" r="1.5"/>
+  <circle class="cls-10" cx="441.5" cy="332" r="1.5"/>
+  <circle class="cls-2" cx="41.5" cy="347" r="1.5"/>
+  <circle class="cls-13" cx="131.5" cy="362" r="1.5"/>
+  <circle class="cls-8" cx="396.5" cy="192" r="1.5"/>
+  <circle class="cls-12" cx="1.5" cy="207" r="1.5"/>
+  <circle class="cls-2" cx="236.5" cy="412" r="1.5"/>
+  <circle class="cls-13" cx="86.5" cy="412" r="1.5"/>
+  <circle class="cls-9" cx="381.5" cy="12" r="1.5"/>
+  <g>
+    <line class="cls-5" x1="86.5" y1="37" x2="61.5" y2="15"/>
+    <line class="cls-5" x1="86.5" y1="37" x2="106.5" y2="12"/>
+    <line class="cls-5" x1="86.5" y1="37" x2="118.5" y2="47"/>
+    <line class="cls-5" x1="86.5" y1="37" x2="71.5" y2="67"/>
+    <line class="cls-5" x1="86.5" y1="37" x2="106.5" y2="65"/>
+    <circle class="cls-14" cx="61.5" cy="15" r="2.5"/>
+    <circle class="cls-16" cx="106.5" cy="12" r="3"/>
+    <circle class="cls-15" cx="118.5" cy="47" r="2"/>
+    <circle class="cls-1" cx="71.5" cy="67" r="2.5"/>
+    <circle class="cls-14" cx="106.5" cy="65" r="2"/>
+    <circle class="cls-17" cx="86.5" cy="37" r="5"/>
+  </g>
+  <g>
+    <line class="cls-5" x1="256.5" y1="22" x2="236.5" y2="2"/>
+    <line class="cls-5" x1="256.5" y1="22" x2="281.5" y2="5"/>
+    <line class="cls-5" x1="256.5" y1="22" x2="276.5" y2="45"/>
+    <line class="cls-5" x1="256.5" y1="22" x2="236.5" y2="47"/>
+    <circle class="cls-1" cx="236.5" cy="2" r="2"/>
+    <circle class="cls-14" cx="281.5" cy="5" r="2.5"/>
+    <circle class="cls-16" cx="276.5" cy="45" r="2"/>
+    <circle class="cls-15" cx="236.5" cy="47" r="2"/>
+    <circle class="cls-17" cx="256.5" cy="22" r="4"/>
+  </g>
+  <g>
+    <line class="cls-3" x1="376.5" y1="77" x2="351.5" y2="49"/>
+    <line class="cls-3" x1="376.5" y1="77" x2="404.5" y2="52"/>
+    <line class="cls-3" x1="376.5" y1="77" x2="416.5" y2="89"/>
+    <line class="cls-3" x1="376.5" y1="77" x2="396.5" y2="109"/>
+    <line class="cls-3" x1="376.5" y1="77" x2="356.5" y2="107"/>
+    <line class="cls-3" x1="376.5" y1="77" x2="341.5" y2="82"/>
+    <circle class="cls-14" cx="351.5" cy="49" r="3"/>
+    <circle class="cls-16" cx="404.5" cy="52" r="3.5"/>
+    <circle class="cls-1" cx="416.5" cy="89" r="2.5"/>
+    <circle class="cls-15" cx="396.5" cy="109" r="3"/>
+    <circle class="cls-14" cx="356.5" cy="107" r="2"/>
+    <circle class="cls-7" cx="341.5" cy="82" r="2.5"/>
+    <circle class="cls-17" cx="376.5" cy="77" r="6"/>
+  </g>
+  <g>
+    <line class="cls-4" x1="41.5" y1="177" x2="11.5" y2="152"/>
+    <line class="cls-4" x1="41.5" y1="177" x2="6.5" y2="192"/>
+    <line class="cls-4" x1="41.5" y1="177" x2="24.5" y2="217"/>
+    <line class="cls-4" x1="41.5" y1="177" x2="66.5" y2="215"/>
+    <line class="cls-4" x1="41.5" y1="177" x2="76.5" y2="185"/>
+    <line class="cls-4" x1="41.5" y1="177" x2="69.5" y2="150"/>
+    <line class="cls-4" x1="41.5" y1="177" x2="34.5" y2="142"/>
+    <circle class="cls-14" cx="11.5" cy="152" r="3"/>
+    <circle class="cls-16" cx="6.5" cy="192" r="3.5"/>
+    <circle class="cls-1" cx="24.5" cy="217" r="2.5"/>
+    <circle class="cls-15" cx="66.5" cy="215" r="3"/>
+    <circle class="cls-14" cx="76.5" cy="185" r="2.5"/>
+    <circle class="cls-16" cx="69.5" cy="150" r="2"/>
+    <circle class="cls-7" cx="34.5" cy="142" r="2.5"/>
+    <circle class="cls-17" cx="41.5" cy="177" r="7"/>
+  </g>
+  <g>
+    <line class="cls-4" x1="206.5" y1="177" x2="176.5" y2="142"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="221.5" y2="137"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="254.5" y2="152"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="264.5" y2="185"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="246.5" y2="215"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="216.5" y2="227"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="176.5" y2="215"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="156.5" y2="185"/>
+    <line class="cls-4" x1="206.5" y1="177" x2="166.5" y2="162"/>
+    <circle class="cls-16" cx="176.5" cy="142" r="4.5"/>
+    <circle class="cls-1" cx="221.5" cy="137" r="3.5"/>
+    <circle class="cls-14" cx="254.5" cy="152" r="5"/>
+    <circle class="cls-15" cx="264.5" cy="185" r="3.5"/>
+    <circle class="cls-16" cx="246.5" cy="215" r="4"/>
+    <circle class="cls-7" cx="216.5" cy="227" r="3"/>
+    <circle class="cls-15" cx="176.5" cy="215" r="3.5"/>
+    <circle class="cls-14" cx="156.5" cy="185" r="3"/>
+    <circle class="cls-1" cx="166.5" cy="162" r="2.5"/>
+    <circle class="cls-17" cx="206.5" cy="177" r="9.5"/>
+  </g>
+  <g>
+    <line class="cls-3" x1="366.5" y1="237" x2="341.5" y2="215"/>
+    <line class="cls-3" x1="366.5" y1="237" x2="394.5" y2="215"/>
+    <line class="cls-3" x1="366.5" y1="237" x2="404.5" y2="252"/>
+    <line class="cls-3" x1="366.5" y1="237" x2="389.5" y2="272"/>
+    <line class="cls-3" x1="366.5" y1="237" x2="351.5" y2="269"/>
+    <line class="cls-3" x1="366.5" y1="237" x2="334.5" y2="242"/>
+    <circle class="cls-1" cx="341.5" cy="215" r="3.5"/>
+    <circle class="cls-14" cx="394.5" cy="215" r="4"/>
+    <circle class="cls-16" cx="404.5" cy="252" r="3"/>
+    <circle class="cls-15" cx="389.5" cy="272" r="3"/>
+    <circle class="cls-14" cx="351.5" cy="269" r="2.5"/>
+    <circle class="cls-7" cx="334.5" cy="242" r="3"/>
+    <circle class="cls-17" cx="366.5" cy="237" r="6"/>
+  </g>
+  <g>
+    <line class="cls-3" x1="86.5" y1="317" x2="61.5" y2="295"/>
+    <line class="cls-3" x1="86.5" y1="317" x2="106.5" y2="289"/>
+    <line class="cls-3" x1="86.5" y1="317" x2="118.5" y2="325"/>
+    <line class="cls-3" x1="86.5" y1="317" x2="104.5" y2="349"/>
+    <line class="cls-3" x1="86.5" y1="317" x2="66.5" y2="347"/>
+    <line class="cls-3" x1="86.5" y1="317" x2="46.5" y2="322"/>
+    <circle class="cls-14" cx="61.5" cy="295" r="3"/>
+    <circle class="cls-16" cx="106.5" cy="289" r="3.5"/>
+    <circle class="cls-1" cx="118.5" cy="325" r="2.5"/>
+    <circle class="cls-15" cx="104.5" cy="349" r="3"/>
+    <circle class="cls-14" cx="66.5" cy="347" r="2.5"/>
+    <circle class="cls-16" cx="46.5" cy="322" r="2"/>
+    <circle class="cls-17" cx="86.5" cy="317" r="6"/>
+  </g>
+  <g>
+    <line class="cls-4" x1="276.5" y1="347" x2="251.5" y2="322"/>
+    <line class="cls-4" x1="276.5" y1="347" x2="306.5" y2="322"/>
+    <line class="cls-4" x1="276.5" y1="347" x2="321.5" y2="355"/>
+    <line class="cls-4" x1="276.5" y1="347" x2="301.5" y2="382"/>
+    <line class="cls-4" x1="276.5" y1="347" x2="264.5" y2="392"/>
+    <line class="cls-4" x1="276.5" y1="347" x2="241.5" y2="372"/>
+    <line class="cls-4" x1="276.5" y1="347" x2="236.5" y2="345"/>
+    <circle class="cls-16" cx="251.5" cy="322" r="3"/>
+    <circle class="cls-14" cx="306.5" cy="322" r="3.5"/>
+    <circle class="cls-1" cx="321.5" cy="355" r="3"/>
+    <circle class="cls-15" cx="301.5" cy="382" r="3"/>
+    <circle class="cls-14" cx="264.5" cy="392" r="2.5"/>
+    <circle class="cls-7" cx="241.5" cy="372" r="2.5"/>
+    <circle class="cls-16" cx="236.5" cy="345" r="2"/>
+    <circle class="cls-17" cx="276.5" cy="347" r="7"/>
+  </g>
+  <g>
+    <line class="cls-5" x1="406.5" y1="367" x2="384.5" y2="345"/>
+    <line class="cls-5" x1="406.5" y1="367" x2="426.5" y2="345"/>
+    <line class="cls-5" x1="406.5" y1="367" x2="434.5" y2="375"/>
+    <line class="cls-5" x1="406.5" y1="367" x2="421.5" y2="397"/>
+    <line class="cls-5" x1="406.5" y1="367" x2="391.5" y2="392"/>
+    <circle class="cls-1" cx="384.5" cy="345" r="2.5"/>
+    <circle class="cls-14" cx="426.5" cy="345" r="2.5"/>
+    <circle class="cls-16" cx="434.5" cy="375" r="3"/>
+    <circle class="cls-15" cx="421.5" cy="397" r="2"/>
+    <circle class="cls-14" cx="391.5" cy="392" r="2"/>
+    <circle class="cls-17" cx="406.5" cy="367" r="5"/>
+  </g>
+</svg>

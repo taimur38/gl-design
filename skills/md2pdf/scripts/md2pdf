@@ -1,0 +1,170 @@
+#!/bin/bash
+# md2pdf - Convert markdown to a GL-styled PDF using pandoc.
+#
+# Pipeline:
+#   markdown
+#     → pandoc (--filter pandoc-crossref, --citeproc if references.bib exists)
+#     → standalone HTML with our stylesheet
+#     → chrome-headless-shell (--print-to-pdf)
+#     → output.pdf
+#
+# Usage:
+#   md2pdf input.md             → produces input.pdf in same directory
+#   md2pdf input.md output.pdf  → produces output.pdf at the specified path
+#   md2pdf --keep-html in.md    → also keep the intermediate HTML for inspection
+#
+# Markdown features supported:
+#   ::: {.box title="..."}        →  <div class="box" title="...">       (callout)
+#   ![cap](path){#fig:label}      →  numbered figure, cross-ref via @fig:label
+#   [@key]                        →  citation, references.bib (Harvard CSL)
+#   `Source: ...` paragraph after a figure → italic serif chart source (CSS)
+#
+# Requires: pandoc, pandoc-crossref, chrome-headless-shell from
+# ~/.cache/puppeteer/ (installed transitively by md-to-pdf / Puppeteer).
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+STYLESHEET="$SCRIPT_DIR/../assets/md2pdf-style.css"
+TEMPLATE="$SCRIPT_DIR/../assets/template.html5"
+COVER_PATTERN_DEFAULT="$SCRIPT_DIR/../../../assets/design-library/cover-patterns/rect-pattern.svg"
+COVER_LOGO_DEFAULT="$SCRIPT_DIR/../../../assets/design-library/logos/GL_logo_black.png"
+
+# ---- Locate Chromium ---------------------------------------------------------
+
+find_chromium() {
+    # Prefer chrome-headless-shell (smaller / faster than full Chrome).
+    local hs ch sys
+    hs=$(find "$HOME/.cache/puppeteer/chrome-headless-shell" \
+            -name "chrome-headless-shell" -type f -executable 2>/dev/null \
+            | sort -V | tail -1)
+    if [ -n "$hs" ]; then echo "$hs"; return; fi
+    ch=$(find "$HOME/.cache/puppeteer/chrome" \
+            -name "chrome" -type f -executable 2>/dev/null \
+            | sort -V | tail -1)
+    if [ -n "$ch" ]; then echo "$ch"; return; fi
+    sys=$(command -v chromium 2>/dev/null \
+          || command -v chromium-browser 2>/dev/null \
+          || command -v google-chrome 2>/dev/null \
+          || true)
+    if [ -n "$sys" ]; then echo "$sys"; return; fi
+    echo ""
+}
+
+# ---- Parse args --------------------------------------------------------------
+
+KEEP_HTML=0
+POSITIONAL=()
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --keep-html)
+            KEEP_HTML=1
+            shift
+            ;;
+        -h|--help)
+            sed -n '1,/^set -e/p' "$0" | sed -n '2,/^$/p' | sed 's/^# \?//'
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$1")
+            shift
+            ;;
+    esac
+done
+
+if [ ${#POSITIONAL[@]} -eq 0 ]; then
+    echo "Usage: md2pdf [--keep-html] input.md [output.pdf]"
+    exit 1
+fi
+
+INPUT="${POSITIONAL[0]}"
+OUTPUT="${POSITIONAL[1]:-${INPUT%.md}.pdf}"
+
+if [ ! -f "$INPUT" ]; then
+    echo "Error: File not found: $INPUT" >&2
+    exit 1
+fi
+if [ ! -f "$STYLESHEET" ]; then
+    echo "Error: Stylesheet not found at $STYLESHEET" >&2
+    exit 1
+fi
+
+CHROMIUM="$(find_chromium)"
+if [ -z "$CHROMIUM" ]; then
+    echo "Error: no chromium / chrome / chrome-headless-shell found." >&2
+    echo "Install one (e.g. \`npm install -g md-to-pdf\` to get the bundled Puppeteer chromium)." >&2
+    exit 1
+fi
+
+# ---- Resolve paths -----------------------------------------------------------
+
+INPUT_DIR="$(cd "$(dirname "$INPUT")" && pwd)"
+INPUT_BASENAME="$(basename "$INPUT")"
+ABS_INPUT="$INPUT_DIR/$INPUT_BASENAME"
+BIB="$INPUT_DIR/references.bib"
+
+# Intermediate HTML lands next to the markdown so relative image paths
+# (e.g. imgs/foo.png) resolve correctly when Chromium reads via file://.
+HTML_BASENAME="$(basename "${INPUT_BASENAME%.md}").intermediate.html"
+HTML="$INPUT_DIR/$HTML_BASENAME"
+
+# ---- Build pandoc command ----------------------------------------------------
+
+PANDOC_ARGS=(
+    "$ABS_INPUT"
+    --from=markdown
+    --to=html5
+    --standalone
+    --section-divs
+    --mathjax
+    --css="$STYLESHEET"
+    --template="$TEMPLATE"
+    --resource-path="$INPUT_DIR"
+    --filter pandoc-crossref
+)
+
+# Cover pattern — default to the rect pattern. Authors can override via
+# `cover-pattern: ...` in their YAML frontmatter (path relative to the
+# markdown source, or absolute), or `cover-pattern: false` to suppress.
+if [ -f "$COVER_PATTERN_DEFAULT" ]; then
+    PATTERN_ABS="$(realpath "$COVER_PATTERN_DEFAULT")"
+    PANDOC_ARGS+=(--metadata=cover-pattern:"file://$PATTERN_ABS")
+fi
+
+# Cover logo — default to GL_logo_black.png in the top-right of the cover.
+if [ -f "$COVER_LOGO_DEFAULT" ]; then
+    LOGO_ABS="$(realpath "$COVER_LOGO_DEFAULT")"
+    PANDOC_ARGS+=(--metadata=cover-logo:"file://$LOGO_ABS")
+fi
+
+# Citations only if a references.bib is present alongside the input.
+if [ -f "$BIB" ]; then
+    CSL="$SCRIPT_DIR/../../md2docx/assets/citation-style.csl"
+    PANDOC_ARGS+=(
+        --citeproc
+        --bibliography="$BIB"
+        --metadata=reference-section-title:"References"
+    )
+    [ -f "$CSL" ] && PANDOC_ARGS+=(--csl="$CSL")
+fi
+
+PANDOC_ARGS+=(-o "$HTML")
+
+# ---- Run pandoc → HTML, then Chromium → PDF ----------------------------------
+
+pandoc "${PANDOC_ARGS[@]}"
+
+"$CHROMIUM" \
+    --headless \
+    --disable-gpu \
+    --no-sandbox \
+    --no-pdf-header-footer \
+    --allow-file-access-from-files \
+    --print-to-pdf="$OUTPUT" \
+    "file://$HTML" 2>&1 | grep -v "^$" || true
+
+if [ "$KEEP_HTML" -eq 0 ]; then
+    rm -f "$HTML"
+fi
+
+echo "Created: $OUTPUT"

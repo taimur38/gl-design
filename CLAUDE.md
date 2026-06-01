@@ -65,13 +65,18 @@ Key rules:
   monospace — neither JetBrains Mono nor any `family = "mono"` fallback.
 - **Do not override the theme per chart** — only adjust `legend.position` or
   `guides()` when needed.
-- **Highlight by muting**: paint *every* series in `c_muted` (`#7E8A99`)
-  first, then re-paint the focus series on top in `highlight` (amber
-  `#C77A20`) or `accent` (blue `#015C9C`). Never use `"red"` or arbitrary
-  colors for emphasis.
+- **Highlight by muting**: untyped geoms default to muted grey, so the
+  pattern is *overpainting* the focus series on top in `highlight` (blue
+  `#1A5A8E`, = `accent` = `c_1_dark`). For stark "lead finding" emphasis
+  use `lead_finding` (red `#CC4948`, = `c_2`) sparingly. Never use `"red"`
+  or arbitrary hex for emphasis.
+- **Dark tone for text**: every direct label, legend mark, callout, or
+  annotation tied to a series uses the series' dark tone (`gl$c_N_dark`),
+  not the main tone — WCAG AA against paper.
 - **Color scales**: default 6-color palette applies automatically; use
   `scale_color_gl("hs_sectors")` / `scale_fill_gl("hs_sectors")` for named
-  external palettes.
+  external palettes; `scale_color_gl_gradient("sequential_1")` for
+  continuous (choropleth) data.
 - **Figure sizes**: use `save_fig("full", "filename.png")` with named sizes:
   `full`, `full_tall`, `full_square`, `major`, `half`, `half_tall`, `slide`
   (sizes defined in [`recipes/report.md`](recipes/report.md)).

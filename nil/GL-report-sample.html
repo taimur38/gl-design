@@ -17,21 +17,21 @@
     --rule: #DDDDDD;
     --ink: #1A1714;
     --ink-2: #2C2823;
-    --ink-3: #6B645A;
-    --ink-4: #9A9389;
+    --ink-3: #4F4A42;
 
-    --accent: #015C9C;
+    --accent: #1A5A8E;
     --accent-deep: #003E6B;
     --accent-soft: #3A85B8;
     --accent-tint: #E1F0FA;
 
-    /* Chart palette — priority order. c-1 doubles as the brand primary. */
-    --c-1: #015C9C;   /* blue — default single-series */
-    --c-2: #C77A1F;   /* amber — contrast / lead finding */
-    --c-3: #2E7D6B;   /* viridian */
-    --c-4: #8C1515;   /* burgundy */
-    --c-5: #5B4A8C;   /* plum */
-    --c-6: #7E8A99;   /* slate */
+    /* Chart palette — main/light/dark trios per color palette opt.html */
+    --c-1-light: #B5D5EA;  --c-1: #2F87C8;  --c-1-dark: #1A5A8E;   /* blue */
+    --c-2-light: #E89C9C;  --c-2: #CC4948;  --c-2-dark: #8A2C2B;   /* red */
+    --c-3-light: #92D6BF;  --c-3: #2AA584;  --c-3-dark: #1A6B53;   /* teal */
+    --c-4-light: #B5A0CC;  --c-4: #7554A3;  --c-4-dark: #4A3470;   /* purple */
+    --c-5-light: #F4BC8A;  --c-5: #EA822D;  --c-5-dark: #A8580F;   /* orange */
+    --c-6-light: #E6E2A8;  --c-6: #CDC86B;  --c-6-dark: #8A8638;   /* yellow */
+    --c-muted-light: #CDD2D9;  --c-muted: #999FA8;  --c-muted-dark: #5F6773;
 
     /* 6-column grid: 560px content / 6 cols / 16px gaps */
     --col: 80px;
@@ -163,7 +163,7 @@
   .display {
     font-family: var(--font-serif);
     font-weight: 400;
-    line-height: 0.96;
+    line-height: 1.2;
     letter-spacing: -0.025em;
     color: var(--ink);
     font-variation-settings: "opsz" 60;
@@ -468,10 +468,10 @@
     <!-- Top meta row: series + date on the left, Growth Lab logo on the right -->
     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
       <div>
-        <div style="font-family:var(--font-sans); font-size:11px; text-transform:uppercase; letter-spacing:0.18em; color:#6b645a; font-weight:600;">
+        <div style="font-family:var(--font-sans); font-size:11px; text-transform:uppercase; letter-spacing:0.18em; color:#4F4A42; font-weight:600;">
           Growth Lab Working Paper Series
         </div>
-        <div style="margin-top:4px; font-family:var(--font-sans); font-size:11px; text-transform:uppercase; letter-spacing:0.18em; color:#015c9c; font-weight:700;">
+        <div style="margin-top:4px; font-family:var(--font-sans); font-size:11px; text-transform:uppercase; letter-spacing:0.18em; color:var(--accent); font-weight:700;">
           April 2026
         </div>
       </div>
@@ -483,18 +483,18 @@
       New Mexico&rsquo;s Economy Over Time and Space
     </h1>
 
-    <hr style="border:none; border-top:2px solid var(--ink); margin:0 0 32px;" />
+    <hr style="border:none; border-top:3px solid var(--accent); width:50%; margin:0 0 32px 0;" />
 
     <!-- Authors -->
-    <div style="font-family:var(--font-serif); font-size:14px; line-height:1.5; color:#6b645a;">
+    <div style="font-family:var(--font-serif); font-size:14px; line-height:1.5; color:var(--ink);">
       Ricardo Hausmann, Frank Neffke, Sehyun Park, Battushig Erdenetsogt and Sophia Henn
     </div>
 
     <!-- Spacer -->
     <div style="flex:1; min-height:24px;"></div>
 
-    <!-- Bottom pattern -->
-    <div style="margin:0 -8px;">
+    <!-- Bottom pattern — pinned to the bottom of the cover, sized to the content column -->
+    <div style="position:absolute; left:0.85in; right:0.85in; bottom:0.75in;">
       <svg viewBox="0 0 612 200" style="width:100%; height:auto; display:block;" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
           <style>
@@ -727,7 +727,7 @@
     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABDcAAADmCAYAAADBYG5OAAAACXBIWXMAAB7BAAAewQHDaVRTAAAgAElEQVR4nO3df4wcaX7f9w/3Nqc7Ze2ZE5XcicJp+izGTgBbnEUCJ0gcTy2RVBuToznLGJYiA2QzCBAYiIazgoA4P9kUkiBIkOyQiY0gtsMaxgakIOY2RWeQrjjcGiiC4xjKzpzzw1FG3h47R+kQUzcjnaTV5U7MH89TnGbv/Oh66qmqp7rfL2Aw/NFV9cxMT1U9n/o+z3Ph5cuXQnusb+9H9o+jB6uXRw02BQAAAACAIFwg3AibDTN6kiJJSye8ZEfSQFLyYPXyYW0NAwAAAAAgEIQbgVrf3l+WtClpZcpNjiT1H6xe3qyuVQAAAAAAhIdwI0Dr2/s9SQ8dN9+RtEYVBwAAAABgXhBuBKZksJHbkxQRcAAAAAAA5sEbTTcAx9a399dUPtiQpCsy83AAAAAAADDzqNwIxPr2/qKkkaQFj7u9/WD1cuJxfwAAAAAABIfKjXBsyG+wIZkJSQEAAAAAmGmEG+HYqGCfC3YODwAAAAAAZhbhRgDWt/cj+a/ayK1VtF8AAAAAAIJAuBGGqKX7BgAAAACgcYQbs6+qihAAAAAAAIJAuBGGqOkGAAAAAADQVoQbYRg13QAAAAAAANqKcCMMo6YbAAAAAABAWxFuhGG3wn3vVLhvAAAAAAAaR7gRhqzCfQ8q3DcAAAAAAI278PLly6bbAEnr2/uJpFsV7PorD1YvjyrYb+OeP7uxKGlZUsd+5Eb2Y/fS1ceHdbcLAAAAAFAvwo1ArG/vdyR97Hm3Ww9WL/c877NRz5/dWJO0JrPCzNIUmxzIVMYMLl19TBULAAAAAMwgwo2ArG/vb0q642l3R5I6D1Yvz0TlwvNnN3qS+pou0DjNgaT+pauPEw9NAgAAAAAEgnAjMOvb+5mklZK7OZIUPVi9XOVEpbWwlRqbKhdqTDqQtEElBwAAAADMhiDDjdXsUT6XgmSGH+QySdqObmb1tqg+69v7izKTgLoGHEeS1h6sXs68NaoBdj6NTVUzD0luSybkmInqFgAAAACYV8GEG6vZo6JzKezJhB3JdnSz9RUKk9a39/uS7hbcbE9Sr+0VGzbYyCRdqeFwe5IiAg4AAAAAaK9Gww1bobFhPxZK7OpAUn87upn4aFco7CSjfZnQ56zvz56kzQerl5PqW1WtmoON3IFMwDGq8ZgAAAAAAE8aCzdWs0d9lQ81Jh1I2tiObs7cXArr2/vRb/3vO/1vv/iVV8NVFv/oj70raXdWlnptKNjIUcEBAAAAAC1Ve7ixmj3qyMwpUWUH9omk3nZ0c6Y6qnHc7WtsqEqaDi801xr/nj+7kan8ZKpl7Fy6+jhq8PgAAAAAAAdv1HkwO6/Grqp/Mn9dUraaPVo+95UIwvNnN/pqNtiQpBXbDgAAAABAi9QWbqxmj3qSPpDfYShnuSICjlZ4/uxGR8UnT63KXdseAAAAAEBL1BJu2GDjYR3HmrAgAo426DfdgAn9phsAAAAAAJhe5eGGDRY2qz7OGRYkDezKLAiMrZK41XQ7JtyiegMAAAAA2qPScMMGCgPVNxTlNEuSkobbgJNtNN2AU4TaLgAAAADAhKorN/oywUIIrtsJTRGWXtMNOEWv6QYAAAAAAKZTWbhhl3y9U9X+HSUMTwnH82c3ltV8Vc9pFmz7AAAAAACBq7Jyo1/hvl0tiOEGIQm9kib09gEAAAAAVFG4Yas2QpskMtdrugF4JfTKiNDbBwAAAABQdZUbvYr268MSc28EI/QhQqG3DwAAAACg+Qw3JIYbhCL0yojQ2wcAAAAAUAXhhh2SEsoKKaeJmm4AJIU7mWgu9PYBAAAAAFRN5UYbnnYv2RAGAAAAAAC03LyGG5LUaboB0FHTDThH6O0DAAAAAKiacKNTwT6rEDXdAGi36QacI/T2AQAAAAA03+EGmnfYdAPOEXr7AAAAAACqbrUUYBqhV0aE3j4AAAAAgKQ3m24A5tpA0t2mG3GGQdMNAAAA54vjbkdSr+BmWZoOM++NAYBTxHG3p4IjHdJ02K+iLbOIcAONuXT18e7zZzcOFObSwQeXrj6mcgMAgHboyO2BSea3GQBwpp6klYLb9P03YzZVMSwlq2CfVaDjGoZQqyNCbRcAAAAAYEIV4UZbJmFsSztn3WbTDThFqO0CAAAAAEyoYlhKVsE+vduObmZNtwHSpauPR8+f3diSdKvptozZunT18ajpRsybOO4uSlqWKS3u2D8v2o8rBXe3Yz+P7MeupFGaDqnYAgAAAGaQ93BjO7q5u5o9OpK04HvfHu2c/xLUqC9pTWG8Z47EuLZaxHF3WVJkP5bld+6VlYnP+TElaU8m7MhkJpMbeTwuAAAAgAZUNaHoQGE9iZ/EfAoBsdUbfUnvN90WSX2qNqphZ7KPZIKsSM2FWVfsxy3brgOZoGMgE3YwZA0AAABomXkNN5KmG4DXXbr6ePP5sxuRpOsNNuPJpauPmWvDIzvUZE3ShooPLanLksz5Kg87nkgapOkwabJRAAAAAKZXSbixHd0crGaPQl3ic2s7usmT2TD1Dr/1xtcW3/rdLzdw7D2ZpZngQRx3I5nvZ8gh52muS7oex91NmaC2z9AVAADaL467Lx0220nTYeS7LQD8q2K1lFy/wn2X0W+6AThZ7z/8zbU/819+68v/9/9TVUHRqfYkRZeuPib0KimOu7047o4kfah2BhvjFmS+ho/juDuwgQ0AAACAAFUWbmxHNxOZTmNItrajm6OmG4FPi+NuT9LDT779Uv/Jf/PrqjHgINjwYCzUeKgwK7bKui7pQxtydJpuDAAAAIDXVVm5IYVV5n8kM+4fgcmDjfzvn3z7pf79v3S0Jel+xYe+f+nq42WCDXdzEGpMui5TydG384kAAAAACECl4cZ2dHNX0r0qj1HAGnNthGcy2LC20nTYu3T18YakdyQdeD7sgaR37P7hII67URx3dzU/ocaku5J2GaoCAAAAhKHqyg1tRzf7kraqPs453tuObmYNtwETzgo28r9cuvo4u3T1cUfSbZUPOQ4k3b509XHn0tXHWcl9zaU47i7GcTeRmVMj1NVP6rIkM1SFFXYAAACAhlUebkjSdnSzp4bm3/jeX/ylb3/nP/jLWRPHxummCTbGXbr6OLEhx9syw1WmfT/t2de/bUONxKW9kOK4uyZppPZPFOrbnTju7jIXBwAAANCcOpeliCRtqsaO0ef/2i/q1/+Xv/1ZSVkcd6M0He7WdWycrmiwMe7S1ce7Gps75fmzG5H9YzT2ssy+NnNuJF6xc0vU+rvbQldkhqmspekwa7oxAAAAwLypLdyw8130VrNHI5nx6pW58PLlr3/2r/71o9/4Wx9/2f7Tggg4glAm2DjJWICRnfEyOIrj7rKkgeZzXo2iFmSGqdxO02HSdGMAAACAeVJn5YYkMwfHavYok5Somg7TzssLF3q/+bc+PpTp8ObzAhBwNMx3sIFq2Z/XpszvTt32ZIbA5L+r2RTbdCY+Vnw3akoP47grAg4AAACgPrWHG5JkJ/fsrGaPepL68hNyHEja2I5uDiRJ0U3ZlQwyEXA0jmCjXewkmXdqPOQTmd/VXZ/DOmzlSWQ/rvva7xQexnF3OU2HrMgDAAAA1KCRcCO3Hd1MJCU25FhT8c7HkUzJfHLSaihpOjwk4GgewUa72NVQqp5fI//dHaTpcFDVQezv+K5MBUo+KWr+UXVFyp047iacZwAAAIDqNRpu5MZCjkVJ+ZPWZUmLJ7x8ZD+yaZZ3JeBoFsFGe9iJQzNVu8TrnkzQMEjT4WGFxzmRDVIG9mtdk5mctqqv9zbnFwAAAKAeQYQbOTvpaCbPk0MScDSDYKM9agg2diT1Q1lJxAYriaTEnhv68jtHB5OKAgAAADV6o+kG1MV2ZiKZJ8e5POBYbqRRM4xgoz0qDjZ2JL2TpsMolGBjUpoOszQdRpLekWlvWQQbAAAAQM3mJtyQCDjqQrDROgP5DzYOJL0bcqgxaSzkeFdmThAXWwQbAAAAQP3mKtyQCDiqRrDRLnbyUN9Lpt6TtFzlRKFVsu3uSNoquCnvcwAAAKAhQc25URfm4KgGwUa7xHF3Q35XRTmQtDYLvz82BO3FcXcgMzfHeSur8D4H0Er22t0psk2aDvtVtAUAgDLmMtyQCDh8I9hoF7sk6vsed/lEUq+JFVCqlKbDgT1PJDp96A7vcwBt1lPxCr6+/2YAAFDO3A1LGccQFT8INtoljrsdmc66L++l6XBt1oKNnA06I71+nsjxPgcAAAACMNfhhkTAURbBRislOn+YxbRup+lw09O+gjV2nhifh2OH9zkAAAAQhrkPNyQCDlcEG+0Tx92+/EwgeiTp7XlaGSRNh4f2vb0lc65Ya7ZFAAAAAHKEGxYBRzEEG+1j38d3PezqSNI8z0uzIfP1z+QwHAAAAKCNCDfGEHBMh2CjtXwNH5mJFVFc2QoOgg0AAAAgIIQbEwg4zkaw0U725+ZjOMrtNB1mHvYDAAAAAN4QbpyAgONkBBvtFMfdRfmp2rg3T3NsAAAAAGgPwo1TEHC8jmCj1TZUfnWUJ2k67HtoCwAAAAB4R7hxBgIOg2CjvWzVxkbJ3RxJ6pVvDQAAAABUg3DjHPMecBBstJ6Pqo01JtAEAAAAEDLCjSnMa8BBsNFunqo2tphAFAAAAEDoCDemNG8BB8HGTChbtXGk8uEIAAAAAFTuzaYb0CZpOjyM424kKZN0xf5zHnBEaTrcbaptPhFszIxeye37DEfBvLCVTpGkZfuxqPOXTz6StCvp0H7OJO3yewMAAFA/wo2CZj3gINiYDfbnuFRiFwdpOvSxfCwQLHsuX5MJNa6c+eKTLeg4ALku6a7d757MNSJp+zUBAACgLQg3HMxqwEGwMVPWSm7f99EIIDRx3O3IDLdaU7EA8BuSflXmnL8n6UuSvnjKa6/Yjztx3D2QlMgEHSOnRgMAAOBczLnhaNbm4CDYmB2283a9xC4O0nSY+GkNEIY47kZx3M0kfSzpjo6Dje/Yz/+vpP9C0m1JT+y/HUh6T9JX0nT4pTQdLktSmg6X03T4JUlfsf9/YF//C5L+M0n/p6Rv239bkqno+DiOu0kbrw8AAABtQOVGCXVUcNj95+O/1yb+b1NmrPdIZpy30/EINmYOVRuAZc+hfb0+f8Z3ZK5/vyLpP5I0SNPhyL42sa+5fV7IZysxNiVtxnF3zf75D8osn5zFcffHJP2kpH9c5mHCLUm34rj7RNIGlRwAAAD+EG6U5DvgsE/d12QmgzxvDPidiW2PbDsGMjfr505qR7Axk3oltj2iagNFTEzEGckEsaedu45kzk+ZpjxHlWzXpkygkPtE0uckpZL+4/FljsfOhU8k9Yq2LU2HA1sZsinpwzju5uHIz4y15V+U9JZMZdX1OO7eFxP3AgAAeEG44YGPgOOUp4tFLcjeNMs8SRzI3DiPTjlmTwQbM8V2olwmRswlnpqCGWbfZ2v2o8gQqAXZ6gWZirPMd9skyVZRJDpeCjkPNX5WJ5wTx86F75WZSNeGFD0bcjy05/88KOnZ/9uU9KclfVYmoP6Tcdz98fGgBUB72Pu3SCbg7ej8a3C+ytLIfmT8/mOe2OGZ+e9LZP952v7P5CplI5WoXp839iF6pOPv/bT9hj19+nue+W9heYQbnrgGHJ5CjZO86kTEcXdLpgT61dNBgo2ZVXZISuKjEWiG7VQXOZe8U+TiZC+KfZn32cKZLz6f92oFG7ok+nTg8ouS/u2Tvtaxc+G5w1CmlabDJI67kgk4svH9pulwI467fUl/VtKPS/oBmUqP+2k63PBxfADVsgFq/lH0XJivspSfq+/a88UTFai8BdrChhnR2EeZ+4fJVcryY0jmdyiTHWpa4hgzxX7/eyo+kfq4vG/76h7Tfs/3dHzeCiJguvDy5cum2zBT7M11ptdTsCNJrwUc9nV9TQwtqdCRzBPLTYKN2RXH3USvl+EXsZdPmIh2qircGAs1XN9bn5Kmwwu+9iW9ungnOj73/rak70r6d06rxrDh8ocqEGzEcffltG0fO9e+m6bDwSnHfyzpC/affknSP1lFx8bhvZHzFvr4YH/OHzlsGtw1Lo67u3KrtPtC/h4Zew/PikKB6zjH78W9NB32p9x/R6aDsKHy4e55tnRG5S3cxXHXpeOzk6bDyHdbZpmnDnUZezLDQYMLC12ux0XvmWw/sydzvqrr+38gE3RsNnnuYrUUz6ZZRcV+zlRfsJG34f047v6vItiYZVGJbRNPbcAMsVUGu/IYbPh2QtXc78gEBX/ojGCjI3MR3qqq8273e1/Siauk2E7c75P0V+w//X5JzytaUeVT4cqUylaD+dZz3O6WvdkLgn3/uQQbT0K7UZ91cdxdtA8OPpZZ+ajqYEMy59t8haVg3rfAeeK427PB7Ud6fWWyul2R6e+M4rjbn5ffI3u+6ssMHXlf9X7/l2R+5h/HcTez92a1I9yowDkBx3v6dGVHnd6e+DvBxoywJ+4yJ7HMU1PQHp3T/iOOux17g1LXzbwTWx3xoUwbP7H//DN2udbRGZsmkkZVn//sUJNdnRIepunwME2Hf0JmCVpJ+ryk/7mCmwLXcKPMstJVKBO2hBTURI7buf4c4WCsk9BUuHtLpnPGkDUEzYYaI5lAoak+zkkWZO5jdu1wspll74dGCuO+bUVmyG3tIQfhRkXOCDj+UzX/hss9JdiYKWWe9h6EMlYOteqc9I/2QuRaMj+NIx87mRhi922ZSUNvn3desx2FvGS2Dj1JHdtROpGt8nhbZjjN98jcFPR8NcAGPXvnve4kodwQ2oqWMgFuEF+H5doWwo0axHF3OaBwN6+8HczL02e0Rxx318ZCjaaqNKaxJOmDWayGsg+jMpmfQdPnq0njIUenjgMSblTolIAjJD8ya7/gcy4qsW3mqQ1ouYlKiKqUDtImgo1fk1l95Nz5IcbmO9qsK9CzwUJf0sZZF3fbnn9a0m/af3roeYhK4rhdKKFAr+T21wO65kUO2+wxJKV69tySKaynz5KposoCeg9jjtnhDwNJHyjsUGPSLc3Q75E9X+3K/8IUvq3IVM9UXoVGuFExeyPyEzIT24VmSTP0C45SlRtUbeC0VZSCYytLxoONNyW9PeXcGZuSDqedRNAXO/fHSCbkOOt1u5L+iKRv2X/6Gx4DDten/pGn45flI2RpPKixlTAu4WHiuSmYMHYODO3pZ+6KuG9Dw+w5bKTwhi1Oq/W/R2NzAYV8vpqUV6FV+r0n3KiY/eH915I+03RbTnFF5mYf7dcpsS3hxmzIXDecCAyCZTv6eSf9dyR9n6Q701Rh2KqJWzKzhzdhQ2Ziy+isF9mv5Z+VCTg+KzMHR+kbgRJDU5YqmuR0ah6GpOQaDzfEfBtBaku4qxnomKG97PDKD9SeDvVpWvt7NLYyZ7ATvZ9jRWYuoUruKwqHG8+f3YgmPypo1yzpK/xyrVuhjKlGKc4ltK5L72E2jK0cUhen0np7QU9kbqryuSmKLFXal1nSr5FOov0929EU4cpYwCGZr/NrnpqROG7X9DWi52k/IQxNcfle7rEsaHVaFGzkroiwCzUaqxS423RbPGrdA96xYCO0YXNF5Qtt9Hzv+M3zXvD82Y2OzIW4p1O+kc+f3ZDMDdtAUnLp6mPGhOrVk9A6l3stI4njbmcex/O+WLm2KPMkbVmffqK2az8GF3eeBvu9KXmzHuqcMKjPQPU+hXGtFEp0fB16Ken+tMHGWNXGO47H9qUvM7lW57zOapoOd+O4e1um0/XlOO7+5TQd/qmSxx/ILA9X1JrOGVJTMZ/hypoaGuJh34cuDzwSvy1Bzj49bFOwkVuJ426/7iF2mD8z1KE+ya047g6aeuhRxAz+HBZk5hZTgYdU5zq1cuP5sxuLz5/dSGTW9X5f538jV+zrRs+f3eg/f3aj6ScjIWhTGrig5kq1G/Fi5Vrnxcq1RNI3ZUrs7sq8j8c/7sjc9Hzzxcq15MXKtUZLs89Qpl3Bhjao3LKd3Cn4C6VN9/Pxvd+Q9DftMqvT2pBZFSjz3LRCxqo3+lO+PpG0Zf/643Hc/WrJ44/kFmheqWum80keh6TkmrzWsUpKWBbV7u/t3aZ+LzEfZrBDfZLgV1CZ8Z/DQ58VHCdWbjx/diN/quHyJC9fT7j3/NmNtUtXH8/lWH77Q2rbG3Ajjrub81C98WLlWl/FS+tuSbr1YuXafUn9kCs5CsqabkBZdgmskGeKfqemTnXR821H5Z/G78i8h0b24zSRTAhXOIizF/U8LP66pLdUvJPYUzgBbiJpM467i1OebzckXZX0ZUk/G8fdHyx5nk7kVr0RqZkKAt8/tyvTVM5UhCEpYempfNXansw58FBnX0/z818kv2FdonAm/QWK2pG5dznv90cyvz8d+9nnPd+C7IpmHvfpWyZ//cojme95JvN9P+vesWM/Ipnve1VVvg/juDvyca/8qXDj+bMbPfkpz1uSlD1/dmPj0tXHiYf9tU2v6QY4yKs3+g23ozJ2CEqmcieIO5KiFyvX1i7uPB35aJcHnaYbgCAU7fC6/B4cyTzpLFrGmTkcK5fInJ9+U9IPSnq3SOd+7IlAEE9o03SYxHF3U1MOj0jT4WEcd/+4pI8kfa/MJNXXSjShzNCUpMRxXVUx38eaaq6utCGdyw15ctp/2BvBC45NkuQWDqfpsNQxA+J6o74j83MZFDgXZfkfbLXFhvyEKytx3I2arkrDbLLXn0j+Otd7Mr87mcNy7Nn4X+x8gWvyM7HmHfuAd+RhX1Uo+70/kJ0+wuH7/oqtpOzJfN99zyk5sOeyUoURrw1L8Rhs5BYkPbSVIHPD/uBDfop8ll7TDaiKp2Ajd0XSrt1nCDolth15agNm25Gke5I6aTrs1TU+1d5U5cNRviPpicOx11SsE1KHgQo8JbIX+/v2r1+N4+6PuB7Y3rwdOGxa+7J/JZZNPU+vgn2ehyEp7bcl6StpOozSdJi4nlPSdDiyw+o6Ov69LqPvYR/Aiez7PJL7HG0Hkt6T+d1ZTtPhZtkOrG3XIE2HPUlfkJ/fo5ArN1ztyEy83knT4UbZ73uaDnftfjoyc5jt+GiktSAPQ4RehRvPn92ockKlxE5MOi96TTeghMaX/KvQQH6HCi1IygIKOFyNmm4AgrcjaTlNh/0GAoL86fqR/dwrsrG9SF5XeB3ETRWfx6Iv6dftn3+u5PGdvh8NrKxV1fGamEMkctjmIOAnifNkT2Z4Yc/nzyNNh4c25HhXx+c4FyvMvYEqOQYcOzK/Nx0baIyqapv9PXq7YPsm9fy0KAgHMt/7yOdknePSdJil6TCSCTl8LU5wRSXD2vHKjSpv/BY0XzN9t71Spdd0A3x7sXJtQ9VU01zRbCa9QG7LXhxHdR94Yu6iNyW5zAm0JukotJnQ7dOTAxW4XtivPV+Ba6nk5KKJ43azEm5UvW9fxwvqfTuntiRVOuzDnp8ilQs4uBdBpQoEHAcyw0drHS5lr6uRjifhLmqhiqVJG3DPBkpZHQezIceyTHVOmXNY7o6t2nXypiQ9f3ajL//jZiat2AlGZ/pCXWKZt5BETTfAJ1tZ0a/wEHdfrFxLApp/A/Bly5Z8NqVvPx/InlfjuNs/7cWniCQdOmx3Ko/7OpTUcyjBPJJ5aPAXJH3J5cB2mdlX39cCIpfjuahwSEqup5rm3bAVkS5fS+K5KSjmvTQd1vIesb+TPZnV21ysiYADFRubg2NXJ18/7sntQYQX9ri9sarNopqaW8qHA0lrPob8uEjT4aadwylR+Ur5JI67yy7vo3xC0V7JBkxrQ7P/FGIWhnS0bZWX82yo2htkyXTCehUfA6hTo8GGvXnKb5y+X+ZJUeSwq5US257G576uqPhEsL8qc077Yhx3fyRNh19zPPZAx5Ug01qyNxx13DxVXVlR56opPYdtDpq6SYWkGoONXJoOB3Hcva/iv5eS+d1sahUgzBEbcKzJzGOX318fyXSss6baNaGn0wOYs0TeW1KPPZkKs0bnFrMhbSQTcJSZp2tJjotcvGkn+6yr0mDl+bMbnUtXH49qOl4TZiHc0IzNvN2r4RhtH4oEjNtruGJDOn4C+VzSP2hLHguxT8s/krnhGvloVBx3X9oxpj72tSjpm5L6Rc+3cdwdyVy7H8n9upPIrRMVqfiywy6KnFddqlAk8z6r42l35LDNrD8MCtlW3cHGmL7cV1GpfRUgzKexTmwmM3db4x3rcTaA6Un6sOCmCy3sAwURbORsO9biuJuo3Eo2d+O4mxS9f3tD9SdUs94J7DTdABx7sXKto3rCu4UXK9eiGo4D1KHX5MHt8L488f8eud+sRwp4QkZ7A+BaVZLYz3/IdWbxsXk/iuq5HK8IhyEpfblNaFb5PYl9P7tURCZ+W4IpNRru2vNCmXMeUAt7DVlWQB3rcTagcFnNI/LbkkoFFWyMs+fRJyV30y+6wRuqv9Igqvl4des03QBPoqYb4Emd7++oxmMBVbkfQCl83uH8lqSLcu/kRTJPlUKWqVy48Yakny5xfJfqgCtll2qbQtHQYSC390kdK4S5BCgMSWlOr+kGyIQbLhPzzUT1MNrDLmscXMd6jEtQ2JbfowMFGmyM6ancSiq3iq4E9aaqWUHiVH/7735mpWcmG5lVszJfReRzAr6m/Ku/57NR9BtNtwJojSNVO/nutHr28zck/Y8lKi+WFcbXc5ZMDp2pNB2O4rj7RKbCZU3SuuPxE7kNTal60rUigcATW4KcSHrf4Vg9VTs0JXLYhiEpzdgKIVSy7+eBipd0L8VxdzHwzg5QGzuPTT4J97TaEm6shf67PjY/y67c5z/sqcC93Jvnv8SvxbcuLKrmQAVOVjQDP6evv/FS0oW6Dlf1k8yqdJpuAIKRNH2hnCjh/wFJ/57jfhZlhqQ13lE5x67MGF+XiQAHMuHGl107NCVWTaks3HAYkjKQXt1E5YFPEVWvMuEyqVriu0PceiMAACAASURBVBGYSr/pBoxxCTck0zHL/DYFaLVdFevTtGHVy3shBLHTsA9jenJfCarQxKJvOB4EwKc12Sksc+yOr0ag9UKYiG58SMr3yv0J9rL0akxwsMYCjY7D5uPfm3+9RDNcvsdRieOdx2VISi5xOF5lQ1NsUFPUUejv2xm1FdL8PGk6dD33dXy2A5gBWdENahiuWMZBmg77TTeiCHs+c5n/RDIPgHrTvrj2yo3Db73MJ1CbVVfU3if4aK8yN8Ktf7/6Wr3iPHao1t06jtWAnUBu7CP7+euSPilRSbKs9lxrduQwP4itVNiTue78MUn/huPxXZaEXYjj7lqJDthZCg9Jyf/iWIIsVTc0xSXcYEhKM/pNN+AEOypeRdupoB1Am40ctgn53rjXdAMcbcisYOdi6mrRN2Vu/mqbJ+If/aHv7tXVEWmCh2VvQvFOy5ZBOpFdwaToMlCuRjUdx7eQ02nUJ2m6AVZkP7+pcp28RTVbTVXESO43UpnMNfwPuB48TYeZYyAQyXNH3HVIygn/VvQ6XNXQlMhhG8KN+u0FEu5OKlpOD+DTRg7bhBpu7LS1f2aHwW7JrZ98fdrht2+o/vHIWc3Hq9uo6QbgNXW+v7MajzVpVGLbjqc2oN2yphtg59vIO7Y/rHJtikpuX6eR3EPGzH7+fMk2uHSoq1hGtcyQlJzL8KolxyEkp7JlzUXHbh9VVA2DsyVNN+AUI4dteGABlBfq71EIw4fLKNP+aJoXvaH6b/5m/aI9E+Nk25oKTrq48/RQ5ddYnsbexZ2noxqOc6KST5zaMHESqhXKU8vJm4my59O2VG7sqlzlhiQpjrtlKg9crs1VzFVRJGDYOekpjp2v4qDiY08jcthm1u+RQhXq993lHBjqE2cA5Ry0Pfy212fXIcPRNC96Q+aE7rKWtouDS1cfz0Tn/wxZ0w3wwHXCl1DVcSIIIUl1nl8gjruRx3agfUI5L+cd5b8ncxEvE04sK5yv6zyHchwear9H+TX8D7s2wN4wudwLRK7HnORpSErO5ZzsO9zoOWzT6hvXljoIJNwFgLPMyvUhcdwumuZFb166+vjw+bMbrstNFRVCB7BSExO8tVVbOgRTubjzNHmxcm1D1f1MDi7uPE0q2ncRZTuCmad2oH2yphtgdezn35L0qyX35bqeehPKVpjk4/J/X8n9uNwL9OTv2u5jSMr4/71fcH/eJkm1SxEXveYwJKUZWdMNOENbqs+AUmwV4KLMfUDH/vOiXq/odDmvzpKk6QZ44nJ9lqb82edLwW6o+uqNA83OD+U8WdMNKClpugEV6FW47yomoXORldg28tQGtNOo6QZYnbE/+whZRx72Ubl82U8754iLkf38wyWb4tKxvmI78j4UCTfOHEpl/89lSKKv6g1WSWmPYB/osCQwZk0cdxfjuLsWx91+HHcHcdwdxXH3pcwqGh9KeiizKt1dmVW8VsY+5jnYmJklwu312anafJpK8zck6dLVx4eqvoPWs8eZB22uUDmYlV+ecRd3nu5Keq+CXd+/uPM0lBvSMj+3yFcj0D4BzbGTd5I/pxJPLPOQoIWl5h3H7Ub2c6nl3UsMTSkdCNg17ItU2yRTvKbJSVIJN9pj5u55gJDYMGMzjru7kr4p6QOZ8OK6mPdtWlnTDfAsc9zu3Hm+8soNXbr6OJG05Xig89y7dPVxVtG+g2NvqNs6b0Wbg5kzXdx5uim/7/GtiztPQ6nakMrdoC1UMDEgUFT+VOZQrADk4i0P+2gqEPA5JEWSlKbDRMXDmgVPq6ZERTdgSEpjCDcAz+K427OVGS9lwow7mu/Ki7Jm7Tzl+vWcWyn6xvhfLl193JP/gGPr0tXHfc/7bIN+0w1wcKTZHJLyysWdpz1Jtz3s6p7dVzBsqFZmeFnPT0vQMiEGsVfUkiElgRjZz6UqNyyXDnZU5oB2WMv1ApsUWd2n9rDGls0WnfOljlW9cIKSExcDsOK427EVGocyw0uKnNdxtlkLN0aO2537IPZTN0KXrj7uPX9241AmYSvrvUtXH89sJcBZ0nSYxXF3R2aMWFtszsNF3k4wuitTpVL057MjqX9x52nmvWF+ZHK/mKwpnPlDgA/juFtqB/aJkXdV7Vcevuay0nQ4iOPukYp1zstOxFk0TEgKvrboJKlrcdxdLHE9ZEhKezivMgbAsENB+6pncYp5NVP9M9tPdtn03MqNE5/yXLr6eMOuoJLIbSzUjqSNOVj29Tx9mclx2uAgTYf9phtRFzsHR/Ri5VokU7Fw1hKERzKhwWbAoUYuk3u4sRTH3eVZnHMFrfSe3J9ULMvMxP2Ov+a88mFF+92Uuea6fM351+uLy6opkdw76N6HpOTsDdSBit3LLNg2JQXblSPcaI+Z6jAAdYvjbl/mwVibVihrnYDmRgveqSWsdo6MzvNnN3oyF+ppOkxPJG3O0/waZ7E3Vfflpwqmar2mG9AEG1ZkkvRi5dr4MlSLMp2MQxuEtIXr8kq5Dc3pe2GOjZpuwCl2XS/m+dOAKm4G4rhb1X4P5fg1V1Dt4RJuOFV+VTwkJZfITF5XhFO4YZ9gFn0o9GQeqiYBzA47T1si5tGAu6JVotIUc6qdOz7XTjSaPH92I19rODrhZRmBxql+qekGTOE+ieCrao5WS9PhyOEp5biy5dhon1HTDYCkKcaRnqHjqxFW5rDNUhx3Ow7BQ5VDUsa3KRpuXHc8F1K1AWCm2dWtHjbdDrTeropPD3Bu/2bqycfsMq6ZZm8pmsrYX/4/23Q7zrGXpkPmWZgtA7lXCy3IPH3te2sNUNw3mm5AA8qU9HZ8NUIyEyzGcfeJig9xW1PxFbcqG5KSs6GvyxxYLtUbhBvtkjXdAKBN4ribiLk1ELA3zn8JXJySan63gaac5ddUcpZ7BCkpuX3PQxsAFwf28yea3+Vcy/jE474qX2WkpiEpucRhG5evp2iAwpAUAK1AsIE28LFsHCacEmzsSfoJSU8VzqQ73yfzlK3XcDvgUZoOd0sOTVmK424vTYeJx2YB0xjp+H3bKbmfedKxn7/lcZ8DFS87Xik4lKOOISm5gcz1rsj1t+jQlKhwq6jaANACNQUbOzKT/ObDxHd18qS/oyJBt12euy0LPMwTl+G4565wRbjh2RnBRmRLfSOZMshQAo5bdoK8XtMNgVeJio8xH9eP4+6AJ4qoWf5++66mWO7rNHYYglq4+o9rWzv28wtP7Sg7NCUp8NoinIMA+/W4TpSaFHhtUYQbAIIWx90N+Q82DnQ83cFuy67V8MOlL3xuv4RhKR6dF2xI5qm6TFLV1Nrq9yXdnvi3WzaRxexISm6/JIeVD4CS8pubz6jcBJs554CkTjb0VokwMf9ejXy0Z4xLxzua5kU1D0nJuXw9vQKvLRpu7BEgAwiZXRXF11LjBzL9kLfTdNhJ02EvTYcJwcb58vsEnI9ww5Npgo1cmg5HaTpclnSvpuZJ5oTybpoON+xwAwKOGWY7AVsld7NhlzUE6pLf4CypfLhxoJaEG2XYkCB/+uH7BrHKeTfqHJIiSUrT4UDH87pMa2Wa86DtABR9CpUUfD0A1C3xsI8DSbdtoLFBmOFkpu5nSoQ1VG7UoUiwMS5Nh31JX5H0pLLGmTWE70latjd2+bETEXDMuqTk9gsqvvIBUMb4Dc9CyXBtJD/VH3VYlhlr7CIa+/PPlG/KMXv9Knp9WpjypqW2ISke9jNNWxmSAmCm2P7NlRK7OJL0ng01Ei+Nml9tuZ+ZVsdxu3ODMcKNklyDjZyt4liT9LbKP2kfdyATanTSdNg/qS0EHLMtTYeZ3DtMuetx3HW5aQcKsxVHR/avn6jcxXyk9jzpKNPOV9+jip6GeQ8DGhqSknMJbHtTvMZlSMqoeFMAoDZlhicfyPSFeEjmx6yFG65fD5UbVSobbIxL0+GundTzCzKBwxMd3+RP60AmIHnXpqQnhhoTx01EwDHL+h72kTA8BTXK7OdDlVuqeqT23Aws6/jrLirvVH/dT1M+pYpKh9qHpORsoFB0zqsrZ50D7f8VfbqZFHw9ANTGDrVzrdo4kqkYD2X4SafpBngQNd0AzyLH7ajcqIrPYGNcmg4P7eQ6a2k6XJSp6HhHpgpj8in8PUnv2f//wtjkPIVuRgk4Zpen6o0FUT6N+mT284LcSv1zu2rPDU1HUzyNmGQrIPKbz6HPBuUch6YsnROINjUkJefyJPGsNkcO++OcCiBkvRLbluoLVaDTdAM8WLCBU+s5PhCQ9KpfcybCDQdVBRsnsRUdmZ2fI5v4v36aDjft/5c6LgHHTOt72McV3guoSd7p+7xMJ9n1Yj6y27dhaMoVuU0GOt7hTvw05USZwzYnhgEND0nJ+V41hSEpAGZN5LjdVkAVG7lO0w3wpNd0AzxxfXA1VdUl4UZBdQYbdSPgmE2eqjck817oedgPcKqJYQO/JscbrLGbq6CfdIxNvlkm3PitNB3+vJ8Wncjn0JSiNzWZw7HPZK/VRee4OmtoSpGwRmJICoDwuQ5J6ftshCdB3wcUMCtz4PUct5vqPolwo4BZDjZyBBwzq+dpPw8JOFCDxH7+XpWb0GxH4Y9TXZZ0UPQaYjvaeaf6F3w3apzjPBUrp1TNNDbfxgQv1RuOEy5nDtsAQC1KLNO5E1pV2sTwzbZbavsk/yXncpnquk24MaV5CDZyBByzx15s7nnaHQEHqpZfwD4nczGPHPezq/Cf2LhOJtob+/NPeWnJ2RKHbV67CZsIZKZxUFV5s52bquik3b0T/i0quI/KviYA8KTjuF3msQ2+RE03wLMyD3xCUKb92TQvItyYwjwFGzkCjtlj520p+vT1NAQcqIwN4/JJLI9UroQxKt+iSkVyG5LSs5+/kabDr3lrzelcKh2iib83PZHopKTg60+aAya0rwkAyuo4bhdicNvqSocTrJR44NMoe/285bj5k2n73G86HmBuzGOwkUvTYRLHXen1r/9WHHdll61F+/QkfeRpXw/teyHxtD9gXCLzlH9B5rwzkMOKIjIzjPdkJhj1wuONxaKkJYd9/rF8O0l/zlNbzpSmw1Ecd/dUrJx08qayV/CwScHXF5VIulNwm57skyd7o7Z05qtPPiYAzKIQ+0WzFm5I5jrSabgNLlxWKstN/WCAcOMM8xxs5Ag4ZkuaDnfjuHtP0l1Pu3wYx93lNB22vUwOgUnT4SCOuwcyncdvSfqgxO4mz+Nlfeh5f+87bvdJmg5/2mtLzpaoWFsX4rgbpekwc1j6rfLhG/Z86BLY5Oe7qOAhZ2ZISv5zbbodAHAa249baLodFViK427fVmS3gp0rZMVx86MiD1IJN05BsHGMgGO2pOmwb58Su55kJt2xTzDX5u13A5Xry5x33rJ//0rRycriuLspaTlNh5GPBsVx92WaDi942tdA0qhIODhxbbrvox0FDFQ8iFmTGScb6vCNRMW+piUb6O6qeCUKQ1IAoD79phtQobtx3B20ITC3DzeSErsoVPHBnBsnINj4NObgmDlrkg487m9F0qit4wARJnveyd+n35LbjUqi01fuaIxtz3UVmIDNbtO3f/0kTYd/xn/LTue4akpkP/cKbpcUfL0rl+P0HGfgdzkWALRFp+kG5GxfruiwwbYZhHZvM8m2b6ByFTRJkRcTbkwg2DgdAcfssO/lNRVfLeAsC5I+jOPuZugnW7RKz35+S+Z8ExXZ2D7VOFB4427XZEotizzN39DxzdpP+G/SVJKCr79if2ZBDUnJ2XPhk3Nf+Lo1FX8/zcyQFCv0VYgA1C+I88LEg4BZtiQpC/yeO1G5pXi3ilbsEm6MIdg4HwHH7HAsq57GHZkqjir23RjbQQutgzzz7Lj+vPP5bUl/yWE3A4W3fNqaCgxTsEO/8rly/k6aDv9CJa06n8vQiqSGY5SRFHz9koq/n0IekuISugTRiQEQlKjpBlibmv2qjdwVBRpw2L5hkeXfT9IvugHhhkWwMT0CjtlhnxpP/ix9WJCZbLT1Q1XiuLsWx91MZhLJMukz3G3IVBl9VtIX7TwaRSQyFQQdz+1yYttxXcU61flrX0p612+Lpuc4NCXoFUXsebBoFVvRc0HI4YbLPU7kuxEAgpE5btf4ddb251yXG22roAKOOO4u2jnFyv4c7hWt2pAINyQRbLgg4Jgdp/wsfVmSGarSqkqOOO524ri7EcfdkcwqHb4mX4UDe3Hr27++KTOJbVRg+12Zc3oo1Rs9mWEK2TQvtmFO3pn+z9N0+LWK2jWtrMJ9NzV8o8rw4WgGVxZZsrPfA5g9oxLb9j21obBT+nPz4oqkXVvl2Rh7/EzlKzYO5Lh07NyHGwQb7gg4ZkfFAYdkQo68kqPfdLJ/Ehto9Gza/LHMCgrzUtYYvDQdbur1uRH+asGnFJs6ngiyaRua8qJtr1F37F//TpoO16tqVAFJhftuqsLB6SZqSiFXbUjuYVXfYxsABMI+UHCddP5WE8HnnAcbuSVJH8Vxt9/EweO4uyFzPfFR5bzh2g+f63CDYKM8Ao7ZUUPAIZkT711JH8dxd9dWR3QqPuap4rgb2bBlVybQeKjyaTOq09PxDdfnJP2NacOKsTXSG63eGKtgSqZ47bKOO92/LelqNa0qZmyS1iokFe33TBV/TaGHG66uNHUTDaByZc5bSZ0VBPY8NO/Bxri7dQ4Lt/fSuzIPBcusipLbKjjZ+mve9NCAViLY8CdNh0kcd6XXv5+34rirNB32mmkVXIz9LDfl5wR1lisyJ8L347h7IJP2ZpJ2qyhLtxfa8Q+GmrRMmg4P7ROhTOb9eVnSn5P041PuYlPSRhx3Nxs8z/clnXv8sdLOBZl5Nv5Emg6r6ny7GOi4osSXplcU2ZQ5J/lUdEWc2qXpMLPnfRd347h7aCurSovjbsdljDVQsZU47r5suhE+penwwjkvSeR+jl+QmQOiV+X5b+wBwDzcz22p2BwW+bDwHUnJ2AMeb2x40pff7/+BSj6Emstwg2DDPwKO2WF/lrs67ljVYUnmpH1Lkux7aUdmorvdsc/T6NiPRZkQY1FMBDoz0nS4a8/hH8hUH/5Je56ZJuDYlLlobqiBknpbsrmoc4ZAnBBs/EtpOtyuvIHFJPIfbjQdAgzkP9xo+mua1oHch+G9b29yN4oGE7byKtLx8rqbYrgL0Dh7rd2Re8d1QdIHdh99n/MO2YrfvuZr4tANmXNk0fvyFZlwri9zPUrKPESw9yc92xbfQ7ePJK2V7YvPXbhBsFEdAo7ZYS9qHZkTYVOJeH5chongNWk6HMRx97bMueYzmjLgsJUfG5I247ib1PmE2Hbi+jqnamMi2JCk/ypNhz9beQMLsueIMh3ikyQe91VYmg5Hcdx9Ir/nnLaEG7sq97O8Lul6HHf3ZL7mbOz/DmVCvVwkE0Avi+AZCFlfZqW4MlY0VkEgaeDa37KVmz0VP0cfqfgklyHMz/WKvX/pyTzYcbEk80DiThx3j2TO+ZnOf3jYsR+RzDm7yoeePR/Vm3MVbhBsVI+AY3bY34nIpr13G24O8JqJc81nJP1oHHffStPhH59iu3xCzzonPUskHabpsH/aC04INv5img7/lcpb5s7n0JSmh6TkBvIXbgQ/JGWMr6/7iv3gmgG0nB2y5ivwXbEfD20ImsmsyjJtx7rMg7a+TFhR5OtodNWRk9gHO/dV/rq7oOOfRyhu+7pezk24QbBRH98Bx/r2fj68IB9iMGlX0ujB6uUQboxnTpoO+3HczWQ6Z6weUtyeyi2rhlNMnGvekPTVOO7uS/onzjmv92RmFO9VMQ51kn3adF3SO2e8pifpvqTfKzMUpZ+mw5+uum0lJfIXbgQRAtj3lK85h4L4mqY0EBPyAfi0nsw9jM8n9nkIWoetNB1uzsrkx2k63LCVoLM0JOe2z3uxuVgthWCjfmVXUVnf3l9e397fXN/e35X0TZmyuPdlngZNfnwg6aP17f3D9e39wfr2fs8GIvDEjpVclul8YToHMifsZSbIq44917wrU3Z6QdIPSxqdNVO7rRC4JzM8pdKnM3Z4VyLp/mljjm1n+qFMsPG7MnNshB5s+F5hJPG0Hx98hRKtCTfsvdCTc18IYK7Yc0OdVY4+7anhFdKqYB8UbzXdDk+8BhtSAJUbL1auLcr80py3gsGOTHKYSRpc3Hk6VShBsNEclwqO9e39nsyJyCXRXZAd9ytpc317fyCp/2D18shhX5hgf182bEA1L7NTuziQeeqeNN2QeWFLNSOZzuSSzLngozju3k/T4Yk3NrYiKZJZsq6S64F9ujKQNDqpHTZYSXR8vvuWpH8mTYdf892WCvkYmnIUyJCUXCI/T8UyD/uo06aan+Moavj4ACbY4Sn5PFdtMdnXK3qN7/htjl9pOuzZPlZbKziOZObY8P4QoLHKjRcr16IXK9cGMk/lH8rcHJ3VWVqR+QE+lPTNFyvXBi9WrkVnHYNgo3nTVnCsb+9H69v7I5mfl49StQWZ98vHtgKESg5P0nS4m6bDSObnGtLSlE3bk0mgOwQb9bOd42W9/vR5PY67v3pGdcaazFC3rKJmbcrcIL321CuOu4u2RPYjHZ/v/qakL7cs2JD8VFwEVeFgK2zKntuetO0+w37dVG8A+JRT7udDdVJfr2iAHvwwbPug+F7T7XCQ/3wqufbXHm7YUCOTGWZQ5gnBdUkfvli5lp0UchBshOOsgGN9e39xfXt/U+b9UNWJ5I6k3fXt/aii/c+lNB0maTrsiJBjS9I7dvhJ0nRj5lmaDg/TdLgm6T0dD1P5okwVR2orKV57vUzw0Inj7mDy/8uwAe6azDVnNPbvPZnfl3zCxe9I+sk0Hf7hNl6bPA1NCSrcsJKS24f4NU2jJ/O7AwCvaUnA8USe+no+7wmqYicpz4fmtsF9mZ9PZdWatYUbL1auLb5YuZZ3Yn2Ws6/IhBybdogLwUaATjohfv4L33/rdw9/5Zflb0K6syxJ+nB9e3/mxt41bSLk2Gu4OXU5kOlAfyVNhz2f67ejvDQdburTVRz/vKQXkyGGvcBG9iMrezNjqzJ2dRxs7Np/68Vx9+/qeG4NSfoFSf9Qmg7fL3PMAGQltg11RZGk5PYhfk3navn4egAVs/fz7yjMh1r30nS45rGvF9yKKSex19COwq68O5B5ELhRdV+8lnDjxcq1jszNT5Wd2DuSsrvXvvrvimAjSOMBx+e/8P36oR/9Kb2x+APfV3Mz3l/f3k9qPuZcsCHHssxFb1YmOhp3IJM4v22HnmwyUWi40nQ4slUc78jM2SSZa951Sd+M4+7/EcfdVfvafEiLZCYjderc2Tk8Rvavkf23TUl/T+a69GX7fweS/miaDv/IjFyXynTkgwwB7O/2znmvO0XrhqSMs2HtbbXnSSCAGgU4yfyBzL1Z/4zXjBz2G3zlRm6scvVdhRU8HcmETp26HgRWHm68WLm2LDPOqY4lf678y7994d4PvvmZ8X8j2AhImg6T7/tH/uDdH/rRn9KFz/2epppxi4CjOmk6zOw4wC/I3CC7dhBCsCcznjEPNDYCm/gQ57Dvx0ivhxyS9I9J+u/iuPs7cdz9SNI/JxNIJJI+iONuZsOKc8VxdzmOuwOZysSfl/TXJW3LzKlxR9Jb9qX/l8yTi06aDn++5JcWDPvUyLUjHGS4YSWO24X8NU3FPoyIVP9Ncms6E8A8s53pDUlvq7n7vPGO85n3Zo4Po1pRuTEuTYeDQIaMH8ncP3fOCZ28q3S1FBtsZPK7NvKZ3vr/pL4+o/5npa9/57sEG4FZ395f/If/hT/9k023Qybg2H2wenmz6YbMKvt7l8isRpGvirQmc8Nc2zmhoB2ZMDaTlLXt3GFT8QtNtyNE9nsT2clFN2TeiwuSPitzA/Pn7cffl/QN2SGPcdz9ZUn/k6T/VtL/Jklx3P0xSV+S9E/JvJ+/KOm79lBfnTj070j6K5L+rRmv9Bmo+KztoQ5JyQ1kJoUter4K+Wuamh1Slf++bKj68/aRik/6B6BB+dDOE66tVTqSOTdvFrxP21GxqRE6RRoVEhtQJ3aqhp7qW+FwT+bnktR0vE+58PLly0p2bOe/yFRPxcan/P3v0bf/h8/p9/9rP/c0pNKcUuzs+vkkdErTYes6Mevb+5nCWkL0nQerl7OmGzFv7EUwkulURqp/Vur8JnpXplRxl3kz5o8dfpIHbj7fgy8k/Zyknwu88w5MxQbUGzI3yT5/V45kwqABvytA+409zIrkP+h4ouPzRasePjUtjrsdHT9k9N0P29Hxz2Xked+FVRluDNT8euk7F3eeRg23wZu2hxt2Ms/QJs47kLT8YPUyJ8mG2SEAnYkPye0kfKDj8ZW7Muubj3QcZPDzxmvshT+Sed9FMuXx04TzvyxT7fHfywZmIVzcgapMhNMd+/m8DkweKB/qOFjmdwWYcfZ8kZ8rIk1/bd3R8fki4wGUX/aeO9Lx/XaR8/jIfgT5c6kk3Hixcm1N0gfed+zm9sWdp0nTjfChzeHG+vZ+R+YXIsThCPcfrF5mFRUApxqffyPEizkAAMC8q2pC0ZDmMXi1RCwa1VeYwYYk3bHhCwCcyE5MGuRTCgAAAFQQbrxYudZT/ePnz7IgM04UDbHBQdGJ5urWb7oBAAAAAAA3VVRu9CvYZ1mEG83qNd2AKaytb+9T4QMAAAAALeQ13Hixci1SWFUbuQU7Dwia0Wu6AVNYkJlBGAAAAADQMr4rN0LuHIbctpm1vr2/rDADr5PwHgEAAACAFpqncCNqugFzKmq6AQVETTcAAAAAAFCct3DDrkgS8hP6pRcr1zpNN2IORU03oIAFW2kCAAAAAGgRn5UbbegUdppuwBzqNN2AgjpNNwAAAAAAUEwVq6WErNN0A+bQlaYbUFAbQjoAAAAAwBgqNwAAAAAAQKv5DDcWPe4LAAAAAABgKm963NfI475wis9e/L268D3/gL77G7/VdFMAAAAABI/g+QAABTRJREFUAAjCvIUbu003oKjV7NGypA1J0Zv/5p9a+t3X/++lpB1JA0nJdnTzsIk2AgAAAADQJJ/DUtrQsW5DGyVJq9mjzmr2KJP0kaRbOn2Z3RVJ70sarWaP+vW0rpCjphtQUGveIwAAAAAAw1u4cXHnaRuqItrQRq1mj3oybV0psNmCpLur2aNsNXsU0vwnrfiej2lbewEAAABg7vleCnbH8/582ru48zT4p/I22HgoE1a4WJEUUsDRtrCgbe0FAAAAgLnnO9zIPO/Pp6zpBpzHzq/x0MOursjMwxGCrOkGFLD3YPVy8AEYAAAAAOB1vsONxPP+fEqabsAUfAYSK6vZow2P+3OVNd2AArKmGwAAAAAAKM5ruHFx5+lIYQ5N2Qt9ThA7HOW0SUNd9ZsenmIrIZ402YYCkqYbAAAAAAAoznflhiT1K9hnWZtNN2AK/Qr2uSBprYL9FpU03YAp7D1YvRx0AAYAAAAAOJn3cOPiztNMYVVv7F3ceZo03Yiz2Lk2fFdt5HoV7XdqD1YvDyQdNN2Oc7QhAAMAAAAAnKCKyg1JCmGuh1xIbTlNVOG+iywnW6V+0w04w8GD1ctJ040AAAAAALipJNyw81vcq2LfBd2zlSShC2XZ1srY8CCkip5xvaYbAAAAAABwV1Xlhi7uPO1L2qpq/1PYsW2Ye6vZo6jpNlg9SUdNN2LC/Qerl7OmGwEAAAAAcFdZuGFtSNqr+Bgn2VMYE2mGYtR0AyTpwerlkcIaJrSnsIfLAAAAAACmUGm4cXHn6aHMfBJ1DkfYkxTZY0PSdnRz1HQbcnZ4yv2m2yFTQbJml6oFAAAAALRY1ZUburjz9PDiztNI9XRoty7uPF1uYbCRVbjvJipnzvRg9fKGmh2ydCQpspUkAAAAAICWqzzcyF3ceboh6V1VsyTokaR3L+487VWw78ptRzczVTcXRVbRfkt5sHq5p2YqOA5kgo3dBo4NAAAAAKhAbeGGJF3ceTqQtCyzkoqPzvyR3VfH7rvNqmr/ZkX7Lc1WcNxWfZOM7khaJtgAAAAAgNly4eXLl40c+MXKtUWZST83JF0puPmeTKd90MIhKCdazR51JH3sebdPtqObwU+sur6935GUSFqp6BBHkvoPVi8HG/QAAAAAANw1Fm6Ms0FHJFPVsSxpceIlh5J27Uc2K4HGpNXsUV/SXU+7O5K0HNJkoudZ397vyaxesuRxt1sywcbI4z4BAAAAAAEJItzAsdXs0UDSdQ+7enc7utnKoTrr2/trknpy/z4cyFSCJIQaAAAAADD7CDcCs5o9WpTpmJcJOG5vRzcTLw1q0Pr2fl7RE+m4qmfhhJfuSRrJTJ6aMacGAAAAAMwXwo1AOQ5R2ZPU245u0rkHAAAAAMwNwo2A2UlG+zITr55UsZDbk7Q5C9UaAAAAAAAURbjREqvZo0hmeMa4kaSsTZOGAgAAAADgG+EGAAAAAABotTeabgAAAAAAAEAZhBsAAAAAAKDVCDcAAAAAAECrEW4AAAAAAIBWI9wAAAAAAACtRrgBAAAAAABajXADAAAAAAC0GuEGAAAAAABoNcINAAAAAADQaoQbAAAAAACg1Qg3AAAAAABAqxFuAAAAAACAViPcAAAAAAAArUa4AQAAAAAAWo1wAwAAAAAAtBrhBgAAAAAAaDXCDQAAAAAA0GqEGwAAAAAAoNUINwAAAAAAQKsRbgAAAAAAgFYj3AAAAAAAAK1GuAEAAAAAAFqNcAMAAAAAALQa4QYAAAAAAGg1wg0AAAAAANBq/z/vOqOxOMDH3AAAAABJRU5ErkJggg==" alt="Growth Lab" class="gl-logo" />
   </div>
 
-  <div class="page-inner" style="padding-top:44px;">
+  <div class="colophon" style="padding-top:44px;">
     <div style="font-family:var(--font-sans); font-size:10px; text-transform:uppercase; letter-spacing:0.18em; color:var(--ink-2); font-weight:600; line-height:1.7;">
       Growth Lab<br/>
       Harvard Kennedy School<br/>
@@ -761,18 +761,18 @@
       Working Paper, John F. Kennedy School of Government, Harvard University.
     </p>
 
-    <!-- Decorative pattern (faded grayscale version of cover pattern) -->
-    <div style="margin-top:auto; padding-top:64px; margin-left:-8px; margin-right:-8px; opacity:0.35;">
+    <!-- Decorative pattern — pinned to the bottom of the page in the same location as the cover -->
+    <div style="position:absolute; left:0.85in; right:0.85in; bottom:0.75in; opacity:0.35;">
       <svg viewBox="0 0 612 200" style="width:100%; height:auto; display:block;" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         <defs>
           <style>
-            .d-line-dash { stroke: #6b645a; stroke-dasharray: 2 3; stroke-width: .4px; fill: none; }
-            .d-line-thin { stroke: #9a9389; stroke-width: .5px; fill: none; }
+            .d-line-dash { stroke: #4F4A42; stroke-dasharray: 2 3; stroke-width: .4px; fill: none; }
+            .d-line-thin { stroke: #4F4A42; stroke-width: .5px; fill: none; }
             .d-line-mid  { stroke: #878787; stroke-width: .6px; fill: none; }
             .d-line-mid2 { stroke: #878787; stroke-width: .7px; fill: none; }
-            .d-ring      { stroke: #6b645a; stroke-width: 1.5px; fill: none; }
-            .d-dot       { fill: #6b645a; }
-            .d-dot-light { fill: #9a9389; }
+            .d-ring      { stroke: #4F4A42; stroke-width: 1.5px; fill: none; }
+            .d-dot       { fill: #4F4A42; }
+            .d-dot-light { fill: #4F4A42; }
             .d-dot-dark  { fill: #2d2d2c; }
           </style>
         </defs>
@@ -1222,20 +1222,42 @@
 
       <svg viewBox="0 0 660 220" style="width:100%; height:auto; display:block;" role="img" aria-label="Stacked area showing Mongolia export composition over time">
         <!-- gridlines -->
+        <g stroke="#ECE9E2" stroke-width="1">
+          <line x1="50" y1="143" x2="650" y2="143"/>
+          <line x1="50" y1="96"  x2="650" y2="96"/>
+          <line x1="50" y1="49"  x2="650" y2="49"/>
+          <line x1="50" y1="20"  x2="650" y2="20"/>
+        </g>
+        <!-- axes -->
         <line x1="50" y1="190" x2="650" y2="190" stroke="#1A1714" stroke-width="1"/>
-        <line x1="50" y1="143" x2="650" y2="143" stroke="#DDDDDD"/>
-        <line x1="50" y1="96"  x2="650" y2="96"  stroke="#DDDDDD"/>
-        <line x1="50" y1="49"  x2="650" y2="49"  stroke="#DDDDDD"/>
-        <line x1="50" y1="20"  x2="650" y2="20"  stroke="#DDDDDD"/>
-
-        <!-- Y axis -->
-        <text class="axis-label" x="50" y="14">% of exports</text>
-        <text class="axis-tick" x="44" y="194" text-anchor="end">0</text>
-        <text class="axis-tick" x="44" y="147" text-anchor="end">25</text>
-        <text class="axis-tick" x="44" y="100" text-anchor="end">50</text>
-        <text class="axis-tick" x="44" y="53"  text-anchor="end">75</text>
-        <text class="axis-tick" x="44" y="24"  text-anchor="end">100</text>
-
+        <line x1="50" y1="20"  x2="50"  y2="190" stroke="#1A1714" stroke-width="1"/>
+        <!-- Y tick marks -->
+        <g stroke="#1A1714" stroke-width="1">
+          <line x1="50" y1="190" x2="46" y2="190"/>
+          <line x1="50" y1="143" x2="46" y2="143"/>
+          <line x1="50" y1="96"  x2="46" y2="96"/>
+          <line x1="50" y1="49"  x2="46" y2="49"/>
+          <line x1="50" y1="20"  x2="46" y2="20"/>
+        </g>
+        <!-- X tick marks -->
+        <g stroke="#1A1714" stroke-width="1">
+          <line x1="50"  y1="190" x2="50"  y2="194"/>
+          <line x1="135" y1="190" x2="135" y2="194"/>
+          <line x1="221" y1="190" x2="221" y2="194"/>
+          <line x1="307" y1="190" x2="307" y2="194"/>
+          <line x1="393" y1="190" x2="393" y2="194"/>
+          <line x1="479" y1="190" x2="479" y2="194"/>
+          <line x1="564" y1="190" x2="564" y2="194"/>
+          <line x1="650" y1="190" x2="650" y2="194"/>
+        </g>
+        <!-- Y tick labels -->
+        <text class="axis-tick" x="42" y="194" text-anchor="end">0</text>
+        <text class="axis-tick" x="42" y="147" text-anchor="end">25</text>
+        <text class="axis-tick" x="42" y="100" text-anchor="end">50</text>
+        <text class="axis-tick" x="42" y="53"  text-anchor="end">75</text>
+        <text class="axis-tick" x="42" y="24"  text-anchor="end">100</text>
+        <!-- Y axis label (rotated, left of tick labels) -->
+        <text class="axis-label" x="11" y="105" text-anchor="middle" transform="rotate(-90 11 105)">% of exports</text>
         <!-- X axis years (every 3) -->
         <text class="axis-tick" x="50"  y="208" text-anchor="middle">2003</text>
         <text class="axis-tick" x="135" y="208" text-anchor="middle">2006</text>
@@ -1283,42 +1305,44 @@
         <!-- Other minerals layer (slate-ish). Bottom edge at cumulative (Coal+Copper). Top edge at (Coal+Copper+OtherMin). -->
         <!-- Coal+Copper cum (above): 46,48,51,52,50,52,56,62,63,64,60,62,65,66,70,72,72,72,72,72,72,72 -->
         <!-- Other-min cum: 68,69,71,73,72,74,77,80,81,81,78,79,82,83,86,87,86,86,87,86,85,85 -->
-        <polygon fill="#7E8A99" stroke="none" points="
+        <polygon fill="#999FA8" stroke="none" points="
           50,135.6 78.57,137.7 107.14,141 135.71,144.1 164.29,142.4 192.86,145.8 221.43,151.9 250,156 278.57,157.7 307.14,157.7 335.71,152.6 364.29,154.3 392.86,159.4 421.43,161.1 450,166.2 478.57,167.9 507.14,166.2 535.71,166.2 564.29,167.9 592.86,166.2 621.43,164.5 650,164.5
           650,170.4 621.43,170.4 592.86,168.7 564.29,168.7 535.71,167.0 507.14,165.3 478.57,164.5 450,170.4 421.43,167.0 392.86,165.3 364.29,160.2 335.71,160.2 307.14,158.5 278.57,156.8 250,156.0 221.43,154.3 192.86,152.6 164.29,151.5 135.71,151.5 107.14,148.7 78.57,148.0 50,148.6
         "/>
 
         <!-- Copper layer. Bottom edge at Coal cum. Top at Coal+Copper cum. -->
         <!-- Coal cum: 8, 8, 9, 12, 18, 22, 28, 32, 33, 32, 30, 30, 33, 36, 38, 40, 42, 42, 42, 42, 43, 44 -->
-        <polygon fill="#C77A1F" stroke="none" points="
+        <polygon fill="#CC4948" stroke="none" points="
           50,148.6 78.57,148.0 107.14,148.7 135.71,151.5 164.29,151.5 192.86,152.6 221.43,154.3 250,156.0 278.57,156.8 307.14,158.5 335.71,160.2 364.29,160.2 392.86,165.3 421.43,167.0 450,170.4 478.57,164.5 507.14,165.3 535.71,167.0 564.29,168.7 592.86,168.7 621.43,170.4 650,170.4
           650,115.4 621.43,116.5 592.86,116.5 564.29,116.5 535.71,114.9 507.14,114.9 478.57,118.4 450,116.5 421.43,118.4 392.86,118.4 364.29,116.5 335.71,124.7 307.14,121.7 278.57,118.6 250,118.6 221.43,124.7 192.86,131.5 164.29,138.6 135.71,131.5 107.14,127.4 78.57,128.1 50,127.4
         "/>
 
         <!-- Coal layer at bottom (navy = primary color, telling main story) -->
-        <polygon fill="#015C9C" stroke="none" points="
+        <polygon fill="#2F87C8" stroke="none" points="
           50,127.4 78.57,128.1 107.14,127.4 135.71,131.5 164.29,138.6 192.86,131.5 221.43,124.7 250,118.6 278.57,118.6 307.14,121.7 335.71,124.7 364.29,116.5 392.86,118.4 421.43,118.4 450,116.5 478.57,118.4 507.14,114.9 535.71,114.9 564.29,116.5 592.86,116.5 621.43,116.5 650,115.4
           650,190 621.43,190 592.86,190 564.29,190 535.71,190 507.14,190 478.57,190 450,190 421.43,190 392.86,190 364.29,190 335.71,190 307.14,190 278.57,190 250,190 221.43,190 192.86,190 164.29,190 135.71,190 107.14,190 78.57,190 50,190
         "/>
 
         <!-- Direct labels on the right edge -->
-        <text class="series-label" x="654" y="155" fill="#015C9C">Coal</text>
-        <text class="axis-tick" x="654" y="166" fill="#015C9C" style="font-weight:500; font-variant-numeric:tabular-nums;">44%</text>
+        <text class="series-label" x="654" y="155" fill="#1A5A8E">Coal</text>
+        <text class="axis-tick" x="654" y="166" fill="#1A5A8E" style="font-weight:500; font-variant-numeric:tabular-nums;">44%</text>
 
-        <text class="series-label" x="654" y="143" fill="#C77A1F">Copper</text>
-        <text class="axis-tick" x="654" y="154" fill="#C77A1F" style="font-weight:500; font-variant-numeric:tabular-nums;">28%</text>
+        <text class="series-label" x="654" y="143" fill="#8A2C2B">Copper</text>
+        <text class="axis-tick" x="654" y="154" fill="#8A2C2B" style="font-weight:500; font-variant-numeric:tabular-nums;">28%</text>
 
-        <text class="series-label" x="654" y="167" fill="#7E8A99">Other minerals</text>
-        <text class="axis-tick" x="654" y="178" fill="#7E8A99" style="font-weight:500; font-variant-numeric:tabular-nums;">14%</text>
+        <text class="series-label" x="654" y="167" fill="#5F6773">Other minerals</text>
+        <text class="axis-tick" x="654" y="178" fill="#5F6773" style="font-weight:500; font-variant-numeric:tabular-nums;">14%</text>
 
 
-        <!-- Gridlines redrawn on top of the stacked areas so they remain visible -->
-        <line x1="50" y1="143" x2="650" y2="143" stroke="#DDDDDD"/>
-        <line x1="50" y1="96"  x2="650" y2="96"  stroke="#DDDDDD"/>
-        <line x1="50" y1="49"  x2="650" y2="49"  stroke="#DDDDDD"/>
-        <line x1="50" y1="20"  x2="650" y2="20"  stroke="#DDDDDD"/>
-        <!-- X-axis baseline drawn on top so the stacked areas don't hide it -->
+        <!-- Gridlines + axes redrawn on top of the stacked areas so they remain visible -->
+        <g stroke="#ECE9E2" stroke-width="1">
+          <line x1="50" y1="143" x2="650" y2="143"/>
+          <line x1="50" y1="96"  x2="650" y2="96"/>
+          <line x1="50" y1="49"  x2="650" y2="49"/>
+          <line x1="50" y1="20"  x2="650" y2="20"/>
+        </g>
         <line x1="50" y1="190" x2="650" y2="190" stroke="#1A1714" stroke-width="1"/>
+        <line x1="50" y1="20"  x2="50"  y2="190" stroke="#1A1714" stroke-width="1"/>
       </svg>
 
       <p class="chart-source">
@@ -1360,123 +1384,67 @@
       like Botswana (diamonds) and Mauritania (iron ore).
     </p>
 
-    <div class="grid-2" style="gap:18px; align-items:stretch;">
+    <!-- Figure 2 — horizontal peer-comparison bars, full width -->
+    <div class="chart">
+      <h3 class="figure-label">Figure 2</h3>
+      <h4 class="chart-title">Mongolia is among the most concentrated exporters in its peer group.</h4>
+      <p class="chart-subtitle">Export Herfindahl-Hirschman Index (HHI), 2024, selected resource economies.</p>
 
-      <!-- Left: HHI bar chart over time -->
-      <div class="chart">
-        <h3 class="figure-label">Figure 2</h3>
-        <h4 class="chart-title">Export concentration has nearly doubled.</h4>
-        <p class="chart-subtitle">Herfindahl-Hirschman Index of merchandise exports (HS-4 digit), 2003&ndash;2024.</p>
+      <svg viewBox="0 0 660 240" style="width:100%; height:auto; display:block;" aria-label="Horizontal bars peer HHI">
+        <!-- gridlines (vertical) -->
+        <g stroke="#ECE9E2" stroke-width="1">
+          <line x1="270" y1="20" x2="270" y2="200"/>
+          <line x1="420" y1="20" x2="420" y2="200"/>
+          <line x1="570" y1="20" x2="570" y2="200"/>
+        </g>
+        <!-- axes -->
+        <line x1="120" y1="200" x2="620" y2="200" stroke="#1A1714" stroke-width="1"/>
+        <line x1="120" y1="20"  x2="120" y2="200" stroke="#1A1714" stroke-width="1"/>
+        <!-- X tick marks -->
+        <g stroke="#1A1714" stroke-width="1">
+          <line x1="120" y1="200" x2="120" y2="204"/>
+          <line x1="270" y1="200" x2="270" y2="204"/>
+          <line x1="420" y1="200" x2="420" y2="204"/>
+          <line x1="570" y1="200" x2="570" y2="204"/>
+        </g>
+        <text class="axis-tick" x="120" y="214" text-anchor="middle">0</text>
+        <text class="axis-tick" x="270" y="214" text-anchor="middle">2k</text>
+        <text class="axis-tick" x="420" y="214" text-anchor="middle">4k</text>
+        <text class="axis-tick" x="570" y="214" text-anchor="middle">6k</text>
+        <text class="axis-label" x="370" y="234" text-anchor="middle">HHI points</text>
 
-        <svg viewBox="0 0 320 220" style="width:100%; height:auto; display:block;" aria-label="Bar chart of HHI over time">
-          <line x1="40" y1="190" x2="310" y2="190" stroke="#1A1714"/>
-          <line x1="40" y1="148" x2="310" y2="148" stroke="#DDDDDD"/>
-          <line x1="40" y1="106" x2="310" y2="106" stroke="#DDDDDD"/>
-          <line x1="40" y1="64"  x2="310" y2="64"  stroke="#DDDDDD"/>
-          <line x1="40" y1="22"  x2="310" y2="22"  stroke="#DDDDDD"/>
+        <!-- Bars (1 HHI = 0.075 px; row height 14; row spacing 24) -->
+        <g>
+          <rect x="120" y="26"  width="468"   height="14" fill="#999FA8"/>
+          <text class="axis-label" x="116" y="36"  text-anchor="end" fill="#1A1714">Botswana</text>
+          <text class="series-label" x="584" y="36"  text-anchor="end" fill="white" style="font-variant-numeric:tabular-nums;">6,240</text>
 
-          <text class="axis-label" x="40" y="14">HHI, points (0–10,000)</text>
-          <text class="axis-tick" x="36" y="194" text-anchor="end">0</text>
-          <text class="axis-tick" x="36" y="152" text-anchor="end">1,000</text>
-          <text class="axis-tick" x="36" y="110" text-anchor="end">2,000</text>
-          <text class="axis-tick" x="36" y="68"  text-anchor="end">3,000</text>
-          <text class="axis-tick" x="36" y="26"  text-anchor="end">4,000</text>
+          <rect x="120" y="50"  width="435.8" height="14" fill="#999FA8"/>
+          <text class="axis-label" x="116" y="60"  text-anchor="end" fill="#1A1714">Mauritania</text>
+          <text class="series-label" x="551.8" y="60"  text-anchor="end" fill="white" style="font-variant-numeric:tabular-nums;">5,810</text>
 
-          <text class="axis-tick" x="50"  y="206" text-anchor="middle">2003</text>
-          <text class="axis-tick" x="115" y="206" text-anchor="middle">2010</text>
-          <text class="axis-tick" x="195" y="206" text-anchor="middle">2017</text>
-          <text class="axis-tick" x="290" y="206" text-anchor="middle">2024</text>
+          <rect x="120" y="74"  width="244.5" height="14" fill="#CC4948"/>
+          <text class="axis-label" x="116" y="84"  text-anchor="end" fill="#8A2C2B" style="font-weight:600;">Mongolia</text>
+          <text class="series-label" x="360.5" y="84"  text-anchor="end" fill="white" style="font-variant-numeric:tabular-nums;">3,260</text>
 
-          <!-- Bars; one per year, x position 50..290; values 1840,1920,2050,2310,2580,2780,3110,3050,2920,2810,2740,2890,3050,3220,3380,3290,3140,3050,3010,3160,3220,3260 -->
-          <!-- Bar y = 190 - (val/10000)*168 -->
-          <g fill="#015C9C">
-            <rect x="46"  y="159.1" width="6" height="30.9"/>
-            <rect x="58"  y="157.7" width="6" height="32.3"/>
-            <rect x="69"  y="155.6" width="6" height="34.4"/>
-            <rect x="81"  y="151.2" width="6" height="38.8"/>
-            <rect x="93"  y="146.7" width="6" height="43.3"/>
-            <rect x="104" y="143.3" width="6" height="46.7"/>
-            <rect x="116" y="137.8" width="6" height="52.2"/>
-            <rect x="128" y="138.8" width="6" height="51.2"/>
-            <rect x="139" y="140.9" width="6" height="49.1"/>
-            <rect x="151" y="142.8" width="6" height="47.2"/>
-            <rect x="163" y="144.0" width="6" height="46.0"/>
-            <rect x="174" y="141.5" width="6" height="48.5"/>
-            <rect x="186" y="138.8" width="6" height="51.2"/>
-            <rect x="198" y="135.9" width="6" height="54.1"/>
-            <rect x="209" y="133.2" width="6" height="56.8"/>
-            <rect x="221" y="134.7" width="6" height="55.3"/>
-          </g>
-          <g fill="#C77A1F">
-            <rect x="233" y="137.2" width="6" height="52.8"/>
-            <rect x="244" y="138.8" width="6" height="51.2"/>
-            <rect x="256" y="139.4" width="6" height="50.6"/>
-            <rect x="268" y="136.9" width="6" height="53.1"/>
-            <rect x="279" y="135.9" width="6" height="54.1"/>
-            <rect x="291" y="135.2" width="6" height="54.8"/>
-          </g>
+          <rect x="120" y="98"  width="165.8" height="14" fill="#999FA8"/>
+          <text class="axis-label" x="116" y="108" text-anchor="end" fill="#1A1714">Kazakhstan</text>
+          <text class="series-label" x="291.8" y="108" fill="#1A1714" style="font-variant-numeric:tabular-nums;">2,210</text>
 
+          <rect x="120" y="122" width="131.3" height="14" fill="#999FA8"/>
+          <text class="axis-label" x="116" y="132" text-anchor="end" fill="#1A1714">Chile</text>
+          <text class="series-label" x="257.3" y="132" fill="#1A1714" style="font-variant-numeric:tabular-nums;">1,750</text>
 
-          <!-- 2024 callout -->
-          <text class="series-label" x="294" y="130" fill="#C77A1F" style="font-variant-numeric:tabular-nums;">3,260</text>
-        </svg>
-        <p class="chart-source">Source: Growth Lab calculation. HHI on HS&ndash;4 digit product groups.</p>
-      </div>
+          <rect x="120" y="146" width="88.5"  height="14" fill="#999FA8"/>
+          <text class="axis-label" x="116" y="156" text-anchor="end" fill="#1A1714">Peru</text>
+          <text class="series-label" x="214.5" y="156" fill="#1A1714" style="font-variant-numeric:tabular-nums;">1,180</text>
 
-      <!-- Right: HHI peer comparison -->
-      <div class="chart">
-        <h3 class="figure-label">Figure 3</h3>
-        <h4 class="chart-title">Mongolia is among the most concentrated.</h4>
-        <p class="chart-subtitle">Export HHI, 2024, selected resource economies.</p>
-
-        <svg viewBox="0 0 320 220" style="width:100%; height:auto; display:block;" aria-label="Horizontal bars peer HHI">
-          <line x1="120" y1="20" x2="120" y2="200" stroke="#1A1714" stroke-width="0.5"/>
-          <line x1="180" y1="20" x2="180" y2="200" stroke="#DDDDDD"/>
-          <line x1="240" y1="20" x2="240" y2="200" stroke="#DDDDDD"/>
-          <line x1="300" y1="20" x2="300" y2="200" stroke="#DDDDDD"/>
-
-          <text class="axis-tick" x="120" y="214" text-anchor="middle">0</text>
-          <text class="axis-tick" x="180" y="214" text-anchor="middle">2k</text>
-          <text class="axis-tick" x="240" y="214" text-anchor="middle">4k</text>
-          <text class="axis-tick" x="300" y="214" text-anchor="middle">6k</text>
-
-          <!-- Each row 24 high -->
-          <!-- Botswana 6240, Mauritania 5810, Mongolia 3260, Kazakhstan 2210, Chile 1750, Peru 1180, Indonesia 540 -->
-          <!-- Width = (val/6500)*180 -->
-          <g>
-            <rect x="120" y="26" width="172.8" height="14" fill="#7E8A99"/>
-            <text class="axis-label" x="116" y="36" text-anchor="end" fill="#1A1714">Botswana</text>
-            <text class="series-label" x="296" y="36" text-anchor="end" fill="white" style="font-variant-numeric:tabular-nums;">6,240</text>
-
-            <rect x="120" y="50" width="160.9" height="14" fill="#7E8A99"/>
-            <text class="axis-label" x="116" y="60" text-anchor="end" fill="#1A1714">Mauritania</text>
-            <text class="series-label" x="276" y="60" text-anchor="end" fill="white" style="font-variant-numeric:tabular-nums;">5,810</text>
-
-            <rect x="120" y="74" width="90.3"  height="14" fill="#c77a20"/>
-            <text class="axis-label" x="116" y="84" text-anchor="end" fill="#c77a20" style="font-weight:600;">Mongolia</text>
-            <text class="series-label" x="206" y="84" text-anchor="end" fill="white" style="font-variant-numeric:tabular-nums;">3,260</text>
-
-            <rect x="120" y="98" width="61.2"  height="14" fill="#7E8A99"/>
-            <text class="axis-label" x="116" y="108" text-anchor="end" fill="#1A1714">Kazakhstan</text>
-            <text class="series-label" x="184" y="108" fill="#1A1714" style="font-variant-numeric:tabular-nums;">2,210</text>
-
-            <rect x="120" y="122" width="48.5" height="14" fill="#7E8A99"/>
-            <text class="axis-label" x="116" y="132" text-anchor="end" fill="#1A1714">Chile</text>
-            <text class="series-label" x="172" y="132" fill="#1A1714" style="font-variant-numeric:tabular-nums;">1,750</text>
-
-            <rect x="120" y="146" width="32.7" height="14" fill="#7E8A99"/>
-            <text class="axis-label" x="116" y="156" text-anchor="end" fill="#1A1714">Peru</text>
-            <text class="series-label" x="156" y="156" fill="#1A1714" style="font-variant-numeric:tabular-nums;">1,180</text>
-
-            <rect x="120" y="170" width="15"   height="14" fill="#7E8A99"/>
-            <text class="axis-label" x="116" y="180" text-anchor="end" fill="#1A1714">Indonesia</text>
-            <text class="series-label" x="139" y="180" fill="#1A1714" style="font-variant-numeric:tabular-nums;">540</text>
-          </g>
-
-          <text class="axis-label" x="120" y="14">HHI points</text>
-        </svg>
-        <p class="chart-source">Source: Growth Lab; same methodology as Figure&nbsp;2a.</p>
-      </div>
+          <rect x="120" y="170" width="40.5"  height="14" fill="#999FA8"/>
+          <text class="axis-label" x="116" y="180" text-anchor="end" fill="#1A1714">Indonesia</text>
+          <text class="series-label" x="166.5" y="180" fill="#1A1714" style="font-variant-numeric:tabular-nums;">540</text>
+        </g>
+      </svg>
+      <p class="chart-source">Source: Growth Lab calculation. HHI on HS&ndash;4 digit product groups, 2024.</p>
     </div>
 
     <p style="margin-top:14px;">
@@ -1544,24 +1512,46 @@
 
     <!-- Six-series line chart -->
     <div class="chart" style="margin-top:14px;">
-      <h3 class="figure-label">Figure 4</h3>
+      <h3 class="figure-label">Figure 3</h3>
       <h4 class="chart-title">Six-series line chart, solid strokes.</h4>
 
       <svg viewBox="0 0 660 320" style="width:100%; height:auto; display:block;" role="img" aria-label="Line chart with six solid series">
-        <!-- Gridlines (plot area: x 50..640, y 30..280) -->
-        <line x1="50" y1="30"  x2="640" y2="30"  stroke="#DDDDDD"/>
-        <line x1="50" y1="92"  x2="640" y2="92"  stroke="#DDDDDD"/>
-        <line x1="50" y1="155" x2="640" y2="155" stroke="#DDDDDD"/>
-        <line x1="50" y1="217" x2="640" y2="217" stroke="#DDDDDD"/>
+        <!-- gridlines (plot area: x 50..640, y 30..280) -->
+        <g stroke="#ECE9E2" stroke-width="1">
+          <line x1="50" y1="30"  x2="640" y2="30"/>
+          <line x1="50" y1="92"  x2="640" y2="92"/>
+          <line x1="50" y1="155" x2="640" y2="155"/>
+          <line x1="50" y1="217" x2="640" y2="217"/>
+        </g>
+        <!-- axes -->
         <line x1="50" y1="280" x2="640" y2="280" stroke="#1A1714" stroke-width="1"/>
-
-        <!-- Y axis ticks -->
-        <text class="axis-label" x="50" y="22">Index</text>
-        <text class="axis-tick" x="44" y="284" text-anchor="end">0</text>
-        <text class="axis-tick" x="44" y="221" text-anchor="end">25</text>
-        <text class="axis-tick" x="44" y="159" text-anchor="end">50</text>
-        <text class="axis-tick" x="44" y="96"  text-anchor="end">75</text>
-        <text class="axis-tick" x="44" y="34"  text-anchor="end">100</text>
+        <line x1="50" y1="30"  x2="50"  y2="280" stroke="#1A1714" stroke-width="1"/>
+        <!-- Y tick marks -->
+        <g stroke="#1A1714" stroke-width="1">
+          <line x1="50" y1="280" x2="46" y2="280"/>
+          <line x1="50" y1="217" x2="46" y2="217"/>
+          <line x1="50" y1="155" x2="46" y2="155"/>
+          <line x1="50" y1="92"  x2="46" y2="92"/>
+          <line x1="50" y1="30"  x2="46" y2="30"/>
+        </g>
+        <!-- X tick marks -->
+        <g stroke="#1A1714" stroke-width="1">
+          <line x1="50"  y1="280" x2="50"  y2="284"/>
+          <line x1="148" y1="280" x2="148" y2="284"/>
+          <line x1="246" y1="280" x2="246" y2="284"/>
+          <line x1="345" y1="280" x2="345" y2="284"/>
+          <line x1="443" y1="280" x2="443" y2="284"/>
+          <line x1="541" y1="280" x2="541" y2="284"/>
+          <line x1="640" y1="280" x2="640" y2="284"/>
+        </g>
+        <!-- Y tick labels -->
+        <text class="axis-tick" x="42" y="284" text-anchor="end">0</text>
+        <text class="axis-tick" x="42" y="221" text-anchor="end">25</text>
+        <text class="axis-tick" x="42" y="159" text-anchor="end">50</text>
+        <text class="axis-tick" x="42" y="96"  text-anchor="end">75</text>
+        <text class="axis-tick" x="42" y="34"  text-anchor="end">100</text>
+        <!-- Y axis label (rotated, left of tick labels) -->
+        <text class="axis-label" x="11" y="155" text-anchor="middle" transform="rotate(-90 11 155)">Index</text>
 
         <!-- X axis ticks -->
         <text class="axis-tick" x="50"  y="296" text-anchor="middle">2010</text>
@@ -1573,27 +1563,27 @@
         <text class="axis-tick" x="640" y="296" text-anchor="middle">2022</text>
 
         <!-- Six solid series -->
-        <polyline fill="none" stroke="#015c9c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        <polyline fill="none" stroke="#2F87C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           points="50,210 99,198 148,182 197,170 246,158 295,150 345,142 394,135 443,128 492,120 541,108 590,96 640,82"/>
-        <polyline fill="none" stroke="#c77a20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        <polyline fill="none" stroke="#CC4948" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           points="50,240 99,232 148,228 197,222 246,210 295,196 345,188 394,180 443,178 492,170 541,160 590,152 640,142"/>
-        <polyline fill="none" stroke="#cec96b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        <polyline fill="none" stroke="#2AA584" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           points="50,170 99,168 148,162 197,154 246,150 295,148 345,138 394,130 443,124 492,118 541,112 590,108 640,102"/>
-        <polyline fill="none" stroke="#51b196" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        <polyline fill="none" stroke="#7554A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           points="50,250 99,244 148,238 197,232 246,228 295,224 345,222 394,220 443,216 492,214 541,210 590,206 640,200"/>
-        <polyline fill="none" stroke="#a8352c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        <polyline fill="none" stroke="#EA822D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           points="50,150 99,154 148,160 197,165 246,162 295,158 345,155 394,150 443,140 492,134 541,128 590,118 640,112"/>
-        <polyline fill="none" stroke="#918bed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        <polyline fill="none" stroke="#CDC86B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
           points="50,260 99,256 148,250 197,246 246,240 295,232 345,228 394,222 443,218 492,212 541,206 590,200 640,194"/>
       </svg>
 
       <div class="chart-legend" style="display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:12px; font-family:var(--font-sans); font-size:12px; color:var(--ink-2);">
-        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#015c9c;"></span>Series 1</span>
-        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#c77a20;"></span>Series 2</span>
-        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#cec96b;"></span>Series 3</span>
-        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#51b196;"></span>Series 4</span>
-        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#a8352c;"></span>Series 5</span>
-        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#918bed;"></span>Series 6</span>
+        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#2F87C8;"></span>Series 1</span>
+        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#CC4948;"></span>Series 2</span>
+        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#2AA584;"></span>Series 3</span>
+        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#7554A3;"></span>Series 4</span>
+        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#EA822D;"></span>Series 5</span>
+        <span style="display:inline-flex; align-items:center; gap:8px;"><span style="display:inline-block; width:20px; height:2px; background:#CDC86B;"></span>Series 6</span>
       </div>
 
       <p class="chart-source">
@@ -1641,25 +1631,41 @@
 
     <!-- Scatter chart -->
     <div class="chart" style="margin-top:12px;">
-      <h3 class="figure-label">Figure 5</h3>
+      <h3 class="figure-label">Figure 4</h3>
       <h4 class="chart-title">Mongolia&rsquo;s income outruns its productive complexity.</h4>
       <p class="chart-subtitle">Economic Complexity Index vs. GDP per capita (PPP), 2024. Selected economies; size = exports.</p>
 
       <svg viewBox="0 0 660 320" style="width:100%; height:auto; display:block;" aria-label="Scatter">
-        <!-- axes — plot area: x 60..640, y 30..280 -->
-        <line x1="60" y1="280" x2="640" y2="280" stroke="#1A1714"/>
-        <line x1="60" y1="30"  x2="60"  y2="280" stroke="#1A1714"/>
-
-        <!-- gridlines vertical -->
-        <line x1="180" y1="30" x2="180" y2="280" stroke="#DDDDDD"/>
-        <line x1="300" y1="30" x2="300" y2="280" stroke="#DDDDDD"/>
-        <line x1="420" y1="30" x2="420" y2="280" stroke="#DDDDDD"/>
-        <line x1="540" y1="30" x2="540" y2="280" stroke="#DDDDDD"/>
-
-        <!-- gridlines horizontal -->
-        <line x1="60" y1="218" x2="640" y2="218" stroke="#DDDDDD"/>
-        <line x1="60" y1="155" x2="640" y2="155" stroke="#DDDDDD"/>
-        <line x1="60" y1="93"  x2="640" y2="93"  stroke="#DDDDDD"/>
+        <!-- gridlines (plot area: x 60..640, y 30..280) -->
+        <g stroke="#ECE9E2" stroke-width="1">
+          <line x1="180" y1="30" x2="180" y2="280"/>
+          <line x1="300" y1="30" x2="300" y2="280"/>
+          <line x1="420" y1="30" x2="420" y2="280"/>
+          <line x1="540" y1="30" x2="540" y2="280"/>
+          <line x1="60" y1="218" x2="640" y2="218"/>
+          <line x1="60" y1="155" x2="640" y2="155"/>
+          <line x1="60" y1="93"  x2="640" y2="93"/>
+        </g>
+        <!-- axes -->
+        <line x1="60" y1="280" x2="640" y2="280" stroke="#1A1714" stroke-width="1"/>
+        <line x1="60" y1="30"  x2="60"  y2="280" stroke="#1A1714" stroke-width="1"/>
+        <!-- X tick marks -->
+        <g stroke="#1A1714" stroke-width="1">
+          <line x1="60"  y1="280" x2="60"  y2="284"/>
+          <line x1="180" y1="280" x2="180" y2="284"/>
+          <line x1="300" y1="280" x2="300" y2="284"/>
+          <line x1="420" y1="280" x2="420" y2="284"/>
+          <line x1="540" y1="280" x2="540" y2="284"/>
+          <line x1="640" y1="280" x2="640" y2="284"/>
+        </g>
+        <!-- Y tick marks -->
+        <g stroke="#1A1714" stroke-width="1">
+          <line x1="60" y1="280" x2="56" y2="280"/>
+          <line x1="60" y1="218" x2="56" y2="218"/>
+          <line x1="60" y1="155" x2="56" y2="155"/>
+          <line x1="60" y1="93"  x2="56" y2="93"/>
+          <line x1="60" y1="30"  x2="56" y2="30"/>
+        </g>
 
         <!-- X labels: GDP per capita PPP, log scale, 2k..80k -->
         <text class="axis-tick" x="60"  y="296" text-anchor="middle">2k</text>
@@ -1670,98 +1676,98 @@
         <text class="axis-tick" x="640" y="296" text-anchor="middle">80k</text>
         <text class="axis-label" x="350" y="312" text-anchor="middle">GDP per capita, PPP USD (log scale)</text>
 
-        <!-- Y labels: ECI -2.5..+2.5 -->
-        <text class="axis-tick" x="54" y="34"  text-anchor="end">+2.5</text>
-        <text class="axis-tick" x="54" y="93"  text-anchor="end">+1.5</text>
-        <text class="axis-tick" x="54" y="155" text-anchor="end">0.0</text>
-        <text class="axis-tick" x="54" y="218" text-anchor="end">−1.5</text>
-        <text class="axis-tick" x="54" y="282" text-anchor="end">−2.5</text>
-        <text class="axis-label" x="54" y="22" text-anchor="end" style="writing-mode: vertical-rl; transform: rotate(180deg);">ECI score</text>
-        <text class="axis-label" x="60" y="22">Economic Complexity Index</text>
+        <!-- Y tick labels: ECI -2.5..+2.5 -->
+        <text class="axis-tick" x="52" y="34"  text-anchor="end">+2.5</text>
+        <text class="axis-tick" x="52" y="93"  text-anchor="end">+1.5</text>
+        <text class="axis-tick" x="52" y="155" text-anchor="end">0.0</text>
+        <text class="axis-tick" x="52" y="218" text-anchor="end">&minus;1.5</text>
+        <text class="axis-tick" x="52" y="282" text-anchor="end">&minus;2.5</text>
+        <!-- Y axis label (rotated) -->
+        <text class="axis-label" x="18" y="155" text-anchor="middle" transform="rotate(-90 18 155)">Economic Complexity Index</text>
 
         <!-- Trend line (slope ~ ECI = -0.6 + 0.13*ln(GDP)) — visualized as a diagonal -->
-        <line x1="60" y1="240" x2="640" y2="60" stroke="#9A9389" stroke-width="1" stroke-dasharray="4 4"/>
+        <line x1="60" y1="240" x2="640" y2="60" stroke="#4F4A42" stroke-width="1" stroke-dasharray="4 4"/>
 
         <!-- Data points. Position = (xLog, ECI). Bubble size = sqrt(exports). -->
         <!-- I'll place ~15 economies. Format: cx, cy, r, color, label, label-x-offset -->
         <!-- Indonesia: GDP 14k, ECI -0.20 -> x=370, y=160; r=12 -->
         <g>
-          <circle cx="370" cy="160" r="11" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="370" cy="160" r="11" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="370" y="148" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Indonesia</text>
         </g>
         <!-- Vietnam: GDP 14k, ECI 0.10 -> x=370, y=143; r=10 -->
         <g>
-          <circle cx="370" cy="143" r="10" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="370" cy="143" r="10" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="370" y="131" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Vietnam</text>
         </g>
         <!-- Kazakhstan: GDP 28k, ECI -0.40 -> x=475, y=171; r=9 -->
         <g>
-          <circle cx="475" cy="171" r="9" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="475" cy="171" r="9" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="475" y="159" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Kazakhstan</text>
         </g>
         <!-- Chile: GDP 30k, ECI 0.15 -> x=485, y=140; r=10 -->
         <g>
-          <circle cx="485" cy="140" r="10" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="485" cy="140" r="10" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="485" y="128" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Chile</text>
         </g>
         <!-- Peru: GDP 16k, ECI -0.30 -> x=390, y=164; r=9 -->
         <g>
-          <circle cx="390" cy="180" r="9" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="390" cy="180" r="9" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="412" y="184" fill="#1A1714" style="font-weight:500;">Peru</text>
         </g>
         <!-- Botswana: GDP 18k, ECI -1.20 -> x=410, y=219; r=6 -->
         <g>
-          <circle cx="410" cy="219" r="6" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="410" cy="219" r="6" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="420" y="222" fill="#1A1714" style="font-weight:500;">Botswana</text>
         </g>
         <!-- Mongolia: GDP 16k, ECI -1.05 -> x=390, y=210; r=7 — CRIMSON HIGHLIGHT -->
         <g>
-          <circle cx="385" cy="210" r="9" fill="#c77a20" stroke="#8B5A14" stroke-width="1.2"/>
-          <text class="series-label" x="385" y="200" text-anchor="middle" fill="#c77a20" style="font-weight:700;">MONGOLIA</text>
-          <line x1="385" y1="201" x2="385" y2="206" stroke="#c77a20" stroke-width="0.8"/>
+          <circle cx="385" cy="210" r="9" fill="#CC4948" stroke="#8A2C2B" stroke-width="1.2"/>
+          <text class="series-label" x="385" y="200" text-anchor="middle" fill="#8A2C2B" style="font-weight:700;">MONGOLIA</text>
+          <line x1="385" y1="201" x2="385" y2="206" stroke="#CC4948" stroke-width="0.8"/>
         </g>
         <!-- China: GDP 23k, ECI 1.10 -> x=445, y=109; r=15 -->
         <g>
-          <circle cx="445" cy="109" r="14" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="445" cy="109" r="14" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="445" y="97" text-anchor="middle" fill="#1A1714" style="font-weight:500;">China</text>
         </g>
         <!-- Korea: GDP 50k, ECI 2.10 -> x=565, y=53; r=12 -->
         <g>
-          <circle cx="565" cy="53" r="12" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="565" cy="53" r="12" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="565" y="41" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Korea</text>
         </g>
         <!-- Japan: GDP 49k, ECI 2.20 -> x=560, y=49; r=14 -->
         <g>
-          <circle cx="555" cy="60" r="14" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="555" cy="60" r="14" fill="#999FA8" opacity="0.75"/>
         </g>
         <!-- Germany: GDP 65k, ECI 2.05 -> x=605, y=58 -->
         <g>
-          <circle cx="605" cy="58" r="14" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="605" cy="58" r="14" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="605" y="46" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Germany</text>
         </g>
         <!-- Singapore -->
         <g>
-          <circle cx="575" cy="68" r="10" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="575" cy="68" r="10" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="585" y="80" fill="#1A1714" style="font-weight:500;">Singapore</text>
         </g>
         <!-- Mauritania: GDP 7k, ECI -1.6 -> x=255, y=234; r=4 -->
         <g>
-          <circle cx="255" cy="234" r="4" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="255" cy="234" r="4" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="262" y="237" fill="#1A1714" style="font-weight:500;">Mauritania</text>
         </g>
         <!-- Bangladesh: GDP 8k, ECI -0.80 -> x=275, y=200; r=8 -->
         <g>
-          <circle cx="275" cy="200" r="8" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="275" cy="200" r="8" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="275" y="188" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Bangladesh</text>
         </g>
         <!-- India: GDP 11k, ECI 0.40 -> x=320, y=130; r=14 -->
         <g>
-          <circle cx="320" cy="130" r="14" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="320" cy="130" r="14" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="320" y="118" text-anchor="middle" fill="#1A1714" style="font-weight:500;">India</text>
         </g>
         <!-- Mexico: GDP 24k, ECI 1.10 -> x=450, y=109 -->
         <g>
-          <circle cx="465" cy="124" r="11" fill="#7E8A99" opacity="0.75"/>
+          <circle cx="465" cy="124" r="11" fill="#999FA8" opacity="0.75"/>
           <text class="axis-tick" x="465" y="142" text-anchor="middle" fill="#1A1714" style="font-weight:500;">Mexico</text>
         </g>
 
@@ -1812,7 +1818,7 @@
     </p>
 
     <div class="chart" style="margin-top:14px;">
-      <h3 class="figure-label">Figure 6</h3>
+      <h3 class="figure-label">Figure 5</h3>
       <h4 class="chart-title">Near-frontier sectors for Mongolia, ranked by feasibility-weighted strategic value.</h4>
 
       <table class="report-table">
@@ -1969,19 +1975,6 @@
       </p>
     </div>
 
-    <hr class="rule"/>
-
-    <div style="margin-top:auto; padding-top:32px; display:flex; justify-content:space-between; align-items:flex-end;">
-      <div>
-        <p style="font-family:var(--font-sans); font-size:9px; text-transform:uppercase; letter-spacing:0.16em; color:var(--ink-3); font-weight:500; margin:0 0 4px;">
-          Growth Lab &middot; Harvard Kennedy School
-        </p>
-        <p style="font-family:var(--font-serif); font-style:italic; font-size:11px; color:var(--ink-3); margin:0;">
-          79 JFK Street, Cambridge, MA 02138 &middot; growthlab.hks.harvard.edu
-        </p>
-      </div>
-      <div>
-    </div>
   </div>
 
   <div class="folio">

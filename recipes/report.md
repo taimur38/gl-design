@@ -15,7 +15,7 @@ authoring pipeline is Markdown → Word via pandoc (see
 | Left margin    | 1.0 in              | 1.0 in              |
 | Right margin   | 1.0 in              | 1.0 in              |
 | **Live area**  | **6.5 × 8.75 in**   | **6.27 × 9.44 in**  |
-| Paper color    | `paper` (#FAF8F4)   | warm white          |
+| Paper color    | `paper` (#FFFFFF)   | pure white          |
 | Cover paper    | `cover-bg` (#F3F2EA)| reserved for cover  |
 
 The bottom margin is 1.25" — slightly larger than the top — so (1) it hosts
@@ -69,15 +69,22 @@ report sizes. Anchor body at **12pt / 19.2pt leading**.
 
 | Role             | Family         | Size | Weight | Leading | opsz | Tracking  |
 |------------------|----------------|------|--------|---------|------|-----------|
-| Display          | Source Serif 4 | 56pt | 400    | 0.96    | 60   | -0.025em  |
-| H1 (section)     | Source Serif 4 | 34pt | 500    | 1.08    | 36   | -0.018em  |
-| H2 (subsection)  | Source Serif 4 | 20pt | 500    | 1.20    | 22   | -0.010em  |
+| Display          | Source Serif 4 | 44pt | 400    | 1.05    | 48   | -0.025em  |
+| H1 (section)     | Source Serif 4 | 26pt | 500    | 1.10    | 28   | -0.018em  |
+| H2 (subsection)  | Source Serif 4 | 16pt | 500    | 1.25    | 18   | -0.010em  |
+| H3 (sub-subsection) | Source Serif 4 | 14pt | 600 | 1.30   | 16   | -0.005em  |
+
+These sizes are anchored to body 12pt and translate Nil's HTML px values
+(56 / 34 / 20 / 16) into print pt at literal CSS-px → pt conversion (×0.75)
+with rounding to typographer-friendly whole-pt values. Body and footnote
+stay anchored to print readability (12pt / 9pt) rather than literal
+conversion. See typography history note in [`followups.md`](../followups.md).
 
 ### Body tier
 
 | Role            | Family                | Size  | Weight | Leading |
 |-----------------|-----------------------|-------|--------|---------|
-| Lead paragraph  | Source Serif 4        | 17pt  | 300    | 1.40    |
+| Lead paragraph  | Source Serif 4        | 14pt  | 300    | 1.45    |
 | Colophon body   | Source Serif 4        | 14pt  | 400    | 1.55    |
 | Body            | Inter                 | 12pt  | 400    | 1.60    |
 | Body emphasis   | Inter                 | 12pt  | 600    | 1.60    |
@@ -88,10 +95,13 @@ report sizes. Anchor body at **12pt / 19.2pt leading**.
 
 | Role            | Family                 | Size  | Weight | Case      |
 |-----------------|------------------------|-------|--------|-----------|
-| Figure label    | Inter                  | 10pt  | 600    | UPPERCASE |
+| Figure label    | Inter                  | 12pt  | 600    | UPPERCASE |
 | Chart title     | Source Serif 4         | 14pt  | 500    | Sentence  |
 | Chart subtitle  | Inter                  | 12pt  | 400    | Sentence  |
-| Chart source    | Source Serif 4 italic  | 10pt  | 400    | Sentence  |
+| Chart source    | Source Serif 4 italic  | 12pt  | 400    | Sentence  |
+
+Figure label, subtitle, and source all sit at body size (12pt). The chart
+title's 14pt serif is what marks the figure block's top.
 
 ### Tables
 
@@ -100,7 +110,7 @@ report sizes. Anchor body at **12pt / 19.2pt leading**.
 | Table header   | Inter                 | 12pt  | 600    |
 | Table cell     | Inter                 | 12pt  | 400    |
 | Table emphasis | Inter                 | 12pt  | 600    |
-| Table note     | Source Serif 4 italic | 10pt  | 400    |
+| Table note     | Source Serif 4 italic | 12pt  | 400    |
 
 ### TOC
 
@@ -121,13 +131,20 @@ report sizes. Anchor body at **12pt / 19.2pt leading**.
 
 ### Cover meta (cover only)
 
-| Role             | Family | Size | Weight | Color   | Case      |
-|------------------|--------|------|--------|---------|-----------|
-| Series eyebrow   | Inter  | 11pt | 600    | `ink-3` | UPPERCASE |
-| Cover date       | Inter  | 11pt | 700    | `accent`| UPPERCASE |
-| Cover authors    | Source Serif 4 | 14pt | 400 | `ink-3` | Sentence  |
+| Role             | Family         | Size | Weight | Color    | Case      |
+|------------------|----------------|------|--------|----------|-----------|
+| Series eyebrow   | Inter          | 11pt | 600    | `ink-3`  | UPPERCASE |
+| Cover date       | Inter          | 11pt | 700    | `accent` | UPPERCASE |
+| Cover authors    | Source Serif 4 | 14pt | 400    | `ink-2`  | Sentence  |
 
 Tracking 0.18em for the eyebrow and date.
+
+### References
+
+| Role            | Family                | Size | Weight | Notes                                |
+|-----------------|-----------------------|------|--------|--------------------------------------|
+| Reference body  | Inter                 | 10pt | 400    | Hanging indent 0.25"; authors flush left |
+| Reference title | Source Serif 4 italic | 10pt | 400    | Italic; the one place serif italic appears in body context |
 
 ## 4. Spacing
 
@@ -147,40 +164,65 @@ not by a blank line of text.
 
 ### Cover page
 
-Distinct paper color (`cover-bg`), no page chrome.
+Distinct paper color (`cover-bg` `#F3F2EA`), no page chrome (running head
+and folio suppressed). Two artwork variants:
+
+- **Working Paper** — uses `rect-pattern.svg` (rectangular network pattern,
+  edge-to-edge at the bottom of the cover).
+- **Report** — uses `circle-pattern.svg` (circular medallion inside a
+  `paper-warm` `#F4F1EA` disk, one tone darker than the cover paper). The
+  circle pattern is the default for full reports.
+
+Both SVGs live in
+[`assets/design-library/cover-patterns/`](../assets/design-library/cover-patterns/).
 
 ```
 ┌─────────────────────────────────────┐
+│  ──────────────                     │  ← pre-title hairline (1px ink-3 @ 0.3 opacity)
 │  GROWTH LAB WORKING PAPER SERIES    │  ← eyebrow, 11pt Inter 600 ink-3 UPPER
 │  MAY 2026                           │  ← date,    11pt Inter 700 accent UPPER
 │                                     │
 │  (vertical space, ~96pt)            │
 │                                     │
-│  New Mexico's Economy               │  ← display, 56pt Source Serif 4 400
-│  Over Time and Space                │     opsz 60, leading 0.96, ink
+│  New Mexico's Economy               │  ← display, 44pt Source Serif 4 400
+│  Over Time and Space                │     opsz 48, leading 1.05, ink
 │                                     │
-│  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │  ← 2pt rule, ink
+│  ═══════════════════                │  ← title rule: 3px accent, 50% width,
+│                                     │     left-anchored
 │                                     │
 │  Juan Carlos Orrego Zamudio         │  ← authors, 14pt Source Serif 4
-│  and Tim O'Brien                    │     ink-3, leading 1.5
+│  and Tim O'Brien                    │     ink-2, leading 1.5
 │                                     │
+│         [ pattern artwork ]         │  ← rect (working paper) or circle (report)
+│                                     │     placed bottom of cover
 └─────────────────────────────────────┘
 ```
 
-Cover meta is **two lines** — series eyebrow and date — never combined.
-Display title never wraps to more than three lines. Authors comma-separated;
-"and" before the last name.
+**Rules:**
+
+- Cover meta is **two lines** — series eyebrow and date — never combined.
+- Pre-title hairline (1px ink-3 at 0.3 opacity) sits above the eyebrow to
+  separate it from the page edge without competing with the title rule
+  below.
+- Title rule is **3px solid `accent`, 50% of content width, left-anchored** —
+  asymmetric and deliberate. Sits below the display, above the authors.
+- Display title never wraps to more than three lines.
+- Authors: comma-separated, "and" before the last name. `ink-2`, not `ink-3`
+  — the byline carries voice, not chrome.
+- Pattern artwork sits at the bottom of the cover; never overlaps the
+  title block. On the colophon page (page 2), echo the same pattern
+  desaturated (`filter: grayscale(1)`) at 35% opacity.
 
 ### Figure block
 
 ```
-FIGURE 4                                          ← figure label
-Mongolia rode the commodity supercycle.           ← chart title (ends in .)
-Share of merchandise exports, 2003–2024, percent. ← chart subtitle (optional)
+FIGURE 4                                          ← figure label (12pt UPPER accent)
+Mongolia rode the commodity supercycle.           ← chart title (14pt serif, ends in .)
+Share of merchandise exports, 2003–2024, percent. ← chart subtitle (12pt ink-3, optional)
 
 [ chart image — at a named figure size ]
 
-Source: Growth Lab analysis of UN Comtrade.       ← chart source (italic)
+Source: Growth Lab analysis of UN Comtrade.       ← chart source (12pt serif italic)
 ```
 
 - Caption (chart source) sits **full-width below the figure**. Body prose
@@ -198,7 +240,7 @@ Source: Growth Lab analysis of UN Comtrade.       ← chart source (italic)
 - Text columns left-aligned.
 - Last row of body has a heavier (`ink`) bottom rule.
 - First-column emphasis: Inter 12pt weight 600 `ink`.
-- Table note below in Source Serif 4 italic 10pt `ink-2`.
+- Table note below in Source Serif 4 italic 12pt `ink-2`.
 
 ### Page chrome
 
@@ -217,7 +259,9 @@ GROWTH LAB WORKING PAPER NO. 264                                       [ GL ]
   `ink-3` (0.16em tracking); Growth Lab logo flush right.
 - Folio: bottom flush right, Inter 9pt 500 `ink-3`, tabular-nums.
 - Folio note (optional): Source Serif 4 italic 10pt `ink-3`, flush left,
-  beside the folio.
+  beside the folio. Footnote anchor (`¹`) in serif italic at 0.7em,
+  superscripted, `accent` color — both inline in body text and at the
+  note itself.
 
 ### Named figure sizes
 
@@ -261,20 +305,20 @@ specific to the report.
 
 ```
 PAGE:   US Letter, margins 1.0/1.0/1.0/1.25 (L/R/T/B) → live 6.5 × 8.75"
-        Paper FAF8F4; cover paper F3F2EA
+        Paper #FFFFFF (content); cover-bg #F3F2EA (cover only)
 GRID:   6 columns × 0.944" + 5 gutters × 0.167" = 6.5" live width
         7 modules × 1.25" = 8.75" live height
 FONTS:  Source Serif 4 (voice) + Inter (function)
 BODY:   12pt Inter / 19.2pt leading
-DISPLAY:56 / 34 / 20 (display / H1 / H2, Source Serif 4)
-LEAD:   17pt Source Serif 4 weight 300
+DISPLAY:44 / 26 / 16 / 14 (display / H1 / H2 / H3, Source Serif 4)
+LEAD:   14pt Source Serif 4 weight 300
 
 CHART BLOCK (top-down):
-  Figure label (Inter 10pt 600 UPPER accent)
+  Figure label (Inter 12pt 600 UPPER accent)
   Chart title  (Source Serif 4 14pt 500 ink, ends with period)
   Chart subtitle [optional] (Inter 12pt 400 ink-3)
   [ figure image ]
-  Source (Source Serif 4 italic 10pt ink-2)
+  Source (Source Serif 4 italic 12pt ink-2)
 
 FIGURE SIZES (width × height):
   full         6.5 × 4.0"     Standard chart
@@ -284,10 +328,14 @@ FIGURE SIZES (width × height):
   half         3.167 × 3.0"   Side-by-side pair
   half_tall    3.167 × 5.0"   Portrait chart
 
-INK:        ink #1A1714 / ink-2 #2C2823 / ink-3 #6B645A / ink-4 #9A9389
-ACCENT:     #015C9C
-CATEGORICAL: c-1 #015C9C  c-2 #C77A20  c-3 #CEC96B
-             c-4 #51B196  c-5 #A8352C  c-6 #918BED
-MUTED:      #7E8A99 (paint everyone-else, then highlight focus in c-2)
-PAPER:      paper #FAF8F4  cover-bg #F3F2EA  rule #DDDDDD
+INK:         ink #1A1714 / ink-2 #2C2823 / ink-3 #4F4A42 / ink-4 #9A9389
+ACCENT:      #1A5A8E (= c-1-dark)
+CATEGORICAL (main tone):
+             c-1 #2F87C8  c-2 #CC4948  c-3 #2AA584
+             c-4 #7554A3  c-5 #EA822D  c-6 #CDC86B
+MUTED:       c-muted #999FA8 (paint everyone-else, then highlight focus in
+             c-1 or c-2). Light #CDD2D9 / dark #5F6773 variants for stroke/text.
+PAPER:       paper #FFFFFF  cover-bg #F3F2EA  rule #DDDDDD  gridline #ECE9E2
+COVER:       rect-pattern.svg (working paper) | circle-pattern.svg (report)
+             assets/design-library/cover-patterns/
 ```

@@ -61,6 +61,12 @@ bigger (~16pt vs 12pt body) to read at a distance.
 **Resolution:** specify slide recipe when one becomes a real artifact. For
 now, `mode = "slide"` falls back to sensible defaults using the new fonts.
 
+**Verification when that happens:** chart subtitle color migrated from old
+`ink-3` (`#6B645A`) to new `ink-3` (`#4F4A42`) — visually cooler and darker.
+Report mode suppresses the subtitle entirely, so this only matters once
+slide mode is exercised again. Confirm the new tone reads correctly against
+the slide background before declaring done.
+
 ## 5. Paper color rendering in Word
 
 The recipe specifies `paper #FAF8F4` (warm white) for content pages and
@@ -101,7 +107,72 @@ trade or product data (the colors carry sector semantics). Use the
 6-color categorical otherwise. This mirrors how Atlas / Metroverse pages
 themselves work.
 
-## 8. Old font retention on merge
+## 8. Should growthlabbify.lua be format-agnostic?
+
+Status: **not now.** The original idea was to refactor the lua filter to emit
+format-agnostic AST so both `md2pdf` (HTML) and `md2docx` (DOCX) could share
+it. After building the pandoc-based `md2pdf`, the filter turned out to be
+**unnecessary** on the HTML path:
+
+| Feature                          | DOCX (lua filter)           | HTML (pandoc + CSS) |
+|----------------------------------|-----------------------------|---------------------|
+| `:::` callout box                | OpenXML table with shading  | `<div class="box">` + CSS |
+| Figure title above image         | Reorders AST + custom-style | `figure { flex-direction: column-reverse }` |
+| `Source:` paragraph styling      | Custom-style "Figure Source"| `figure + p` selector |
+| Side-by-side figures             | OpenXML side-by-side table  | Could be `figure + figure` CSS later |
+| References H1                    | Inserts Header before `#refs` div | `--reference-section-title` |
+
+The two pipelines now do the same job from the same markdown input via
+totally different mechanisms. That's acceptable — each renderer plays to
+its strengths (pandoc's HTML writer is already rich; the DOCX writer needs
+the Lua kick).
+
+**When to revisit:** if we introduce a third output target (e.g. a slide
+recipe), refactoring the filter to emit AST + classes that both targets
+style natively starts to pay for itself.
+
+## 10. Docx template lags the new cover spec
+
+`recipes/report.md` §5 now documents the cover with:
+- pre-title hairline (1px `ink-3` at 0.3 opacity)
+- 3px `accent` title rule at 50% content width, left-anchored
+- byline in `ink-2` (was `ink-3`)
+- pattern artwork (`assets/design-library/cover-patterns/rect-pattern.svg`
+  or `circle-pattern.svg`) at the bottom of the cover
+
+None of this exists in `assets/gl-report.docx` or `assets/build_gl_template.py`
+yet. Word-export fidelity of the cover page will lag the spec until the
+template is regenerated. Similarly, the colophon page's desaturated echo
+of the cover pattern (35% opacity, grayscale) is not in the template.
+
+**Resolution:** treat the cover/colophon as an HTML-or-PDF-first artifact
+for now; rebuild `gl-report.docx` to include cover-page art when the cover
+becomes a routine deliverable from the docx pipeline.
+
+## 9. Typography size history — px vs pt
+
+Nil's typography-spec.html writes sizes in **CSS px** (12 / 17 / 20 / 34 /
+56). An earlier pass of `recipes/report.md` copied those numerical values
+into **pt**, which inflated everything by ~33% in print (1 CSS px =
+0.75pt at 96 dpi). After review against the rendered PDF, the recipe was
+rescaled to anchor body at 12pt (print readability) and convert the
+heading values literally (×0.75, rounded):
+
+| Role     | Nil HTML | Old recipe (pt) | New recipe (pt) |
+|----------|----------|-----------------|-----------------|
+| Display  | 56 px    | 56              | 44              |
+| H1       | 34 px    | 34              | 26              |
+| H2       | 20 px    | 20              | 16              |
+| H3       | 16 px    | 16              | 14              |
+| Lead     | 17 px    | 17              | 14              |
+| Body     | 12 px    | 12              | 12 (kept)       |
+| Footnote |  9 px    |  9              |  9 (kept)       |
+
+Body and footnote are anchored to print readability rather than literal
+conversion — Nil's 12px → 9pt would be illegibly small for a research
+report.
+
+## 10. Old font retention on merge
 
 Three font families are still on the branch from the previous system:
 Source Sans 3, JetBrains Mono, Crimson Pro. None are referenced by the new

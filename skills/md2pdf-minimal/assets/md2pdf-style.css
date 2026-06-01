@@ -1,0 +1,410 @@
+/* GL design system — md2pdf stylesheet
+ *
+ * Applies grammar.md + recipes/report.md to markdown rendered through
+ * md-to-pdf (headless Chromium). Markdown → HTML → PDF, so this is the
+ * CSS that styles the intermediate HTML.
+ *
+ * The recipe says: US Letter 8.5x11, margins 1.0/1.0/1.0/1.25 (L/R/T/B),
+ * live area 6.5x8.75. Paper #fff for content; cover #F3F2EA (cover handled
+ * by a separate .cover-page class — for now md2pdf renders the document
+ * as content pages only).
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,600&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---- Design tokens (from grammar.md) ---- */
+:root {
+    --ink:        #1A1714;
+    --ink-2:      #2C2823;
+    --ink-3:      #4F4A42;
+    --ink-4:      #9A9389;
+    --accent:     #1A5A8E;
+    --paper:      #FFFFFF;
+    --cover-bg:   #F3F2EA;
+    --paper-warm: #F4F1EA;
+    --rule:       #DDDDDD;
+    --gridline:   #ECE9E2;
+
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                  Helvetica, Arial, sans-serif;
+}
+
+/* ---- Page setup ---- */
+@page {
+    size: Letter;
+    margin: 1.0in 1.0in 1.25in 1.0in;
+    background: var(--paper);
+
+    @bottom-right {
+        content: counter(page);
+        font-family: var(--font-sans);
+        font-size: 9pt;
+        font-weight: 500;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+html, body {
+    background: var(--paper);
+    color: var(--ink-2);
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    line-height: 1.6;
+    font-feature-settings: 'tnum' off;
+    max-width: 100%;
+}
+
+/* ---- Frontmatter title block (md-to-pdf injects this from YAML) ---- */
+/* md-to-pdf's default behavior is to leave frontmatter out of the body
+ * unless explicitly templated. If a title/byline appears as the first
+ * .title block, style it. Most demos rely on a first h1 instead. */
+
+/* ---- Headings ----
+ *
+ * Markdown maps:
+ *   # h1   → Section          (Source Serif 4 34pt 500 ink)
+ *   ## h2  → Subsection       (Source Serif 4 20pt 500 ink)
+ *   ### h3 → Improvised level (Source Serif 4 16pt 600 ink) — see followups #1
+ *   #### h4 → Eyebrow          (Inter 11pt 600 UPPER accent, 0.14em track)
+ *
+ * No trailing periods in markdown; CSS doesn't add any.
+ */
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--ink);
+    margin: 0;
+}
+
+h1 {
+    font-family: var(--font-serif);
+    font-size: 26pt;
+    font-weight: 500;
+    line-height: 1.10;
+    letter-spacing: -0.018em;
+    font-variation-settings: 'opsz' 28;
+    margin-top: 0.6em;
+    margin-bottom: 0.3em;
+    /* page-break-before: always; */ /* enable if every # should start a new page */
+}
+
+h1:first-child {
+    margin-top: 0;
+}
+
+h2 {
+    font-family: var(--font-serif);
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.010em;
+    font-variation-settings: 'opsz' 18;
+    margin-top: 1.4em;
+    margin-bottom: 0.4em;
+}
+
+h3 {
+    font-family: var(--font-serif);
+    font-size: 14pt;
+    font-weight: 600;
+    line-height: 1.30;
+    color: var(--ink);
+    margin-top: 1.2em;
+    margin-bottom: 0.3em;
+    font-variation-settings: 'opsz' 16;
+}
+
+h4 {
+    font-family: var(--font-sans);
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-top: 1.2em;
+    margin-bottom: 0.4em;
+}
+
+/* ---- Body copy ---- */
+p {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 0.6em;
+    text-align: left; /* recipe-allowed: not justified to avoid hyphenation on screen */
+    hyphens: none;
+    orphans: 2;
+    widows: 2;
+}
+
+strong {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+em {
+    font-style: italic;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+}
+
+/* ---- Lead paragraph — applied via class or markdown convention ----
+ * If the first <p> directly under an <h1> is meant as the lead, mark it
+ * with a manual class. md-to-pdf doesn't transform this automatically.
+ */
+p.lead, .lead p {
+    font-family: var(--font-serif);
+    font-size: 14pt;
+    font-weight: 300;
+    line-height: 1.45;
+    font-variation-settings: 'opsz' 16;
+    color: var(--ink-2);
+    margin: 0.4em 0 1em;
+}
+
+/* ---- Lists ---- */
+ul, ol {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    line-height: 1.6;
+    color: var(--ink-2);
+    padding-left: 1.4em;
+    margin: 0.6em 0;
+}
+
+li {
+    margin: 0.2em 0;
+}
+
+li::marker {
+    color: var(--accent);
+}
+
+/* ---- Horizontal rule ---- */
+hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 1.8em 0;
+}
+
+/* ---- Tables ----
+ * Recipe §5 table spec: top + bottom rules in ink (heavier), row dividers
+ * in rule. Header: Inter 12pt 600 ink, sentence case. Cell: Inter 12pt 400
+ * ink-2. Numeric columns right-aligned with tabular-nums (author must
+ * apply via class or alignment in markdown — `| ---: | ---: |`).
+ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    margin: 1.2em 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+}
+
+thead th {
+    font-weight: 600;
+    color: var(--ink);
+    background: transparent;
+    text-align: left;
+    padding: 8pt 10pt 6pt;
+    border-bottom: 1px solid var(--ink);
+    line-height: 1.3;
+}
+
+tbody td {
+    color: var(--ink-2);
+    padding: 8pt 10pt;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.45;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Numeric columns: markdown right-alignment ( |---: |) renders as
+ * style="text-align: right"; tabular-nums applied uniformly. */
+th[style*="text-align: right"],
+td[style*="text-align: right"] {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- Figure block ----
+ *
+ * markdown:
+ *   ![alt text](path/to/image.png)
+ *
+ *   Source: Data source, year.
+ *
+ * The chart source is the paragraph immediately following the image-only
+ * paragraph. Style it as a chart-source caption per recipe.
+ */
+p:has(> img) {
+    text-align: left;
+    margin: 1em 0 0.2em;
+}
+
+p > img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+/* Paragraph immediately after an image-only paragraph → treat as chart
+ * source (Source Serif 4 italic 12pt ink-2 per recipe). */
+p:has(> img:only-child) + p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 12pt;
+    font-weight: 400;
+    color: var(--ink-2);
+    line-height: 1.45;
+    margin: 0 0 1.4em;
+    font-variation-settings: 'opsz' 14;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ---- Blockquote — small callout ----
+ *
+ * Recipes don't standardize a blockquote role today; until a callout
+ * recipe lands, render markdown `>` as a soft accent panel.
+ */
+blockquote {
+    background: var(--accent-tint, #E1F0FA);
+    border-left: 3px solid var(--accent);
+    padding: 0.9em 1.2em;
+    margin: 1.4em 0;
+    color: var(--ink-2);
+}
+
+blockquote p {
+    margin: 0 0 0.5em;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* ---- Pandoc-style fenced div callouts (`::: {.box title="..."}`) ----
+ *
+ * md-to-pdf doesn't parse `:::` natively, but if a transformer converts
+ * them to <div class="box"> they'll render here. If they pass through as
+ * literal text, that's a known gap; for now style what we can.
+ */
+div.box {
+    background: #F4F1EA;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 1em 1.2em;
+    margin: 1.4em 0;
+    color: var(--ink-2);
+}
+
+div.box::before {
+    content: attr(title);
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 11pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 0.6em;
+}
+
+div.box p:last-child {
+    margin-bottom: 0;
+}
+
+/* ---- Inline code & code blocks ----
+ *
+ * Grammar §4.2: "No monospace... in body, charts, and tables." Code is
+ * a special case — code IS code. We honor monospace only inside `<pre>`
+ * and `<code>`, at smaller size and on a paper-warm background.
+ */
+code {
+    font-family: ui-monospace, 'JetBrains Mono', 'Source Code Pro', Menlo,
+                 Consolas, monospace;
+    font-size: 0.88em;
+    background: var(--paper-warm);
+    padding: 1pt 4pt;
+    border-radius: 2px;
+    color: var(--ink);
+}
+
+pre {
+    font-family: ui-monospace, 'JetBrains Mono', 'Source Code Pro', Menlo,
+                 Consolas, monospace;
+    font-size: 9.5pt;
+    background: var(--paper-warm);
+    color: var(--ink);
+    padding: 0.8em 1em;
+    border-radius: 3px;
+    overflow-x: auto;
+    line-height: 1.5;
+    margin: 1em 0;
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* ---- Footnotes ----
+ * md-to-pdf via remark renders `[^1]` footnotes into a <section
+ * class="footnotes"> at the document end. Style as recipe Footnote role.
+ */
+section.footnotes {
+    border-top: 1px solid var(--rule);
+    margin-top: 2em;
+    padding-top: 0.6em;
+    font-size: 9pt;
+    color: var(--ink-3);
+    line-height: 1.5;
+}
+
+section.footnotes ol {
+    font-size: 9pt;
+    padding-left: 1.2em;
+}
+
+sup, sub {
+    font-size: 0.75em;
+    line-height: 0;
+}
+
+a.footnote-ref, sup a {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--accent);
+    border: none;
+}
+
+/* ---- Print fidelity ---- */
+@media print {
+    html, body { background: var(--paper); }
+    h1, h2, h3 { page-break-after: avoid; }
+    img, table, blockquote, pre, div.box { page-break-inside: avoid; }
+    p { orphans: 2; widows: 2; }
+}

@@ -1,0 +1,728 @@
+/* GL design system — md2pdf stylesheet (pandoc pipeline)
+ *
+ * Applies grammar.md + recipes/report.md to the HTML pandoc emits when
+ * called with --standalone --section-divs --filter pandoc-crossref --citeproc.
+ *
+ * Structural elements we target:
+ *   <header id="title-block-header">   cover (from YAML title/subtitle/author/date)
+ *   <section class="level1">           wraps each `# Section`
+ *   <section class="level2">           wraps each `## Subsection`
+ *   <figure> + <figcaption>            from ![](path){#fig:label}
+ *   <figure> + <p>                     the `Source: ...` paragraph after an image
+ *   <div class="box" title="...">      from ::: {.box title="..."}
+ *   <section class="footnotes">        from [^1] footnotes
+ *   <div id="refs"> .csl-entry         citeproc bibliography
+ *   <span class="citation">            from [@key]
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,600&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---- Design tokens (from grammar.md) ---- */
+:root {
+    --ink:         #1A1714;
+    --ink-2:       #2C2823;
+    --ink-3:       #4F4A42;
+    --ink-4:       #9A9389;
+    --accent:      #1A5A8E;
+    --accent-tint: #E1F0FA;
+    --paper:       #FFFFFF;
+    --cover-bg:    #F3F2EA;
+    --paper-warm:  #F4F1EA;
+    --rule:        #DDDDDD;
+    --gridline:    #ECE9E2;
+    --c-muted:     #999FA8;
+
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                  Helvetica, Arial, sans-serif;
+}
+
+/* ---- Page setup ---- */
+@page {
+    size: Letter;
+    margin: 1.0in 1.0in 1.25in 1.0in;
+    background: var(--paper);
+
+    @bottom-right {
+        content: counter(page);
+        font-family: var(--font-sans);
+        font-size: 9pt;
+        font-weight: 500;
+        color: var(--ink-3);
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@page :first {
+    /* Cover — no folio, warmer paper */
+    background: var(--cover-bg);
+    @bottom-right { content: none; }
+}
+
+/* html / body stay transparent so the @page background shows through.
+ * The !important is needed to defeat pandoc's standalone default
+ * <style> block (`html { background-color: #fdfdfd }`) which it injects
+ * before our linked stylesheet. */
+html, body {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--ink-2);
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    line-height: 1.6;
+    max-width: 100%;
+    /* Browser rendering: grayscale antialiasing matches Nil's reference;
+     * without this Chromium defaults to subpixel rendering which makes
+     * serif strokes look heavier than the same font in print. */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* ---- Cover page (custom pandoc title-block template) ----
+ *
+ * The cover is emitted by skills/md2pdf/assets/template.html5 with this
+ * structure (driven by frontmatter):
+ *
+ *   <header id="title-block-header">
+ *     <div class="cover-meta">          top-left, eyebrow + date stacked
+ *       <div class="cover-series">      $series$ (e.g. "Growth Lab Working Paper Series")
+ *       <div class="cover-date">        $date$
+ *     <div class="cover-body">          center, title + rule + subtitle + authors
+ *       <h1 class="title">              $title$
+ *       <hr class="title-rule">         3px accent, 50% width, left-anchored
+ *       <p class="subtitle">            $subtitle$ (optional)
+ *       <p class="author">              $author$ (one per author)
+ *     <div class="cover-pattern">       bottom, decorative artwork
+ *       <img src="$cover-pattern$">     (defaults to rect-pattern.svg)
+ *
+ * Cover-bg comes from `@page :first { background }` plus a transparent
+ * body. The header is a flex column; cover-pattern uses `margin-top: auto`
+ * to pin to the bottom.
+ */
+header#title-block-header {
+    page-break-after: always;
+    break-after: page;
+    padding-top: 0.25in;
+    /* Cover content area is 11in − 1in top − 1.25in bottom = 8.75in.
+     * Pin the cover to that height so the pattern lands at the page bottom
+     * (not off-page on the would-be page 2). */
+    height: 8.5in;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top meta row — series + date stacked at left, logo at right (Nil layout).
+ * Nil's title sits ~1in below the meta row, not in the middle of the page. */
+header#title-block-header .cover-meta {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1in;
+}
+
+header#title-block-header .cover-meta-text {
+    display: flex;
+    flex-direction: column;
+}
+
+header#title-block-header .cover-logo {
+    height: 36px;
+    width: auto;
+    display: block;
+}
+
+header#title-block-header .cover-series {
+    font-family: var(--font-sans);
+    font-size: 11px;            /* match Nil literally (was 11pt ≈ 14.67px in browser) */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-3);
+    margin: 0;
+}
+
+header#title-block-header .cover-date {
+    font-family: var(--font-sans);
+    font-size: 11px;            /* match Nil literally */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    margin: 4px 0 0;            /* Nil: margin-top:4px */
+}
+
+/* Title + rule + byline cluster */
+header#title-block-header .cover-body {
+    display: block;
+}
+
+header#title-block-header .title {
+    font-family: var(--font-serif);
+    font-size: 56px;            /* matches Nil literally (was 42pt ≈ 56px) */
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    font-variation-settings: 'opsz' 60;
+    color: var(--ink);
+    margin: 0 0 24px;
+    max-width: 90%;
+}
+
+header#title-block-header .title-rule {
+    border: none;
+    border-top: 3px solid var(--accent);
+    width: 50%;
+    margin: 0 0 32px;           /* match Nil literally */
+}
+
+header#title-block-header .subtitle {
+    font-family: var(--font-serif);
+    font-size: 18px;            /* Nil-equivalent for a subtitle slot */
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink-2);
+    margin: 0 0 24px;
+    font-variation-settings: 'opsz' 18;
+}
+
+header#title-block-header .author {
+    font-family: var(--font-serif);
+    font-size: 14px;            /* match Nil literally */
+    font-weight: 400;
+    color: var(--ink);
+    margin: 0 0 4px;
+    line-height: 1.5;
+    font-variation-settings: 'opsz' 14;
+}
+
+/* Bottom decorative pattern — pinned to the bottom of the cover via
+ * `margin-top: auto` (flex layout). The header has a fixed height that
+ * fits within one page, so the SVG renders on-page. */
+header#title-block-header .cover-pattern {
+    margin-top: auto;
+    margin-bottom: 0;
+    width: 100%;
+    line-height: 0;
+}
+
+header#title-block-header .cover-pattern img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 2.5in;
+    object-fit: contain;
+    object-position: center bottom;
+}
+
+/* Leave pandoc's auto-generated .date alone (used in body, not cover) */
+header#title-block-header .date {
+    display: none;
+}
+
+/* ---- Sections — pandoc wraps each heading + its content in <section> ---- */
+section.level1 {
+    break-before: page;
+    page-break-before: always;
+}
+section.level1:first-of-type {
+    /* The first section follows the cover, which already ends with a break */
+    break-before: auto;
+    page-break-before: auto;
+}
+
+section.level2,
+section.level3 {
+    break-before: auto;
+}
+
+/* ---- Headings ---- */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--ink);
+    margin: 0;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+/* h1 inside title-block-header is the cover; everything else is a section */
+h1 {
+    font-family: var(--font-serif);
+    font-size: 26pt;
+    font-weight: 500;
+    line-height: 1.10;
+    letter-spacing: -0.018em;
+    font-variation-settings: 'opsz' 28;
+    margin: 0 0 0.4em;
+}
+
+section.level1 > h1:first-child {
+    margin-top: 0;
+}
+
+h2 {
+    font-family: var(--font-serif);
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.010em;
+    font-variation-settings: 'opsz' 18;
+    margin: 1.4em 0 0.4em;
+}
+
+h3 {
+    font-family: var(--font-serif);
+    font-size: 14pt;
+    font-weight: 600;
+    line-height: 1.30;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    margin: 1.2em 0 0.3em;
+    font-variation-settings: 'opsz' 16;
+}
+
+h4 {
+    font-family: var(--font-sans);
+    font-size: 11pt;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 1.2em 0 0.4em;
+}
+
+/* ---- Body copy ---- */
+p {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin: 0 0 0.6em;
+    orphans: 2;
+    widows: 2;
+}
+
+strong {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+em {
+    font-style: italic;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* Lead paragraph — opt-in via HTML class, since markdown can't tag it */
+p.lead, .lead > p {
+    font-family: var(--font-serif);
+    font-size: 14pt;
+    font-weight: 300;
+    line-height: 1.45;
+    font-variation-settings: 'opsz' 16;
+    color: var(--ink-2);
+    margin: 0.4em 0 1em;
+}
+
+/* ---- Lists ---- */
+ul, ol {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    line-height: 1.6;
+    color: var(--ink-2);
+    padding-left: 1.4em;
+    margin: 0.6em 0;
+}
+
+li {
+    margin: 0.2em 0;
+}
+
+li::marker {
+    color: var(--accent);
+}
+
+/* ---- Horizontal rule ---- */
+hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 1.8em 0;
+}
+
+/* ---- Tables ---- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    margin: 1.2em 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+thead th {
+    font-weight: 600;
+    color: var(--ink);
+    background: transparent;
+    text-align: left;
+    padding: 8pt 10pt 6pt;
+    border-bottom: 1px solid var(--ink);
+    line-height: 1.3;
+}
+
+tbody td {
+    color: var(--ink-2);
+    padding: 8pt 10pt;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.45;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+th[style*="text-align: right"],
+td[style*="text-align: right"] {
+    font-variant-numeric: tabular-nums;
+}
+
+caption {
+    caption-side: top;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 14pt;
+    color: var(--ink);
+    text-align: left;
+    margin-bottom: 0.4em;
+}
+
+/* ---- Figure block ----
+ *
+ * Pandoc emits:
+ *   <figure>
+ *     <img alt="..." src="...">
+ *     <figcaption aria-hidden="true">Figure N: Caption text</figcaption>
+ *   </figure>
+ *   <p>Source: ...</p>
+ *
+ * We want caption *above* the image (recipe), so we use column-reverse,
+ * then style figcaption as the chart title (with the "Figure N:" prefix
+ * inline from pandoc-crossref). The trailing <p> starting with "Source:"
+ * becomes the chart-source line.
+ */
+figure {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 1.4em 0 0.3em;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+figure img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+figure figcaption {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 14pt;
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    margin: 0 0 0.4em;
+    /* pandoc adds aria-hidden — undo any visual hiding it might imply */
+    visibility: visible;
+}
+
+/* Chart source — the paragraph immediately after a figure */
+figure + p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 12pt;
+    font-weight: 400;
+    color: var(--ink-2);
+    line-height: 1.45;
+    margin: 0.4em 0 1.4em;
+    font-variation-settings: 'opsz' 14;
+}
+
+/* Bare images (rare — pandoc usually wraps in <figure>) */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ---- Callout box (::: {.box title="..."} → <div class="box" title="...">) ---- */
+div.box {
+    background: var(--paper-warm);
+    border-left: 3px solid var(--accent);
+    padding: 0.9em 1.2em;
+    margin: 1.4em 0;
+    color: var(--ink-2);
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+div.box[title]::before {
+    content: attr(title);
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 11pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 0.5em;
+}
+
+div.box p:first-of-type {
+    margin-top: 0;
+}
+
+div.box p:last-of-type {
+    margin-bottom: 0;
+}
+
+/* ---- Blockquote — small accent panel ---- */
+blockquote {
+    background: var(--accent-tint);
+    border-left: 3px solid var(--accent);
+    padding: 0.8em 1.2em;
+    margin: 1.4em 0;
+    color: var(--ink-2);
+}
+
+blockquote p { margin: 0 0 0.4em; }
+blockquote p:last-child { margin-bottom: 0; }
+
+/* ---- Code ---- */
+code {
+    font-family: ui-monospace, 'JetBrains Mono', 'Source Code Pro', Menlo,
+                 Consolas, monospace;
+    font-size: 0.88em;
+    background: var(--paper-warm);
+    padding: 1pt 4pt;
+    border-radius: 2px;
+    color: var(--ink);
+}
+
+pre {
+    font-family: ui-monospace, 'JetBrains Mono', 'Source Code Pro', Menlo,
+                 Consolas, monospace;
+    font-size: 9.5pt;
+    background: var(--paper-warm);
+    color: var(--ink);
+    padding: 0.8em 1em;
+    border-radius: 3px;
+    overflow-x: auto;
+    line-height: 1.5;
+    margin: 1em 0;
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* ---- Footnotes (pandoc emits <section class="footnotes">) ---- */
+section.footnotes {
+    border-top: 1px solid var(--rule);
+    margin-top: 2em;
+    padding-top: 0.6em;
+    font-size: 9pt;
+    color: var(--ink-3);
+    line-height: 1.5;
+}
+
+section.footnotes ol {
+    font-size: 9pt;
+    padding-left: 1.2em;
+}
+
+section.footnotes li::marker {
+    color: var(--accent);
+}
+
+a.footnote-ref, a.footnote-back {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.75em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+sup, sub {
+    font-size: 0.75em;
+    line-height: 0;
+}
+
+/* ---- Citations + bibliography (citeproc) ---- */
+span.citation a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+/* Bibliography */
+div#refs {
+    margin-top: 1.6em;
+}
+
+div#refs .csl-entry {
+    font-family: var(--font-sans);
+    font-size: 10pt;
+    line-height: 1.55;
+    color: var(--ink-2);
+    padding-left: 1.5em;
+    text-indent: -1.5em;
+    margin: 0 0 0.6em;
+}
+
+/* CSL renders titles as italic (depending on style). When it does, the
+ * italic spans get our serif italic — feels right for a reference list. */
+div#refs .csl-entry i,
+div#refs .csl-entry em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-variation-settings: 'opsz' 14;
+}
+
+/* ---- Table of contents (--toc) ---- */
+nav#TOC {
+    break-after: page;
+    page-break-after: always;
+    margin: 0 0 2em;
+}
+
+nav#TOC ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+nav#TOC > ul > li {
+    font-family: var(--font-serif);
+    font-size: 14pt;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 0.7em 0 0.2em;
+    border-top: 1px solid var(--ink);
+    padding-top: 0.5em;
+}
+
+nav#TOC > ul > li > a {
+    color: var(--ink);
+}
+
+nav#TOC ul ul {
+    margin-left: 1em;
+    margin-top: 0.3em;
+}
+
+nav#TOC ul ul li {
+    font-family: var(--font-sans);
+    font-size: 12pt;
+    font-weight: 400;
+    color: var(--ink-2);
+    border: none;
+    margin: 0.25em 0;
+}
+
+nav#TOC ul ul li a {
+    color: var(--ink-2);
+}
+
+/* ---- Print fidelity ---- */
+@media print {
+    html, body { background: var(--paper); }
+    h1, h2, h3 { page-break-after: avoid; break-after: avoid; }
+    figure, table, blockquote, pre, div.box {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    p { orphans: 2; widows: 2; }
+}
+
+/* ---- Screen view (md2html output / browser preview) ----
+ *
+ * @page rules above only apply when printing. In a browser the document
+ * is one continuous column with no page boundaries. Treat each top-level
+ * block (cover header + each # section + the bibliography div) as a
+ * separate visual "page": fixed width 8.5in, paper background, 1in/1.25in
+ * padding mirroring the print page margins, a subtle shadow to make
+ * boundaries visible against a darker page background.
+ *
+ * The cover keeps cover-bg; everything else gets paper white.
+ *
+ * Page numbers don't apply on screen (they live in @page @bottom-right);
+ * scroll handles navigation instead.
+ */
+@media screen {
+    html {
+        background: #E5E2D9;       /* darker than paper — feels like the table */
+        color-scheme: light;
+    }
+
+    body {
+        background: transparent !important;
+        margin: 0;
+        padding: 1in 0;
+    }
+
+    /* Each direct child of body becomes a "page" panel */
+    body > header,
+    body > section,
+    body > nav,
+    body > div#refs {
+        max-width: 8.5in;
+        margin: 0 auto 0.5in;
+        padding: 1in 1in 1.25in;
+        box-sizing: border-box;
+        background: var(--paper);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10),
+                    0 0 0 1px rgba(0, 0, 0, 0.04);
+        border-radius: 1px;
+    }
+
+    /* Cover keeps its warm background; height fills its panel naturally */
+    body > header#title-block-header {
+        background: var(--cover-bg);
+        /* override print's fixed height — let it size to content on screen */
+        height: auto;
+        min-height: 11in;          /* still feels like a page */
+    }
+
+    /* On screen, the title-block's flexbox still pushes cover-pattern to
+     * bottom; ensure that's preserved (no override needed). */
+
+    /* Sections that pandoc wraps in <section.level1> with break-before:page
+     * on print — on screen, just give them their own panel via margin. */
+    body > section.level1 {
+        page-break-before: auto;
+        break-before: auto;
+    }
+
+    /* Constrain figures and tables inside content panels */
+    section figure img,
+    section table {
+        max-width: 100%;
+    }
+}

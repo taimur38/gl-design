@@ -1,0 +1,107 @@
+#!/bin/bash
+# md2html - Convert markdown to a self-contained, GL-styled HTML file.
+#
+# Same pipeline as md2pdf, minus the final Chromium → PDF step. Uses
+# `--embed-resources` so referenced images (chart PNGs, cover pattern,
+# Growth Lab logo) and the stylesheet become data URIs inside the HTML.
+# The output is a single portable file that anyone can open in a browser
+# without the source repo on their machine — useful when sharing for
+# design review.
+#
+# Shares assets with the sibling md2pdf skill:
+#   - assets/template.html5     (pandoc template with cover block)
+#   - assets/md2pdf-style.css   (GL design tokens, all layout)
+#
+# Usage:
+#   md2html input.md             → produces input.html in same directory
+#   md2html input.md output.html → produces output.html at the specified path
+#
+# Markdown features supported (same as md2pdf):
+#   ::: {.box title="..."}        callout
+#   ![cap](path){#fig:label}      numbered figure
+#   @fig:label                    cross-ref
+#   [@key] + references.bib       citation + bibliography
+#   YAML frontmatter for cover    title / subtitle / author / date / series
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+# md2html is a thin wrapper that re-uses md2pdf's assets — never drift.
+MD2PDF_ASSETS="$SCRIPT_DIR/../../md2pdf/assets"
+STYLESHEET="$MD2PDF_ASSETS/md2pdf-style.css"
+TEMPLATE="$MD2PDF_ASSETS/template.html5"
+COVER_PATTERN_DEFAULT="$SCRIPT_DIR/../../../assets/design-library/cover-patterns/rect-pattern.svg"
+COVER_LOGO_DEFAULT="$SCRIPT_DIR/../../../assets/design-library/logos/GL_logo_black.png"
+
+if [ ${#@} -eq 0 ]; then
+    echo "Usage: md2html input.md [output.html]"
+    exit 1
+fi
+
+INPUT="$1"
+OUTPUT="${2:-${INPUT%.md}.html}"
+
+if [ ! -f "$INPUT" ]; then
+    echo "Error: File not found: $INPUT" >&2
+    exit 1
+fi
+if [ ! -f "$STYLESHEET" ]; then
+    echo "Error: Stylesheet not found at $STYLESHEET" >&2
+    exit 1
+fi
+if [ ! -f "$TEMPLATE" ]; then
+    echo "Error: Template not found at $TEMPLATE" >&2
+    exit 1
+fi
+
+# ---- Resolve paths -----------------------------------------------------------
+
+INPUT_DIR="$(cd "$(dirname "$INPUT")" && pwd)"
+INPUT_BASENAME="$(basename "$INPUT")"
+ABS_INPUT="$INPUT_DIR/$INPUT_BASENAME"
+BIB="$INPUT_DIR/references.bib"
+
+# ---- Build pandoc command ----------------------------------------------------
+
+PANDOC_ARGS=(
+    "$ABS_INPUT"
+    --from=markdown
+    --to=html5
+    --standalone
+    --embed-resources
+    --section-divs
+    --mathjax
+    --css="$STYLESHEET"
+    --template="$TEMPLATE"
+    --resource-path="$INPUT_DIR"
+    --filter pandoc-crossref
+)
+
+# Cover pattern + logo — pass as file:// paths; --embed-resources inlines
+# them as data URIs so the resulting HTML stands alone.
+if [ -f "$COVER_PATTERN_DEFAULT" ]; then
+    PATTERN_ABS="$(realpath "$COVER_PATTERN_DEFAULT")"
+    PANDOC_ARGS+=(--metadata=cover-pattern:"$PATTERN_ABS")
+fi
+
+if [ -f "$COVER_LOGO_DEFAULT" ]; then
+    LOGO_ABS="$(realpath "$COVER_LOGO_DEFAULT")"
+    PANDOC_ARGS+=(--metadata=cover-logo:"$LOGO_ABS")
+fi
+
+# Citations only if a references.bib is present alongside the input.
+if [ -f "$BIB" ]; then
+    CSL="$SCRIPT_DIR/../../md2docx/assets/citation-style.csl"
+    PANDOC_ARGS+=(
+        --citeproc
+        --bibliography="$BIB"
+        --metadata=reference-section-title:"References"
+    )
+    [ -f "$CSL" ] && PANDOC_ARGS+=(--csl="$CSL")
+fi
+
+PANDOC_ARGS+=(-o "$OUTPUT")
+
+pandoc "${PANDOC_ARGS[@]}"
+
+echo "Created: $OUTPUT"

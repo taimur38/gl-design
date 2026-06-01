@@ -1,8 +1,8 @@
 ---
 title: "From Stabilization to Transformation"
 subtitle: "A Growth Diagnostics Brief on Pakistan"
-author: "Growth Lab · Harvard Kennedy School"
 date: "April 2026"
+series: "Growth Lab Working Paper Series"
 ---
 
 # Executive Summary
@@ -21,17 +21,17 @@ The diagnostic identifies two interrelated drivers of Pakistan's growth speed li
 
 ## Boom-bust cycles and foreign reserves
 
-Pakistan's foreign exchange reserves have repeatedly fallen below the three-month-of-imports threshold considered the minimum for macroeconomic stability. Each episode triggers emergency borrowing, IMF programs, and contractionary adjustment. Since 1990, Pakistan has entered at least seven IMF programs, each breaking the growth cycle before productive momentum can build.
+Pakistan's foreign exchange reserves have repeatedly fallen below the three-month-of-imports threshold considered the minimum for macroeconomic stability [@imf2025weo]. Each episode triggers emergency borrowing, IMF programs, and contractionary adjustment. Since 1990, Pakistan has entered at least seven IMF programs, each breaking the growth cycle before productive momentum can build (@fig:reserves).
 
-![Pakistan's reserves in months of imports](imgs/fm_meeting/reserves-time-series.png)
+![Pakistan's reserves in months of imports](imgs/fm_meeting/reserves-time-series.png){#fig:reserves}
 
-Source: World Bank WDI.
+Source: World Bank WDI [@worldbank2025wdi].
 
 ## Growth and the current account constraint
 
-The scatter plot below illustrates the core structural problem: years of higher per capita GDP growth are systematically associated with a worsening current account balance. This "growth–current account trade-off" is not inevitable — countries that diversify their exports can grow without generating unsustainable external deficits — but it has defined Pakistan's economic trajectory for three decades.
+The scatter plot in @fig:growth-vs-cab illustrates the core structural problem: years of higher per capita GDP growth are systematically associated with a worsening current account balance. This "growth–current account trade-off" is not inevitable — countries that diversify their exports can grow without generating unsustainable external deficits [@hausmann2007; @hausmann2016] — but it has defined Pakistan's economic trajectory for three decades.
 
-![GDP per capita growth vs change in current account balance](imgs/fm_meeting/gdp-growth-vs-cab-change.png)
+![GDP per capita growth vs change in current account balance](imgs/fm_meeting/gdp-growth-vs-cab-change.png){#fig:growth-vs-cab}
 
 Source: IMF WEO October 2025.
 

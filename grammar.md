@@ -22,53 +22,105 @@ not neutral greys) — it sits on paper, not on a screen.
 |---------|-----------|------------------------------------------------------------------|
 | `ink`   | `#1A1714` | Cover title, all headings, strong emphasis, table emphasis cells |
 | `ink-2` | `#2C2823` | Body copy, axis text, table cells                                |
-| `ink-3` | `#6B645A` | Captions, eyebrows, page chrome, secondary copy                  |
-| `ink-4` | `#9A9389` | Hairline rules, trendlines, deep-background markers              |
+| `ink-3` | `#4F4A42` | Captions, eyebrows, page chrome, secondary copy, chart subtitles |
+| `ink-4` | `#9A9389` | Trendlines, deep-background markers (rarely used outside charts) |
+
+For hairline borders between blocks, use `rule` (below), not `ink-4`. `ink-4`
+is reserved for *inside* the chart panel — a faint stroke on the outermost
+gridline of a radar, the line behind a sparse trend.
 
 ### Accent
 
 | Token         | Hex       | Use                                                                |
 |---------------|-----------|--------------------------------------------------------------------|
-| `accent`      | `#015C9C` | Cover date, eyebrows, figure labels, primary chart series         |
+| `accent`      | `#1A5A8E` | Cover date, eyebrows, figure labels, footnote anchor, accent text  |
 | `accent-deep` | `#003E6B` | Reserved — strong emphasis variant                                 |
 | `accent-soft` | `#3A85B8` | Reserved — softer variant                                          |
 | `accent-tint` | `#E1F0FA` | Background tint for accent panels                                  |
 
-### Paper
+`accent` and `c-1-dark` are intentionally the same hex: when the c-1 series
+needs a direct label or legend mark, it uses the dark tone (`accent`) for
+WCAG AA contrast against paper.
 
-| Token        | Hex       | Use                                              |
-|--------------|-----------|--------------------------------------------------|
-| `paper`      | `#FAF8F4` | Page paper (warm white)                          |
-| `paper-warm` | `#F4F1EA` | Warmer surface                                   |
-| `cover-bg`   | `#F3F2EA` | Cover page paper — do not use on content pages   |
-| `rule`       | `#DDDDDD` | Hairline borders between content blocks          |
+### Paper & chrome
 
-### Categorical chart palette (6 colors)
+| Token        | Hex       | Use                                                |
+|--------------|-----------|----------------------------------------------------|
+| `paper`      | `#FFFFFF` | Content page paper (pure white)                    |
+| `cover-bg`   | `#F3F2EA` | Cover page paper — do not use on content pages     |
+| `paper-warm` | `#F4F1EA` | Warm surface — accent panels, cover medallion bg   |
+| `rule`       | `#DDDDDD` | Hairline borders between content blocks            |
+| `gridline`   | `#ECE9E2` | In-chart gridlines (see §3)                        |
 
-```
-#015C9C  #C77A20  #CEC96B  #51B196  #A8352C  #918BED
-```
+The split is deliberate: content pages are pure white so figures land
+on a neutral background and color reads true; the cover is warmer (`cover-bg`)
+to mark the threshold into the document.
 
-| Token | Hex       | Role                                              |
-|-------|-----------|---------------------------------------------------|
-| `c-1` | `#015C9C` | Primary — single-series default; also `accent`    |
-| `c-2` | `#C77A20` | Contrast / lead-finding amber                     |
-| `c-3` | `#CEC96B` | Third series                                      |
-| `c-4` | `#51B196` | Fourth series                                     |
-| `c-5` | `#A8352C` | Fifth series                                      |
-| `c-6` | `#918BED` | Sixth series                                      |
+### Categorical chart palette — six hues, three tones each
 
-Use in order. The palette is deliberately small and muted — calmer than a
-saturated rainbow.
+Each categorical color comes in **light / main / dark**. The main tone fills
+geoms (bars, lines, treemap tiles). The dark tone strokes overlapping shapes
+and renders every label, legend mark, or text annotation associated with the
+series — it carries the WCAG AA contrast against paper. The light tone is
+for backgrounds, faded states, and sequential ramps.
+
+|       | Light       | Main      | Dark        | Role                              |
+|-------|-------------|-----------|-------------|-----------------------------------|
+| `c-1` | `#B5D5EA`   | `#2F87C8` | `#1A5A8E`   | Primary — single-series default; institutional voice (same as `accent`) |
+| `c-2` | `#E89C9C`   | `#CC4948` | `#8A2C2B`   | Contrast / lead-finding red       |
+| `c-3` | `#92D6BF`   | `#2AA584` | `#1A6B53`   | Third series                      |
+| `c-4` | `#B5A0CC`   | `#7554A3` | `#4A3470`   | Fourth series                     |
+| `c-5` | `#F4BC8A`   | `#EA822D` | `#A8580F`   | Fifth series                      |
+| `c-6` | `#E6E2A8`   | `#CDC86B` | `#8A8638`   | Sixth series                      |
+
+Use in order: `c-1` first, then `c-2`, etc. The palette is deliberately
+small — six categories is a working-memory limit. If a chart truly needs
+more, re-think the encoding or use the muted base in §3.
 
 ### Muted — for de-emphasis
 
-| Token     | Hex       | Use                                                   |
-|-----------|-----------|-------------------------------------------------------|
-| `c-muted` | `#7E8A99` | "Everyone-else" series when one is highlighted        |
+| Token     | Hex         | Use                                                |
+|-----------|-------------|----------------------------------------------------|
+| `c-muted-light` | `#CDD2D9` | Faded fills, background panels                 |
+| `c-muted` | `#999FA8`   | "Everyone-else" series in the highlight pattern    |
+| `c-muted-dark`  | `#5F6773` | Dark stroke or label for a muted series        |
 
-Used in the highlight pattern below — a cool grey that visually recedes
-behind the warm ink and accent palette.
+A cool grey that visually recedes behind the warm ink and the categorical
+hues. Used in the highlight pattern (§3.1).
+
+### Sequential ramps — for ordered encodings
+
+For choropleths and any ordered encoding from low to high, use a single-hue
+ramp built from the same c-N family. Darker = higher value. Default to five
+steps; coarse signals can use three, fine gradients seven or more.
+
+| Palette         | 5-step ramp (low → high)                                          |
+|-----------------|-------------------------------------------------------------------|
+| `sequential-1`  | `#E5F0F9` · `#B5D5EA` · `#6FA5CE` · `#2F87C8` · `#1A5A8E`         |
+| `sequential-2`  | `#F4D5D5` · `#E89C9C` · `#DC6F6E` · `#CC4948` · `#8A2C2B`         |
+| `sequential-3`  | `#D5EFE7` · `#92D6BF` · `#5BC0A0` · `#2AA584` · `#1A6B53`         |
+| `sequential-4`  | `#E5DDF0` · `#B5A0CC` · `#9276BA` · `#7554A3` · `#4A3470`         |
+| `sequential-5`  | `#FBE5D5` · `#F4BC8A` · `#EE9A52` · `#EA822D` · `#A8580F`         |
+| `sequential-6`  | `#FBF8DC` · `#E6E2A8` · `#DCD68E` · `#CDC86B` · `#8A8638`         |
+
+Default to `sequential-1` (blue) unless the data has a hue convention
+(e.g., heat / fire / vegetation).
+
+### Diverging palettes — for meaningful midpoints
+
+Use only when the data has a real reference point: gains vs. losses, above
+vs. below baseline, positive vs. negative deviation. The boundary between
+hues marks the midpoint; the lightest tones flank it.
+
+| Palette  | 6-step (negative tail → midpoint → positive tail)                                                                  |
+|----------|--------------------------------------------------------------------------------------------------------------------|
+| `div-2-1` | `#8A2C2B` · `#DC6F6E` · `#EFC7C0` · `#C5DCEC` · `#6FA5CE` · `#1A5A8E` — red to blue (default)                       |
+| `div-3-1` | `#1A6B53` · `#5BC0A0` · `#BDE5D8` · `#C5DCEC` · `#6FA5CE` · `#1A5A8E` — teal to blue (loss vs. gain in same family) |
+| `div-5-1` | `#A8580F` · `#EE9A52` · `#F4BC8A` · `#C5DCEC` · `#6FA5CE` · `#1A5A8E` — orange to blue                              |
+| `div-6-1` | `#8A8638` · `#DCD68E` · `#E6E2A8` · `#C5DCEC` · `#6FA5CE` · `#1A5A8E` — yellow to blue                              |
+
+Never use a diverging palette for a purely positive scale — readers will
+read midpoint meaning into the boundary.
 
 ### Sector-specific palettes
 
@@ -76,6 +128,21 @@ For trade/product data, use the official Atlas HS sector colors defined in
 [`assets/design-library/visualization_colors/atlas/hs_product_sectors.csv`](assets/design-library/visualization_colors/atlas/hs_product_sectors.csv).
 These are an external standard and override the categorical palette when
 charting product data.
+
+### Cover pattern colors
+
+The decorative patterns on the cover (see [`recipes/report.md`](recipes/report.md))
+use their own fixed palette — not the categorical or accent colors. Treat
+these as artwork, not as a chart palette.
+
+| Token          | Hex       |
+|----------------|-----------|
+| `pattern-blue`   | `#578CC9` |
+| `pattern-cyan`   | `#5DC4E2` |
+| `pattern-red`    | `#E55D5C` |
+| `pattern-yellow` | `#F2C32F` |
+| `pattern-green`  | `#5CA75B` |
+| `pattern-dark`   | `#2D2D2C` |
 
 ## 2. Typography
 
@@ -88,7 +155,8 @@ the text *does* — serif for voice, sans for function.
 optical-size axis). Carries the lab's voice. Weights used: 300, 400, 500, 600.
 
 > Cover title, all section and subsection headings, the lead paragraph,
-> chart titles, chart sources (italic), colophon body text, footnote markers.
+> chart titles, chart sources (italic), colophon body text, footnote markers,
+> TOC major entries, reference titles.
 
 **Inter** — UI, labels, and reading body. Variable font. Carries information
 without inflection. Weights used: 400, 500, 600, 700.
@@ -134,14 +202,15 @@ themselves are part of the grammar.
 
 **Body tier:**
 
-| Role              | Family         | Weight  | Color   | Notes                          |
-|-------------------|----------------|---------|---------|--------------------------------|
-| Lead paragraph    | Source Serif 4 | 300     | `ink-2` | One per section; opens it      |
-| Body              | Inter          | 400     | `ink-2` | Default narrative              |
-| Body emphasis     | Inter          | 600     | `ink`   | `<strong>`                     |
-| Colophon body     | Source Serif 4 | 400     | `ink-2` | Imprint page only              |
-| Footnote          | Inter          | 400     | `ink-3` | Bottom of page                 |
-| Footnote anchor   | Source Serif 4 italic | 400 | `accent` | Superscripted marker     |
+| Role              | Family                | Weight | Color    | Notes                          |
+|-------------------|-----------------------|--------|----------|--------------------------------|
+| Lead paragraph    | Source Serif 4        | 300    | `ink-2`  | One per section; opens it      |
+| Body              | Inter                 | 400    | `ink-2`  | Default narrative              |
+| Body emphasis     | Inter                 | 600    | `ink`    | `<strong>`                     |
+| Colophon body     | Source Serif 4        | 400    | `ink-2`  | Imprint page only              |
+| Footnote          | Inter                 | 400    | `ink-3`  | Bottom of page                 |
+| Footnote anchor   | Source Serif 4 italic | 400    | `accent` | Super, 0.7em; both in text and at note |
+| Reference entry   | Inter                 | 400    | `ink-2`  | Hanging indent; titles in Source Serif 4 italic |
 
 **Chart-adjacent tier (figure block elements that sit outside the plot panel):**
 
@@ -155,12 +224,12 @@ themselves are part of the grammar.
 
 **Inside the chart panel (theme_gl handles):**
 
-| Role          | Family        | Weight       | Color   | Notes               |
-|---------------|---------------|--------------|---------|---------------------|
-| Axis label    | Inter         | 500          | `ink-2` |                     |
-| Axis tick     | Inter         | 400          | `ink-2` | tabular-nums        |
-| Legend / series label | Inter | 600          | series  | Color matches geom  |
-| Annotation    | Inter         | 400          | `ink-2` | Sparingly           |
+| Role          | Family        | Weight       | Color           | Notes                            |
+|---------------|---------------|--------------|------------------|----------------------------------|
+| Axis label    | Inter         | 500          | `ink-2`          | Sentence case                    |
+| Axis tick     | Inter         | 400          | `ink-2`          | tabular-nums                     |
+| Legend / series label | Inter | 600          | series dark tone | Always the dark tone of the series color (WCAG AA) |
+| Annotation    | Inter         | 400          | `ink-2`          | Sparingly                        |
 
 **Tables:**
 
@@ -187,15 +256,25 @@ themselves are part of the grammar.
 | Folio (page #)| Inter                 | 500    | `ink-3` | tabular-nums                     |
 | Folio note   | Source Serif 4 italic  | 400    | `ink-3` | Optional, beside the folio       |
 
-Recipes pin the absolute size of each role.
+**Cover meta (cover only):**
+
+| Role             | Family         | Weight | Color    | Case      | Notes              |
+|------------------|----------------|--------|----------|-----------|--------------------|
+| Series eyebrow   | Inter          | 600    | `ink-3`  | UPPERCASE | 0.18em tracking    |
+| Cover date       | Inter          | 700    | `accent` | UPPERCASE | 0.18em tracking    |
+| Cover authors    | Source Serif 4 | 400    | `ink-2`  | Sentence  | Comma-separated    |
+
+Recipes pin the absolute size of each role. Cover meta is always two lines —
+series eyebrow on top, date directly below. Never combine.
 
 ## 3. Charts
 
-### Highlight by muting
+### 3.1 Highlight by muting
 
 When one series carries the story, paint everything else in `c-muted` first,
-then re-paint the focus series on top in an accent (typically `c-1` or `c-2`).
-The muted layer carries the general trend; the highlight carries the finding.
+then re-paint the focus series on top in `c-1` (the institutional voice) or
+`c-2` (the lead-finding red). The muted layer carries the general trend; the
+highlight carries the finding.
 
 In ggplot:
 
@@ -204,19 +283,68 @@ data |>
     ggplot(aes(x = x, y = y, group = country)) +
     geom_line(color = c_muted, linewidth = 0.6) +
     geom_line(data = \(d) filter(d, country == "Mongolia"),
-              color = c_2, linewidth = 1.8)
+              color = highlight, linewidth = highlight_sz)
 ```
 
-The `theme_gl()` helper provides `c_muted`, `c_1`, ... `c_6`, and `accent`
-as named values; do not hard-code hex.
+The `theme_gl()` helper provides `c_muted`, `c_1`..`c_6`, `accent`, and
+`highlight` (alias for `c_2`) as named values; do not hard-code hex.
 
-### Most charts: two to four colors
+### 3.2 Most charts: two to four colors
 
 A reader can hold only a few categories in working memory. When a chart
 truly needs more series, use the muted layer for the rest and let one or
 two focus series carry the story.
 
-### Tabular numerals everywhere numeric
+### 3.3 Three tones, three jobs
+
+Each categorical hue has a light / main / dark variant. They are not
+interchangeable:
+
+| Tone  | Job                                                                                      |
+|-------|------------------------------------------------------------------------------------------|
+| Main  | Fills — bars, lines, treemap tiles, scatter circles, choropleth polygons                 |
+| Dark  | Strokes on overlapping marks, and **every text element** referring to the series — direct labels, legend marks, callouts, annotations. Required for WCAG AA contrast against paper. |
+| Light | Backgrounds, faded states, sequential ramp tail                                          |
+
+Only one chart type uses the dark tone as a *fill*: the three-tone stacked
+area (light / main / dark of one hue, when three bands belong to the same
+parent variable). Outside that case, dark = stroke and text.
+
+### 3.4 Fill, stroke, opacity
+
+| Geom                 | Fill                          | Stroke                                  | Notes                                  |
+|----------------------|-------------------------------|-----------------------------------------|----------------------------------------|
+| Scatter circle       | main, `fill-opacity: 0.8`     | dark, `stroke-opacity: 0.8`, 1px        | Same 0.8 so overlapping points darken together |
+| Line                 | —                             | main, full opacity, 2px (2.4px focus)   | `stroke-linejoin: round`; solid only   |
+| Bar / area / treemap | main, full opacity            | none — tiles abut directly              | Stacked: leave a 1px gap between segments |
+| Choropleth polygon   | sequential or diverging tone  | `ink-3`, 0.5px                          | Separates regions                      |
+| Radar polygon        | main, `fill-opacity: 0.25`    | main, full opacity, 2px round join      | Lower fill so gridlines/labels read    |
+
+The 0.8 rule is for overlapping marks. Single-layer marks (bars, treemap
+tiles, choropleths) stay at full opacity — overlap isn't a risk and lowering
+opacity just dilutes the color.
+
+### 3.5 Axes, ticks, gridlines
+
+- **Axis line**: 1px solid `ink-2`
+- **Tick mark**: 1px, 4px long, **outward** (never inward)
+- **Tick label offset**: 6px outside the axis
+- **Axis label offset**: measure from the *start* of the tick label, not from
+  the axis line — typically 20px on both X and Y to clear wide numbers
+- **Gridline**: 1px solid `gridline` (`#ECE9E2`). Use only where the reader
+  needs to estimate values; avoid both X and Y unless the chart is dense
+- **Zero baseline**: render with axis weight, not gridline weight
+- **Year axis**: when the X axis is just years, omit the axis label — the
+  tick labels already say what the dimension is
+
+### 3.6 Sequential vs. diverging — when
+
+- **Sequential** for any ordered encoding without a natural midpoint
+  (population, GDP, complexity, count). Darker = higher.
+- **Diverging** *only* when there is a real reference point (positive vs.
+  negative, above vs. below baseline). Never on a purely positive scale.
+
+### 3.7 Tabular numerals everywhere numeric
 
 Always set `font-variant-numeric: tabular-nums` (CSS), `\addfontfeatures{Numbers=Monospaced}`
 (LaTeX), or the equivalent on:
@@ -236,7 +364,8 @@ The system is small on purpose. Before introducing a new style, work through
 this list.
 
 1. **Serif or sans?** Serif for the cover, all headings, the lead, the
-   colophon, chart titles, and chart sources. Sans for everything else.
+   colophon, chart titles, chart sources, and reference titles. Sans for
+   everything else.
 
 2. **No monospace.** Numerals use Inter with tabular figures. Avoid mono
    fonts in body, charts, and tables.
@@ -245,22 +374,30 @@ this list.
    carry a specific function — a category, a series, a threshold, a
    highlight. If a color is not earning its keep, remove it.
 
-4. **Use color to highlight; mute the rest.** Paint the focus series in an
-   accent and the supporting data in `c-muted`. The muted layer carries the
-   trend; the highlight carries the finding.
+4. **Use color to highlight; mute the rest.** Paint the focus series in
+   `c-1` or `c-2` and the supporting data in `c-muted`. The muted layer
+   carries the trend; the highlight carries the finding.
 
 5. **Keep most charts to two to four colors.** When a chart truly needs more
    series, use the muted color for the rest and let the focus series carry
-   the story.
+   the story. Six categorical colors is a hard ceiling.
 
-6. **Tabular numerals on all numeric content.** Tables, axis ticks, page
+6. **Dark tone for strokes and text.** Every label, legend mark, callout,
+   and annotation tied to a series uses the dark variant of that series'
+   color, not the main tone. The main tone is for fills.
+
+7. **0.8 opacity on overlapping marks.** Scatter circles, radar polygons,
+   any overlaid shape. Single-layer marks (bars, treemap, choropleth) stay
+   at full opacity.
+
+8. **Tabular numerals on all numeric content.** Tables, axis ticks, page
    numbers, TOC page numbers.
 
-7. **No all-caps body or headings.** Uppercase is reserved for eyebrows,
+9. **No all-caps body or headings.** Uppercase is reserved for eyebrows,
    figure labels, running heads, and similar 9–11pt chrome.
 
-8. **No trailing periods on headings.** Section headings, subsection
-   headings, and TOC entries end without a period. Chart titles **do** end
-   with a period — they read as findings, not labels.
+10. **No trailing periods on headings.** Section headings, subsection
+    headings, and TOC entries end without a period. Chart titles **do** end
+    with a period — they read as findings, not labels.
 
 Recipe-specific size and layout rules live in each recipe.
