@@ -23,6 +23,7 @@ grammar.md            # Visual grammar — color, type, chart conventions
 intention.md          # Purpose, problem, approach, inspirations
 recipes/
   report.md           # Long-form report: page, grid, figure sizes, patterns
+  slide.md            # 16:9 slide deck: canvas, type sizes, slide classes
 
 assets/               # Static embodiments of grammar + recipe
   fonts/              # Source Sans 3 + JetBrains Mono (local copies)
@@ -34,6 +35,9 @@ skills/               # Runnable, Claude-consumable tools
   gl-ggplot/          # GL design system for R/ggplot2 (theme, scales, sizes)
     assets/theme_gl.R   # Sourceable R file — the portable runtime
   md2docx/            # Markdown → Word conversion (pandoc + Lua filters)
+  md2pdf/             # Markdown → PDF via pandoc + headless Chromium
+  md2html/            # Markdown → self-contained HTML (shares md2pdf assets)
+  md2slides/          # Markdown → 16:9 PDF deck via Marp + gl theme
   chart-audit/        # Visual audit checklist for ggplot charts
 
 showcase/             # Interactive presentations of the framework
@@ -89,16 +93,20 @@ Key rules:
 - **Chart audit**: after generating charts, run the
   [`skills/chart-audit/`](skills/chart-audit/) checklist.
 
-## Converting markdown to Word
+## Converting markdown
 
-Use the bundled md2docx skill:
+Four pipelines, all sharing the same design tokens and cover assets:
 
 ```bash
-skills/md2docx/scripts/md2docx --theme gl input.md output.docx
+skills/md2docx/scripts/md2docx --theme gl input.md output.docx   # Word
+skills/md2pdf/scripts/md2pdf input.md output.pdf                  # PDF (print)
+skills/md2html/scripts/md2html input.md output.html               # self-contained HTML
+skills/md2slides/scripts/md2slides input.md output.pdf            # 16:9 slide deck (Marp)
 ```
 
-Requires `pandoc` and `pandoc-crossref`. See
-[`skills/md2docx/SKILL.md`](skills/md2docx/SKILL.md) for full usage.
+The docx, pdf, and html paths use pandoc; md2slides uses Marp. All require
+`pandoc` + `pandoc-crossref` (except md2slides, which needs Node + the Marp
+CLI). See each skill's `SKILL.md` for full usage.
 
 ## Regenerating charts
 

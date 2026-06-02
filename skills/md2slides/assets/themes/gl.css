@@ -1,0 +1,588 @@
+/* @theme gl
+ *
+ * Growth Lab slide theme — applies grammar.md + the report recipe's
+ * typography hierarchy to a 16:9 Marp canvas (1280 × 720 px default).
+ *
+ * Sister theme to skills/md2pdf/assets/md2pdf-style.css. The design tokens,
+ * type families, and accent rule are identical; sizes are scaled up for
+ * slide consumption (viewed projected or in a deck, not held at reading
+ * distance) and the title / break / closing classes use Marp's section-class
+ * mechanism instead of cover-template HTML.
+ *
+ * Author markdown frontmatter:
+ *   ---
+ *   marp: true
+ *   theme: gl
+ *   size: 16:9
+ *   paginate: true
+ *   ---
+ *
+ * Slide classes (set with <!-- _class: name -->):
+ *   title       cover slide
+ *   break       section divider
+ *   chart       compact eyebrow + title, chart fills the slide
+ *   img-slide   image-left layout (use ![bg left:55%](img.png))
+ *   img-full    full-bleed image
+ *   map-slide   tight padding for side-by-side maps in .cols
+ *   closing     final / outro slide
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,600&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---- Design tokens (mirror grammar.md / md2pdf-style.css) ---- */
+:root {
+    --ink:         #1A1714;
+    --ink-2:       #2C2823;
+    --ink-3:       #4F4A42;
+    --ink-4:       #9A9389;
+    --accent:      #1A5A8E;
+    --accent-tint: #E1F0FA;
+    --paper:       #FFFFFF;
+    --cover-bg:    #F3F2EA;
+    --paper-warm:  #F4F1EA;
+    --rule:        #DDDDDD;
+    --gridline:    #ECE9E2;
+    --c-muted:     #999FA8;
+
+    --font-serif: 'Source Serif 4', Georgia, serif;
+    --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                  Helvetica, Arial, sans-serif;
+}
+
+/* ---- Base slide ---- */
+section {
+    font-family: var(--font-sans);
+    font-size: 24px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    background: var(--paper);
+    padding: 64px 80px 72px 80px;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- Headings ---- */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--ink);
+    margin: 0;
+    font-feature-settings: 'kern' 1;
+}
+
+h1 {
+    font-family: var(--font-serif);
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+    font-variation-settings: 'opsz' 36;
+    margin: 0 0 0.5em;
+}
+
+h2 {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.010em;
+    font-variation-settings: 'opsz' 22;
+    margin: 1.0em 0 0.4em;
+}
+
+h3 {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.30;
+    letter-spacing: -0.005em;
+    font-variation-settings: 'opsz' 18;
+    margin: 0.9em 0 0.3em;
+}
+
+/* h4 = eyebrow label (mirrors md2pdf) */
+h4 {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 0 0 0.5em;
+}
+
+/* Vertically center body content under H1 on a content slide */
+section:not(.title):not(.break):not(.closing):not(.chart):not(.img-full) > h1 + * {
+    margin-top: auto;
+}
+section:not(.title):not(.break):not(.closing):not(.chart):not(.img-full) > *:last-child {
+    margin-bottom: auto;
+}
+
+/* ---- Body / lists ---- */
+p {
+    margin: 0.4em 0;
+}
+
+ul, ol {
+    padding-left: 1.3em;
+    margin: 0.4em 0;
+}
+
+li {
+    margin: 0.35em 0;
+}
+
+li::marker {
+    color: var(--accent);
+}
+
+strong {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+em {
+    font-style: italic;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ---- Horizontal rule — hairline ink-3 divider ---- */
+hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 1.0em 0;
+}
+
+/* ---- Code (sparingly; mono is not in the grammar) ---- */
+code {
+    font-family: ui-monospace, 'JetBrains Mono', 'Source Code Pro', Menlo,
+                 Consolas, monospace;
+    font-size: 0.85em;
+    background: var(--paper-warm);
+    padding: 1px 6px;
+    border-radius: 2px;
+    color: var(--ink);
+}
+
+pre {
+    font-family: ui-monospace, 'JetBrains Mono', 'Source Code Pro', Menlo,
+                 Consolas, monospace;
+    font-size: 18px;
+    line-height: 1.5;
+    background: var(--paper-warm);
+    color: var(--ink);
+    padding: 16px 20px;
+    border-radius: 3px;
+    overflow-x: auto;
+    margin: 0.6em 0;
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* ---- Tables (mirror md2pdf: top/bottom ink rules, hairline row dividers) ---- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 20px;
+    margin: 0.6em 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+}
+
+thead th {
+    font-weight: 600;
+    color: var(--ink);
+    text-align: left;
+    padding: 10px 14px 8px;
+    border-bottom: 1px solid var(--ink);
+    line-height: 1.3;
+}
+
+tbody td {
+    color: var(--ink-2);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.4;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+th[style*="text-align: right"],
+td[style*="text-align: right"] {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- Images (default — bounded, centered, never overflow) ---- */
+section img {
+    max-width: 88%;
+    max-height: 58vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* In two-column layouts let images breathe to the column edge */
+.cols img {
+    max-width: 100%;
+    max-height: 48vh;
+    margin: 0;
+}
+
+/* ---- Blockquote — accent panel (mirrors md2pdf) ---- */
+blockquote {
+    background: var(--accent-tint);
+    border-left: 3px solid var(--accent);
+    padding: 14px 22px;
+    margin: 0.8em 0;
+    color: var(--ink-2);
+    font-size: 22px;
+    line-height: 1.5;
+}
+
+blockquote p { margin: 0.3em 0; }
+blockquote p:last-child { margin-bottom: 0; }
+
+/* ---- Folio / page number ---- */
+section::after {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+}
+
+/* ---- Two-column layout (.cols) ---- */
+.cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    margin-top: 0.4em;
+    width: 100%;
+}
+.cols h3 { margin-top: 0; }
+
+/* .cols.divided — adds a hairline `rule` divider between the two columns,
+ * with 32px padding on each side. Use when the comparison is the slide's
+ * primary content (e.g. parallel arguments, side-by-side options) and the
+ * reader needs to *see* the division, not just infer it from layout. */
+.cols.divided {
+    gap: 0;
+}
+.cols.divided > :first-child {
+    padding-right: 32px;
+    border-right: 1px solid var(--rule);
+}
+.cols.divided > :nth-child(2) {
+    padding-left: 32px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Title slide — cover paper, eyebrow + date, display + accent rule + byline,
+ * pattern artwork at the bottom. Mirrors the report cover layout, scaled.
+ * ───────────────────────────────────────────────────────────────────────── */
+section.title {
+    background: var(--cover-bg);
+    /* Logo sits top-right; pattern bleeds across the bottom of the slide.
+     * @COVER_LOGO@ / @COVER_PATTERN@ are placeholder tokens the md2slides
+     * script substitutes with absolute file:// URLs at render time — Marp
+     * resolves CSS url() relative to the markdown source, not the CSS file,
+     * so static relative paths aren't portable.
+     *
+     * The pattern is rect-pattern-wide.svg (1168 × 172, aspect 6.79:1).
+     * At background-size 100% it lands ~188px tall on a 1280px slide —
+     * tall enough to anchor the bottom without crowding the byline.
+     * Opacity is baked into the SVG (0.65), so no CSS layer needed. */
+    background-image:
+        url('@COVER_LOGO@'),
+        url('@COVER_PATTERN@');
+    background-repeat: no-repeat, no-repeat;
+    background-position: top 56px right 80px, bottom center;
+    background-size: 140px auto, 100% auto;
+    padding: 64px 80px 64px 80px;
+    justify-content: flex-start;
+}
+
+/* Top meta — the cover default is **just the date**, rendered as accent
+ * bold uppercase. Author writes it as **MAY 2026** on its own line above
+ * the title. The series-eyebrow slot (h4) is still styled below for decks
+ * that want one above the date — but it's not the cover's default. */
+section.title > p:first-of-type {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 96px;             /* 1in breathing room before the display */
+}
+
+/* Series eyebrow (optional — only if the author writes an h4 above the date) */
+section.title h4 {
+    margin: 0 0 4px;
+    color: var(--ink-3);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+section.title h4 + p {
+    margin: 0 0 96px;             /* keep the same drop-to-title gap */
+}
+
+section.title h1 {
+    font-family: var(--font-serif);
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    font-variation-settings: 'opsz' 60;
+    color: var(--ink);
+    margin: 0 0 28px;
+    max-width: 90%;
+    /* Accent rule under the display — 3px, anchored to the H1's left edge,
+     * extending 50% across the live width. Drawn with a wrapped-line trick:
+     * we add 32px bottom padding and overlay a 3px linear-gradient as a
+     * background only on the bottom-left half. Simpler than ::after, and
+     * avoids a list-marker glyph that Marp's print stylesheet otherwise
+     * pierces through pseudo-elements with. */
+    padding-bottom: 32px;
+    background-image: linear-gradient(to right,
+        var(--accent) 0, var(--accent) 50%,
+        transparent 50%, transparent 100%);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    background-size: 100% 3px;
+}
+
+/* Byline — Source Serif 4 14pt-equivalent, ink */
+section.title h2 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 400;
+    font-variation-settings: 'opsz' 18;
+    color: var(--ink);
+    margin: 0 0 4px;
+    line-height: 1.4;
+    border: none;
+    padding: 0;
+}
+
+section.title p {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--ink-2);
+    margin: 0;
+    font-variation-settings: 'opsz' 18;
+}
+
+/* Suppress the page number on the title slide */
+section.title::after { content: none; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Break slide — section divider on a dark ink-2 ground, big serif
+ * display in the warm cover paper tone. Page number muted.
+ * ───────────────────────────────────────────────────────────────────────── */
+section.break {
+    background: var(--ink-2);
+    justify-content: center;
+    padding: 80px 96px;
+}
+
+section.break h4 {
+    color: var(--cover-bg);          /* warm light tone on dark — full opacity */
+    margin: 0 0 16px;
+}
+
+section.break h1 {
+    font-family: var(--font-serif);
+    font-size: 56px;
+    font-weight: 400;
+    color: var(--cover-bg);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variation-settings: 'opsz' 48;
+    margin: 0 0 16px;
+    max-width: 90%;
+}
+
+section.break p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 22px;
+    color: color-mix(in srgb, var(--cover-bg) 70%, transparent);
+    margin: 0;
+    max-width: 80%;
+    font-variation-settings: 'opsz' 18;
+}
+
+section.break::after {
+    color: color-mix(in srgb, var(--cover-bg) 40%, transparent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Chart slide — eyebrow + chart title at the top, chart fills the slide,
+ * source line at the bottom. Mirrors the report figure block.
+ * ───────────────────────────────────────────────────────────────────────── */
+section.chart {
+    padding: 48px 64px 56px 64px;
+}
+section.chart h4 { margin: 0 0 6px; }
+section.chart h1 {
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 0 0 0.4em;
+    max-width: 96%;
+    font-variation-settings: 'opsz' 22;
+}
+/* Marp wraps ![](src) in a <p>; make that p flex-grow to fill the slide */
+section.chart > p:has(img) {
+    flex: 1 1 0;
+    min-height: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+section.chart > p:has(img) img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin: 0;
+}
+/* Source line (paragraph starting with "Source:") — serif italic */
+section.chart > p:not(:has(img)) {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-2);
+    margin: 0.6em 0 0;
+    line-height: 1.4;
+    font-variation-settings: 'opsz' 14;
+    flex: 0 0 auto;
+    text-align: left;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * img-slide — image-left layout via Marp's ![bg left:55%](img.png) directive
+ * ───────────────────────────────────────────────────────────────────────── */
+section.img-slide h2 {
+    margin: 0 0 0.3em;
+}
+section.img-slide h4 {
+    margin: 0 0 0.4em;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * img-full — let the image dominate
+ * ───────────────────────────────────────────────────────────────────────── */
+section.img-full {
+    padding: 40px 56px;
+    justify-content: center;
+}
+section.img-full img {
+    max-width: 100%;
+    max-height: 76vh;
+}
+section.img-full > p:not(:has(img)) {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-2);
+    margin: 0.6em 0 0;
+    text-align: left;
+    font-variation-settings: 'opsz' 14;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * map-slide — tight padding for side-by-side maps in .cols
+ * ───────────────────────────────────────────────────────────────────────── */
+section.map-slide {
+    padding: 28px 40px;
+}
+section.map-slide .cols img {
+    max-height: 86vh;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Closing slide — paper-warm ground, italic serif display, eyebrow footer.
+ * Used for outro / thank-you / contact slides.
+ * ───────────────────────────────────────────────────────────────────────── */
+section.closing {
+    background: var(--paper-warm);
+    justify-content: center;
+    text-align: center;
+    padding: 80px 96px;
+}
+
+section.closing h1 {
+    font-family: var(--font-serif);
+    font-size: 40px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.25;
+    max-width: 880px;
+    margin: 0 auto;
+    font-variation-settings: 'opsz' 36;
+}
+
+section.closing p {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ink-3);
+    margin-top: 2em;
+}
+
+section.closing::after { color: var(--ink-4); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Source / caption line — for figures outside .chart slides
+ * Use via inline HTML in markdown: `<p class="source">Source: ...</p>`.
+ * On .chart slides the trailing non-image <p> already gets this styling
+ * automatically; this class makes the same role reachable on two-column
+ * chart slides and bg-image slides where there's no chart-specific
+ * structural anchor for CSS to attach to.
+ * ───────────────────────────────────────────────────────────────────────── */
+p.source {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ink-2);
+    line-height: 1.4;
+    font-variation-settings: 'opsz' 14;
+    margin: 0.6em 0 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Utility classes — mirror the colors named in grammar.md
+ * ───────────────────────────────────────────────────────────────────────── */
+.accent  { color: var(--accent); }
+.muted   { color: var(--ink-3); }
+.ink     { color: var(--ink); }

@@ -1,0 +1,185 @@
+#!/bin/bash
+# md2slides - Convert markdown to a 16:9 PDF slide deck via Marp,
+#             styled with the Growth Lab visual grammar.
+#
+# Pipeline:
+#   markdown (with Marp frontmatter)
+#     → marp-cli (via local nvm node)
+#     → headless Chromium
+#     → PDF (16:9, 1280×720 default)
+#
+# Usage:
+#   md2slides input.md                      → input.pdf (default theme: gl)
+#   md2slides input.md output.pdf           → custom output path
+#   md2slides --theme ./custom.css input.md → use a custom CSS file
+#   md2slides --list-themes                 → list bundled themes
+#
+# Bundled themes live in assets/themes/*.css. --theme accepts either a
+# bare name matched against those files, or a path to any .css file.
+#
+# Required markdown frontmatter:
+#   ---
+#   marp: true
+#   theme: gl
+#   size: 16:9
+#   paginate: true
+#   ---
+#
+# Slide classes (set with <!-- _class: name -->):
+#   title       cover slide (cover-bg paper, display title, accent rule, byline)
+#   break       section divider (ink-2 background, light serif display)
+#   chart       compact title + dominant chart fills the slide
+#   img-slide   image-left layout (use ![bg left:55%](img.png))
+#   img-full    full-bleed image slide
+#   map-slide   tight padding for side-by-side maps in .cols
+#   closing     final slide (paper-warm bg, italic serif)
+#
+# Two-column layout: wrap content in <div class="cols">...</div>.
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "$0")")" && pwd)"
+THEMES_DIR="$SCRIPT_DIR/../assets/themes"
+DEFAULT_THEME="gl"
+
+list_themes() {
+    echo "Available themes (in $THEMES_DIR):"
+    for f in "$THEMES_DIR"/*.css; do
+        [ -e "$f" ] || continue
+        echo "  - $(basename "$f" .css)"
+    done
+}
+
+# ---- Locate Chromium ---------------------------------------------------------
+# Match md2pdf's discovery order so the two skills behave the same way.
+
+find_chromium() {
+    local hs ch sys
+    hs=$(find "$HOME/.cache/puppeteer/chrome-headless-shell" \
+            -name "chrome-headless-shell" -type f -executable 2>/dev/null \
+            | sort -V | tail -1)
+    if [ -n "$hs" ]; then echo "$hs"; return; fi
+    ch=$(find "$HOME/.cache/puppeteer/chrome" \
+            -name "chrome" -type f -executable 2>/dev/null \
+            | sort -V | tail -1)
+    if [ -n "$ch" ]; then echo "$ch"; return; fi
+    sys=$(command -v chromium 2>/dev/null \
+          || command -v chromium-browser 2>/dev/null \
+          || command -v google-chrome 2>/dev/null \
+          || command -v brave 2>/dev/null \
+          || true)
+    if [ -n "$sys" ]; then echo "$sys"; return; fi
+    echo ""
+}
+
+# ---- Parse args --------------------------------------------------------------
+
+THEME_ARG=""
+POSITIONAL=()
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --theme)
+            THEME_ARG="$2"
+            shift 2
+            ;;
+        --theme=*)
+            THEME_ARG="${1#*=}"
+            shift
+            ;;
+        --list-themes)
+            list_themes
+            exit 0
+            ;;
+        -h|--help)
+            sed -n '2,35p' "$0" | sed 's/^# \{0,1\}//'
+            echo
+            list_themes
+            exit 0
+            ;;
+        *)
+            POSITIONAL+=("$1")
+            shift
+            ;;
+    esac
+done
+
+set -- "${POSITIONAL[@]}"
+
+if [ -z "$1" ]; then
+    echo "Usage: md2slides [--theme NAME|PATH] input.md [output.pdf]"
+    exit 1
+fi
+
+INPUT="$1"
+OUTPUT="${2:-${INPUT%.md}.pdf}"
+
+THEME_NAME="${THEME_ARG:-$DEFAULT_THEME}"
+if [ -f "$THEME_NAME" ]; then
+    THEME_SRC="$THEME_NAME"
+else
+    THEME_SRC="$THEMES_DIR/${THEME_NAME}.css"
+fi
+
+if [ ! -f "$INPUT" ]; then
+    echo "Error: File not found: $INPUT" >&2
+    exit 1
+fi
+
+if [ ! -f "$THEME_SRC" ]; then
+    echo "Error: Theme not found: $THEME_SRC" >&2
+    list_themes
+    exit 1
+fi
+
+# ---- Theme placeholder substitution -----------------------------------------
+# The theme CSS uses @COVER_LOGO@ and @COVER_PATTERN@ tokens for the
+# title-slide background image and logo. We substitute absolute file://
+# paths here so Marp doesn't need to resolve them relative to anything.
+# A tempfile holds the substituted CSS for the duration of the render.
+
+COVER_LOGO_DEFAULT="$SCRIPT_DIR/../../../assets/design-library/logos/GL_logo_black.png"
+COVER_PATTERN_DEFAULT="$SCRIPT_DIR/../../../assets/design-library/cover-patterns/rect-pattern-wide.svg"
+
+THEME=$(mktemp --suffix=.css)
+trap 'rm -f "$THEME"' EXIT
+
+LOGO_URL=""
+PATTERN_URL=""
+[ -f "$COVER_LOGO_DEFAULT" ] && LOGO_URL="file://$(realpath "$COVER_LOGO_DEFAULT")"
+[ -f "$COVER_PATTERN_DEFAULT" ] && PATTERN_URL="file://$(realpath "$COVER_PATTERN_DEFAULT")"
+
+sed -e "s|@COVER_LOGO@|${LOGO_URL}|g" \
+    -e "s|@COVER_PATTERN@|${PATTERN_URL}|g" \
+    "$THEME_SRC" > "$THEME"
+
+# ---- Load Marp ---------------------------------------------------------------
+# Marp is installed under nvm; source nvm so `marp` is on PATH.
+
+unset NPM_CONFIG_PREFIX
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+if ! command -v marp >/dev/null 2>&1; then
+    echo "Error: marp-cli not found on PATH." >&2
+    echo "Install with: npm install -g @marp-team/marp-cli" >&2
+    exit 1
+fi
+
+CHROMIUM="$(find_chromium)"
+if [ -z "$CHROMIUM" ]; then
+    echo "Error: no chromium / chrome / chrome-headless-shell found." >&2
+    exit 1
+fi
+export CHROME_PATH="$CHROMIUM"
+
+# ---- Render -----------------------------------------------------------------
+
+marp "$INPUT" \
+    --pdf \
+    --html \
+    --theme "$THEME" \
+    --allow-local-files \
+    -o "$OUTPUT"
+
+echo "Created: $OUTPUT (theme: $(basename "$THEME_SRC" .css))"
