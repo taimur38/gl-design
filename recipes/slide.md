@@ -60,13 +60,20 @@ projection legibility, not literal scaling. The grammar's role identity
 
 ### Body tier
 
-| Role             | Family                | Size | Weight | Leading |
-|------------------|-----------------------|------|--------|---------|
-| Body             | Inter                 | 24px | 400    | 1.55    |
-| Body emphasis    | Inter                 | 24px | 600    | 1.55    |
-| Blockquote       | Inter                 | 22px | 400    | 1.50    |
-| Code (inline)    | mono                  | 0.85em | 400  | —       |
-| Code block       | mono                  | 18px | 400    | 1.5     |
+| Role             | Family                | Size   | Weight | Color    | Leading |
+|------------------|-----------------------|--------|--------|----------|---------|
+| Body             | Inter                 | 24px   | 400    | `ink-2`  | 1.55    |
+| Body emphasis    | Inter                 | 24px   | 600    | `accent` | 1.55    |
+| Blockquote       | Inter                 | 22px   | 400    | `ink-2`  | 1.50    |
+| Code (inline)    | mono                  | 0.85em | 400    | `ink`    | —       |
+| Code block       | mono                  | 18px   | 400    | `ink`    | 1.5     |
+
+Body emphasis is `accent` blue, not `ink` — a deliberate departure from
+the report recipe. Slides reward a splash of color inside dense
+paragraphs, and the accent weight-600 pulls the eye to the key fact
+without disturbing the surrounding body color. **Table cells keep ink
+emphasis** (per the grammar's table convention) — accent in a table
+cell would overwhelm.
 
 ### Chart-adjacent tier (chart slide)
 
@@ -276,6 +283,10 @@ slide-specific values.
 6. **Slide-page chrome is just the folio.** No running head, no series
    tag on every slide — the deck's identity sits on the cover.
 7. **No body, no chart on a break slide.** It's a punctuation mark.
+8. **Body emphasis is accent, not ink.** A deliberate deviation from the
+   report recipe; the splash of color inside dense paragraphs is what
+   keeps the slide reading at distance. Table cells still use ink
+   emphasis.
 
 ## 6. Quick reference
 

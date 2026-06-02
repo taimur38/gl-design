@@ -139,8 +139,19 @@ li::marker {
     color: var(--accent);
 }
 
+/* Body emphasis on slides leans on accent for color — a deliberate
+ * deviation from the report recipe, where strong stays in ink. Slides
+ * benefit from a splash of color inside dense paragraphs, and the
+ * accent reads cleanly against paper at body weight 600.
+ * Tables keep ink emphasis (per the grammar's table convention). */
 strong {
     font-weight: 600;
+    color: var(--accent);
+}
+
+table strong,
+td strong,
+th strong {
     color: var(--ink);
 }
 
