@@ -62,6 +62,16 @@ MINOR_FONT = "Inter"
 
 # Sizes in half-points (Word convention: 24 = 12pt, 28 = 14pt, 68 = 34pt, etc.)
 # Spacing in twips (20 twips = 1pt).
+#
+# NOTE — unit fidelity vs. the canonical PDF. The report's source of truth is
+# the HTML→PDF (md2pdf) path, authored in Nil's px values (body 12px, H1 34px,
+# …). Word can't express px, so this template approximates in pt. The sizes
+# below use a literal 1px→1pt numeral map (34px → 34pt), which is ~33% LARGER
+# than the PDF physically (where 34px = 25.5pt). That keeps the .docx readable
+# as a standalone editable document, but Word and the PDF do NOT render at the
+# same size. To make Word match the PDF exactly, multiply every px value by 0.75
+# (body 12px → 9pt, footnotes 9px → 6.75pt). Open design decision — see the
+# typography alignment review under nil/.
 STYLES = {
     # styleId: (font, size_halfpt, color, bold, italic, space_before_twips, space_after_twips)
     # None = don't change that attribute

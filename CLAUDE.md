@@ -70,10 +70,12 @@ Key rules:
 - **Do not override the theme per chart** — only adjust `legend.position` or
   `guides()` when needed.
 - **Highlight by muting**: untyped geoms default to muted grey, so the
-  pattern is *overpainting* the focus series on top in `highlight` (blue
-  `#1A5A8E`, = `accent` = `c_1_dark`). For stark "lead finding" emphasis
-  use `lead_finding` (red `#CC4948`, = `c_2`) sparingly. Never use `"red"`
-  or arbitrary hex for emphasis.
+  pattern is *overpainting* the focus series on top in `highlight` (main blue
+  `#2F87C8`, = `c_1`). Fills and lines use the main tone; a highlighted point
+  is `fill = highlight, color = highlight_dark` and its label uses
+  `highlight_dark` (`#1A5A8E`). For stark "lead finding" emphasis use
+  `lead_finding` (red `#CC4948`, = `c_2`) sparingly. Never use `"red"`,
+  `accent`, or arbitrary hex for emphasis.
 - **Dark tone for text**: every direct label, legend mark, callout, or
   annotation tied to a series uses the series' dark tone (`gl$c_N_dark`),
   not the main tone — WCAG AA against paper.

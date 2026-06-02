@@ -39,7 +39,7 @@
     @bottom-right {
         content: counter(page);
         font-family: var(--font-sans);
-        font-size: 9pt;
+        font-size: 9px;
         font-weight: 500;
         color: var(--ink-3);
         font-variant-numeric: tabular-nums;
@@ -55,7 +55,7 @@ html, body {
 
 body {
     font-family: var(--font-sans);
-    font-size: 12pt;
+    font-size: 12px;
     line-height: 1.6;
     font-feature-settings: 'tnum' off;
     max-width: 100%;
@@ -69,10 +69,10 @@ body {
 /* ---- Headings ----
  *
  * Markdown maps:
- *   # h1   → Section          (Source Serif 4 34pt 500 ink)
- *   ## h2  → Subsection       (Source Serif 4 20pt 500 ink)
- *   ### h3 → Improvised level (Source Serif 4 16pt 600 ink) — see followups #1
- *   #### h4 → Eyebrow          (Inter 11pt 600 UPPER accent, 0.14em track)
+ *   # h1   → Section          (Source Serif 4 34px 500 ink)
+ *   ## h2  → Subsection       (Source Serif 4 20px 500 ink)
+ *   ### h3 → Improvised level (Source Serif 4 16px 600 ink) — see followups #1
+ *   #### h4 → Eyebrow          (Inter 11px 600 UPPER accent, 0.14em track)
  *
  * No trailing periods in markdown; CSS doesn't add any.
  */
@@ -84,11 +84,11 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-family: var(--font-serif);
-    font-size: 26pt;
+    font-size: 34px;
     font-weight: 500;
-    line-height: 1.10;
+    line-height: 1.08;
     letter-spacing: -0.018em;
-    font-variation-settings: 'opsz' 28;
+    font-variation-settings: 'opsz' 36;
     margin-top: 0.6em;
     margin-bottom: 0.3em;
     /* page-break-before: always; */ /* enable if every # should start a new page */
@@ -100,18 +100,18 @@ h1:first-child {
 
 h2 {
     font-family: var(--font-serif);
-    font-size: 16pt;
+    font-size: 20px;
     font-weight: 500;
-    line-height: 1.25;
+    line-height: 1.2;
     letter-spacing: -0.010em;
-    font-variation-settings: 'opsz' 18;
+    font-variation-settings: 'opsz' 22;
     margin-top: 1.4em;
     margin-bottom: 0.4em;
 }
 
 h3 {
     font-family: var(--font-serif);
-    font-size: 14pt;
+    font-size: 16px;
     font-weight: 600;
     line-height: 1.30;
     color: var(--ink);
@@ -122,7 +122,7 @@ h3 {
 
 h4 {
     font-family: var(--font-sans);
-    font-size: 11pt;
+    font-size: 11px;
     font-weight: 600;
     color: var(--accent);
     text-transform: uppercase;
@@ -134,7 +134,7 @@ h4 {
 /* ---- Body copy ---- */
 p {
     font-family: var(--font-sans);
-    font-size: 12pt;
+    font-size: 12px;
     font-weight: 400;
     line-height: 1.6;
     color: var(--ink-2);
@@ -166,10 +166,10 @@ a {
  */
 p.lead, .lead p {
     font-family: var(--font-serif);
-    font-size: 14pt;
+    font-size: 17px;
     font-weight: 300;
-    line-height: 1.45;
-    font-variation-settings: 'opsz' 16;
+    line-height: 1.4;
+    font-variation-settings: 'opsz' 18;
     color: var(--ink-2);
     margin: 0.4em 0 1em;
 }
@@ -177,7 +177,7 @@ p.lead, .lead p {
 /* ---- Lists ---- */
 ul, ol {
     font-family: var(--font-sans);
-    font-size: 12pt;
+    font-size: 12px;
     line-height: 1.6;
     color: var(--ink-2);
     padding-left: 1.4em;
@@ -201,7 +201,7 @@ hr {
 
 /* ---- Tables ----
  * Recipe §5 table spec: top + bottom rules in ink (heavier), row dividers
- * in rule. Header: Inter 12pt 600 ink, sentence case. Cell: Inter 12pt 400
+ * in rule. Header: Inter 12px 600 ink, sentence case. Cell: Inter 12px 400
  * ink-2. Numeric columns right-aligned with tabular-nums (author must
  * apply via class or alignment in markdown — `| ---: | ---: |`).
  */
@@ -209,7 +209,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-family: var(--font-sans);
-    font-size: 12pt;
+    font-size: 12px;
     margin: 1.2em 0;
     border-top: 1px solid var(--ink);
     border-bottom: 1px solid var(--ink);
@@ -220,14 +220,14 @@ thead th {
     color: var(--ink);
     background: transparent;
     text-align: left;
-    padding: 8pt 10pt 6pt;
+    padding: 10px 12px 8px;
     border-bottom: 1px solid var(--ink);
     line-height: 1.3;
 }
 
 tbody td {
     color: var(--ink-2);
-    padding: 8pt 10pt;
+    padding: 11px 12px;
     border-bottom: 1px solid var(--rule);
     vertical-align: top;
     line-height: 1.45;
@@ -267,11 +267,11 @@ p > img {
 }
 
 /* Paragraph immediately after an image-only paragraph → treat as chart
- * source (Source Serif 4 italic 12pt ink-2 per recipe). */
+ * source (Source Serif 4 italic 12px ink-2 per recipe). */
 p:has(> img:only-child) + p {
     font-family: var(--font-serif);
     font-style: italic;
-    font-size: 12pt;
+    font-size: 12px;
     font-weight: 400;
     color: var(--ink-2);
     line-height: 1.45;
@@ -324,7 +324,7 @@ div.box::before {
     content: attr(title);
     display: block;
     font-family: var(--font-sans);
-    font-size: 11pt;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -379,13 +379,13 @@ section.footnotes {
     border-top: 1px solid var(--rule);
     margin-top: 2em;
     padding-top: 0.6em;
-    font-size: 9pt;
+    font-size: 9px;
     color: var(--ink-3);
     line-height: 1.5;
 }
 
 section.footnotes ol {
-    font-size: 9pt;
+    font-size: 9px;
     padding-left: 1.2em;
 }
 

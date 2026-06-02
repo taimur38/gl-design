@@ -7,14 +7,14 @@ conversation with nil, or future iteration. Not for the merged spec.
 
 Nil's typography spec defines three heading tiers: **display** (cover only),
 **H1 section**, **H2 subsection**. Long-form research reports almost always
-need at least one more level (H3) for sub-subsections. The current
-`recipes/report.md` follows nil strictly and so has no H3 definition.
+need at least one more level (H3) for sub-subsections. `recipes/report.md` and
+the md2pdf CSS currently **improvise** an H3 (Source Serif 4 16px weight 600,
+opsz 16) as a recipe extension — still pending Nil's blessing of the third tier.
 
 **Resolution options:**
-- Ask nil to extend the spec with an H3.
-- Improvise an H3 — Source Serif 4 ~16pt weight 600, or sentence-case Inter
-  600 at 13pt, sit it somewhere between H2 (20pt) and chart title (14pt).
-  Both options risk colliding with chart title styling.
+- Ask nil to extend the spec with an H3 (and confirm the improvised 16px).
+- Keep the improvised H3 — Source Serif 4 16px weight 600, sitting between H2
+  (20px) and chart title (14px). Risk: collision with chart-title styling.
 - Use the lead paragraph as a soft section break, and rely on visual rhythm
   instead of an explicit H3.
 
@@ -24,15 +24,15 @@ Previously: body at 11pt / 15pt leading = 0.208" per baseline. Six baselines
 = 1.25" = one vertical module. Body lines and figure placements snapped to
 the same rhythm.
 
-Under nil: body at 12pt / 1.6 line-height = 19.2pt leading = 0.267" per
-baseline. Six baselines = 1.6" — does not divide 1.25". Body has its own
-rhythm; the module grid is still useful for figure placement but the two no
+Under nil (px everywhere): body at 12px / 1.6 line-height = 19.2px leading =
+0.2" per baseline. Six baselines = 1.2" — does not divide 1.25". Body has its
+own rhythm; the module grid is still useful for figure placement but the two no
 longer share a baseline.
 
 **Resolution options:**
 - Accept the decoupling (current state). Figures snap; body flows.
-- Tighten body leading to ~1.49 (17.86pt) to recover the snap — overrides
-  nil's `line-height: 1.6`.
+- Adjust body leading so 6 baselines = one module (20px leading → line-height
+  ~1.67) — overrides nil's `line-height: 1.6`.
 - Recompute the vertical module on the body baseline (would shrink modules
   to ~1.07", break the 7-module fit into 8.75" live height).
 
@@ -149,28 +149,42 @@ of the cover pattern (35% opacity, grayscale) is not in the template.
 for now; rebuild `gl-report.docx` to include cover-page art when the cover
 becomes a routine deliverable from the docx pipeline.
 
-## 9. Typography size history — px vs pt
+## 9. Typography size history — px vs pt (RESOLVED: px everywhere)
 
-Nil's typography-spec.html writes sizes in **CSS px** (12 / 17 / 20 / 34 /
-56). An earlier pass of `recipes/report.md` copied those numerical values
-into **pt**, which inflated everything by ~33% in print (1 CSS px =
-0.75pt at 96 dpi). After review against the rendered PDF, the recipe was
-rescaled to anchor body at 12pt (print readability) and convert the
-heading values literally (×0.75, rounded):
+Nil's typography-spec.html writes sizes in **CSS px** at real Letter geometry
+(8.5 × 11in pages), so her px values *are* print sizes (12px body = 9pt on the
+page). The system briefly experimented with two pt translations and they
+disagreed with each other:
 
-| Role     | Nil HTML | Old recipe (pt) | New recipe (pt) |
-|----------|----------|-----------------|-----------------|
-| Display  | 56 px    | 56              | 44              |
-| H1       | 34 px    | 34              | 26              |
-| H2       | 20 px    | 20              | 16              |
-| H3       | 16 px    | 16              | 14              |
-| Lead     | 17 px    | 17              | 14              |
-| Body     | 12 px    | 12              | 12 (kept)       |
-| Footnote |  9 px    |  9              |  9 (kept)       |
+- `recipes/report.md` / md2pdf CSS: headings ×0.75 (56→44, 34→26…) but body
+  re-anchored up to 12pt for "print readability."
+- `md2docx` template: literal 1px→1pt (56→56, 34→34…), ~33% bigger again.
 
-Body and footnote are anchored to print readability rather than literal
-conversion — Nil's 12px → 9pt would be illegibly small for a research
+Net effect: the Word file and the PDF rendered at different sizes, and neither
+matched Nil.
+
+**Resolution (2026-06):** the report ships as HTML → PDF, where CSS px is an
+absolute print unit (96px = 72pt = 1in) and renders deterministically. So the
+md2pdf stylesheet and `recipes/report.md` now use **Nil's px values as-is** —
+1:1 with her reference. This makes body 12px = 9pt physical (dense editorial
+sizing — accepted as Nil's intent, not a bug). pt is no longer used for the
 report.
+
+| Role     | Nil HTML | Now (px, used as-is) |
+|----------|----------|----------------------|
+| Display  | 56 px    | 56 px                |
+| H1       | 34 px    | 34 px                |
+| H2       | 20 px    | 20 px                |
+| H3       | 16 px    | 16 px (recipe extension) |
+| Lead     | 17 px    | 17 px                |
+| Body     | 12 px    | 12 px                |
+| Footnote |  9 px    |  9 px                |
+
+`.docx` remains pt-native (Word can't express px) and is now an explicit
+*best-effort approximation* of the PDF — see the note in
+`assets/build_gl_template.py`. **Open:** whether to rescale the docx template
+×0.75 so Word matches the PDF physically (body 9pt, footnotes 6.75pt) or keep
+it print-readable but larger than the PDF.
 
 ## 10. Old font retention on merge
 

@@ -37,8 +37,9 @@ gl <- list(
 
     # Paper & chrome
     paper       = "#FFFFFF",  # Content pages — pure white
-    paper_warm  = "#F4F1EA",  # Accent panels, cover medallion bg
+    paper_warm  = "#F4F1EA",  # Accent panels, code / quote tint
     cover_bg    = "#F3F2EA",  # Cover only
+    cover_disk  = "#ECEBE0",  # Report-cover medallion disk (one tone darker than cover_bg)
     rule        = "#DDDDDD",  # Hairline borders
     gridline    = "#ECE9E2",  # In-chart gridlines
 
@@ -61,15 +62,29 @@ gl <- list(
 )
 
 # Top-level aliases so user code reads naturally
-highlight    <- gl$accent     # blue popout (= c_1_dark) — the default focus color.
-                              # Per Nil: "Reserve saturated hue (usually c-1) for
-                              # one or two focus series."
-lead_finding <- gl$c_2        # red, for stark / lead-finding emphasis (gains vs.
-                              # losses, alarm, exception). Use sparingly.
+# Data-mark focus colors are the MAIN tone — fills (bars, areas, point
+# interiors) and highlighted lines all use the main tone (spec §5). Their
+# *_dark partners are ONLY for strokes on those marks and for any text/label
+# tied to them (Decision Rule 2). Both focus colors are main tones so they are
+# consistent: highlight = c_1 (blue), lead_finding = c_2 (red).
+#
+# `accent` is a SEPARATE thing: non-data UI chrome (eyebrows, figure labels,
+# links) and is the dark tone by design. Do NOT use `accent` as a data fill —
+# that is the typography↔data-viz mix-up to avoid.
+highlight         <- gl$c_1       # main blue (#2F87C8) — default data focus:
+                                  # bar/area/point fills + highlighted lines.
+highlight_dark    <- gl$c_1_dark  # #1A5A8E — stroke on a highlighted point and
+                                  # the label/text tied to the highlight.
+lead_finding      <- gl$c_2       # main red (#CC4948) — stark lead-finding
+                                  # emphasis (gains vs. losses, alarm). Sparingly.
+lead_finding_dark <- gl$c_2_dark  # #8A2C2B — stroke/label for the lead finding.
 c_muted      <- gl$c_muted    # cool grey, "everyone else"
-accent       <- gl$accent     # primary blue — same hex as highlight; this name
-                              # is for non-data UI (eyebrows, figure labels, links)
-highlight_sz <- 1.8           # line width for highlighted series (vs 0.6 muted)
+accent       <- gl$accent     # #1A5A8E — non-data UI chrome only (eyebrows,
+                              # figure labels, links). NOT a data-mark fill.
+highlight_sz <- 0.65          # linewidth for the highlighted focus line (~2.4px).
+                              # Standard/muted lines default to 0.5 (~2px); the
+                              # focus is only ~1.3x thicker, per spec §5
+                              # (2px standard / 2.4px highlight) — not a 2x jump.
 
 # ---- Named palettes ---------------------------------------------------------
 #
@@ -80,8 +95,21 @@ highlight_sz <- 1.8           # line width for highlighted series (vs 0.6 muted)
 # The sector palettes are external Growth Lab standards.
 
 gl_palettes <- list(
-    # Default categorical (6 colors)
+    # Default categorical (6 colors) — main tones, all fill work.
     categorical = gl$palette,
+
+    # Dark tones, same order — strokes on overlapping marks + EVERY text
+    # element tied to a series (direct labels, legend, callouts, annotations).
+    # Required for WCAG AA against paper (Decision Rule 2). Pair a dark color
+    # scale with a main fill scale: scale_color_gl("categorical_dark") +
+    # scale_fill_gl("categorical").
+    categorical_dark = c("#1A5A8E", "#8A2C2B", "#1A6B53",
+                         "#4A3470", "#A8580F", "#8A8638"),
+
+    # Light tones, same order — backgrounds, faded states, and the fills for
+    # the two/three-tone single-hue option.
+    categorical_light = c("#B5D5EA", "#E89C9C", "#92D6BF",
+                          "#B5A0CC", "#F4BC8A", "#E6E2A8"),
 
     # Sequential 5-step ramps (low → high)
     sequential_1 = c("#E5F0F9", "#B5D5EA", "#6FA5CE", "#2F87C8", "#1A5A8E"),  # Blue
@@ -196,8 +224,10 @@ theme_gl <- function(base_size = 12, mode = "report") {
             ),
 
             # Axes — Inter, ink-2. Label weight 500, tick weight 400.
-            axis.title   = element_text(family = "gl_sans", color = gl$ink_2,
-                                        size = rel(1.0), face = "bold"),
+            # Axis label is Inter 500 (gl_sans_medium), NOT 600 — the spec
+            # reserves 600 for figure labels and series labels.
+            axis.title   = element_text(family = "gl_sans_medium", color = gl$ink_2,
+                                        size = rel(1.0)),
             axis.title.x = element_text(margin = margin(t = 6)),
             axis.title.y = element_text(margin = margin(r = 6), angle = 90),
             axis.text    = element_text(family = "gl_sans", color = gl$ink_2,
@@ -263,34 +293,51 @@ theme_gl <- function(base_size = 12, mode = "report") {
 # force authors to manually mute every supporting layer.
 #
 # So:
-#   geom_col / bar / area / point / line / path  → c_muted family
+#   geom_line / path / step                      → c_muted_dark line
+#   geom_point                                   → shape 21, c_muted fill +
+#                                                  c_muted_dark stroke, 0.8 alpha
+#   geom_col / bar                               → c_muted fill + 1px paper stroke
+#   geom_area / ribbon                           → c_muted fill, no stroke
 #   geom_smooth                                  → c_muted_dark line + light ribbon
-#   geom_boxplot                                 → neutral (white fill, ink stroke)
+#   geom_boxplot                                 → recedes: c_muted_light fill,
+#                                                  c_muted outline (background dist.)
 #   geom_hline / vline                           → dashed ink_3 (reference line)
 #   geom_text / label                            → ink_2 (body color)
 #
 # Called from gl_setup() — these mutate global ggplot2 state.
 
 gl_set_geom_defaults <- function() {
-    # Lines + points read as "data" — darker grey (c_muted_dark, same as
-    # geom_smooth) so a single-series chart looks substantive.
-    update_geom_defaults("point",   list(colour = gl$c_muted_dark, fill = gl$c_muted_dark))
-    update_geom_defaults("line",    list(colour = gl$c_muted_dark, linewidth = 0.8))
-    update_geom_defaults("path",    list(colour = gl$c_muted_dark, linewidth = 0.8))
-    update_geom_defaults("step",    list(colour = gl$c_muted_dark, linewidth = 0.8))
+    # Lines read as "data" — darker grey (c_muted_dark) so a single-series
+    # chart looks substantive.
+    update_geom_defaults("line",    list(colour = gl$c_muted_dark, linewidth = 0.5))
+    update_geom_defaults("path",    list(colour = gl$c_muted_dark, linewidth = 0.5))
+    update_geom_defaults("step",    list(colour = gl$c_muted_dark, linewidth = 0.5))
 
-    # Bars and areas read as "backdrop" — softer grey (c_muted) since they're
-    # usually a row of comparators with one highlighted.
-    update_geom_defaults("col",     list(fill = gl$c_muted, colour = NA))
-    update_geom_defaults("bar",     list(fill = gl$c_muted, colour = NA))
+    # Points: a filled circle (shape 21) so EVERY point has a fill (a tone) AND
+    # a 1px stroke in the darker version of that tone (spec §5). Default to the
+    # muted pair; overlap-friendly at 0.8 opacity. Highlighted points override
+    # fill + colour, e.g. geom_point(fill = highlight, colour = highlight_dark).
+    update_geom_defaults("point",   list(shape = 21, fill = gl$c_muted,
+                                         colour = gl$c_muted_dark, stroke = 0.6,
+                                         alpha = 0.8))
+
+    # Bars read as "backdrop" — softer grey. A 1px paper-colored stroke gives
+    # the spec's separation between stacked segments (§6); on a single bar it is
+    # invisible against the white panel. Areas stay edge-to-edge (no stroke) —
+    # the spec keeps stacked areas gapless.
+    update_geom_defaults("col",     list(fill = gl$c_muted, colour = gl$paper, linewidth = 0.5))
+    update_geom_defaults("bar",     list(fill = gl$c_muted, colour = gl$paper, linewidth = 0.5))
     update_geom_defaults("area",    list(fill = gl$c_muted, colour = NA))
     update_geom_defaults("ribbon",  list(fill = gl$c_muted_light, colour = NA, alpha = 0.5))
 
     update_geom_defaults("smooth",  list(colour = gl$c_muted_dark,
                                          fill = gl$c_muted_light, alpha = 0.5))
 
-    # Boxplots: c_muted_dark stroke (not near-black ink) so they recede.
-    update_geom_defaults("boxplot", list(fill = "white", colour = gl$c_muted_dark))
+    # Boxplots most often show the BACKGROUND distribution (peers) behind a
+    # highlighted country line — so they recede: soft grey fill + medium-grey
+    # outline (the muted main tone, not the darker tone). The highlight line
+    # drawn on top carries the eye.
+    update_geom_defaults("boxplot", list(fill = gl$c_muted_light, colour = gl$c_muted))
     update_geom_defaults("violin",  list(fill = gl$c_muted_light, colour = gl$c_muted_dark,
                                          alpha = 0.6))
     update_geom_defaults("density", list(fill = gl$c_muted_light, colour = gl$c_muted_dark,
@@ -318,8 +365,9 @@ gl_set_geom_defaults <- function() {
 #       geom_line(data = \(d) filter(d, country == "Mongolia"),
 #                 color = highlight, linewidth = highlight_sz)
 #
-# `highlight` is blue (c_1_dark, = accent) — the default focus per Nil:
-# "Reserve saturated hue (usually c-1) for one or two focus series."
+# `highlight` is blue (c_1, the main tone #2F87C8) — the default focus per Nil:
+# "Reserve saturated hue (usually c-1) for one or two focus series." Its dark
+# partner (c_1_dark = accent, #1A5A8E) is only for the point stroke and label.
 #
 # For a stark "lead finding" emphasis (gains vs losses, alarm, exception)
 # use `lead_finding` (c_2 red) instead. Use sparingly.
@@ -418,8 +466,9 @@ save_fig <- function(size_name, filename, plot = last_plot(), dpi = 300) {
 #'   gl_serif             400    500      Body serif, chart title (bold),
 #'                                         chart source (italic — slanted)
 #'   gl_serif_semibold    600     —       TOC major, reference titles
-#'   gl_sans              400    600      Body sans, axis title (bold),
-#'                                         table header (bold)
+#'   gl_sans              400    600      Body sans, series labels (bold),
+#'                                         legend, table header (bold)
+#'   gl_sans_medium       500     —       Axis title (Inter 500)
 #'   gl_sans_heavy        700     —       Cover date, TOC page numbers
 #'
 #' Italic is rendered as artificial slant — sysfonts on this system doesn't
@@ -453,6 +502,8 @@ gl_setup <- function(mode = "report", base_size = 12) {
     # Inter
     font_add_google("Inter", "gl_sans",
                     regular.wt = 400, bold.wt = 600)
+    font_add_google("Inter", "gl_sans_medium",
+                    regular.wt = 500)
     font_add_google("Inter", "gl_sans_heavy",
                     regular.wt = 700)
 

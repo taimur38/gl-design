@@ -146,7 +146,7 @@ Folios use tabular-nums. The cover date and any UPPER-case label gets
 - Logo top-right at **140px wide**, 56px from the top.
 - Title rule is **3px solid `accent`, 50% width, left-anchored**. The
   theme inserts this automatically below the H1 — don't write a `---`.
-- Authors: Source Serif 4 22px `ink-2`, comma-separated, "and" before
+- Authors: Source Serif 4 22px `ink`, comma-separated, "and" before
   the last name.
 - Cover pattern is `rect-pattern-wide.svg` (mirror of the report's
   `rect-pattern.svg`, 1168 × 172 viewBox, baked-in 0.65 opacity) — sized

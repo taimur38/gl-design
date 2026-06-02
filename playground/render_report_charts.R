@@ -117,7 +117,7 @@ macro_df %>%
     geom_point() +
     labs(title = "Pakistan: Reserves in Months of Imports",
          subtitle = "unused in report mode",
-         x = "Year", y = "Reserves (months of imports)")
+         x = NULL, y = "Reserves (months of imports)")
 save_fig("full", "reserves-time-series.png")
 
 # 2. GDP per capita growth vs change in current account
@@ -135,12 +135,12 @@ weo_scatter <- weo_rgdp |>
     filter(year > 1995, year <= 2025, !is.na(gdppc_growth), !is.na(ca_change))
 
 weo_scatter |>
-    ggplot(aes(x = gdppc_growth, y = ca_change, label = year)) +
+    ggplot(aes(x = gdppc_growth, y = ca_change)) +
     geom_hline(yintercept = 0, color = 'grey') +
     geom_vline(xintercept = 0, color = 'grey') +
     geom_vline(xintercept = 2, linetype = 'dashed', color = 'grey') +
     geom_smooth(method = 'lm', se = TRUE) +
-    geom_label() +
+    geom_point() +
     labs(title = "unused", subtitle = "unused",
          x = "GDP per capita growth (annual %)",
          y = "Change in Current Account Balance (% GDP)",
@@ -178,7 +178,7 @@ weo_combined |>
     scale_linetype_manual(values = c("Current Account" = "dotted")) +
     scale_y_continuous(labels = percent_format(scale = 1), breaks = breaks_width(2)) +
     labs(title = "unused", subtitle = "unused",
-         x = "Year", y = "% of GDP", color = "", linetype = "", caption = "unused")
+         x = NULL, y = "% of GDP", color = "", linetype = "", caption = "unused")
 save_fig("full", "ca-decomposition.png")
 
 # 4. SBP balance sheet decomposition
@@ -234,8 +234,8 @@ private_credit |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), color = highlight, size = 2) +
-    labs(title = "unused", y = "Private credit (% of GDP)", x = "Year")
+               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
+    labs(title = "unused", y = "Private credit (% of GDP)", x = NULL)
 save_fig("full", "private-credit-comparators.png")
 
 # 6. Exports per capita
@@ -294,7 +294,7 @@ percap_trade |>
     scale_y_continuous(limits = shared_ylim) +
     scale_fill_manual(values = gl_cluster_colors) +
     theme(legend.position = "right") +
-    labs(title = "unused", y = 'Per Capita, constant 2023 USD', x = 'Year', fill = '', caption = "unused")
+    labs(title = "unused", y = 'Per Capita, constant 2023 USD', x = NULL, fill = '', caption = "unused")
 save_fig("full", "exports-per-capita.png")
 
 # 6b. Export decline drivers
@@ -385,7 +385,10 @@ decomp |>
     mutate(catlabel = factor(catlabel, levels = sector_order)) |>
     ggplot(aes(x = value, y = catlabel, fill = component)) +
     geom_col() +
-    geom_point(aes(x = total), show.legend = FALSE) +
+    # Marker sits on top of saturated stacked bars → lightest muted tone with a
+    # white stroke so it reads against the strong-vs-white bar colors.
+    geom_point(aes(x = total), fill = gl$c_muted_light, color = gl$paper,
+               size = 2.2, stroke = 0.7, show.legend = FALSE) +
     geom_vline(xintercept = 0) +
     scale_x_continuous(labels = function(x) paste0(x, '%')) +
     labs(title = "unused", subtitle = "unused",
@@ -419,7 +422,7 @@ percap_with_remit |>
     scale_y_continuous(limits = shared_ylim) +
     scale_fill_manual(values = gl_cluster_colors) +
     theme(legend.position = "right") +
-    labs(title = "unused", y = 'Per Capita, constant 2023 USD', x = 'Year', fill = '', caption = "unused")
+    labs(title = "unused", y = 'Per Capita, constant 2023 USD', x = NULL, fill = '', caption = "unused")
 save_fig("full", "exports-plus-remittances-per-capita.png")
 
 # 8. Revenue vs peers
@@ -434,7 +437,7 @@ rev_peers |>
     geom_line(data = . %>% filter(ISO3 == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(ISO3 == main_country),
-               aes(group = NA), color = highlight, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "revenue-vs-peers.png")
 
@@ -459,7 +462,7 @@ rev_components |>
     geom_line(data = . %>% filter(ISO3 == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(ISO3 == main_country),
-               aes(group = NA), color = highlight, size = 1.5) +
+               aes(group = NA), fill = highlight, color = highlight_dark, size = 1.5) +
     facet_wrap(~source, scales = "free_y") +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of Total Revenue", caption = "unused")
 save_fig("full_tall", "revenue-composition-vs-peers.png")
@@ -476,7 +479,7 @@ exp_peers |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), color = highlight, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "expenditure-vs-peers.png")
 
@@ -494,7 +497,7 @@ interest_exp |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), color = highlight, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "interest-expense-vs-peers.png")
 
@@ -543,9 +546,9 @@ scatter_energy |>
     geom_point(alpha = 0.3) +                                    # muted backdrop
     geom_smooth() +                                              # trend
     geom_point(data = . %>% filter(country_iso3_code == main_country),
-               color = highlight, size = 3) +                    # highlight on top
+               fill = highlight, color = highlight_dark, size = 3) +                    # highlight on top
     geom_text_repel(data = . %>% filter(country_iso3_code == main_country),
-                    aes(label = 'Pakistan'), color = highlight) +
+                    aes(label = 'Pakistan'), color = highlight_dark) +
     scale_x_log10(labels = dollar) +
     scale_y_log10(labels = dollar) +
     labs(title = "unused", subtitle = "unused",
@@ -571,9 +574,9 @@ scatter_fuel_burden |>
     geom_point(alpha = 0.3) +                                    # muted backdrop
     geom_smooth() +                                              # trend
     geom_point(data = . %>% filter(country_iso3_code == main_country),
-               color = highlight, size = 3) +                    # highlight on top
+               fill = highlight, color = highlight_dark, size = 3) +                    # highlight on top
     geom_text_repel(data = . %>% filter(country_iso3_code == main_country),
-                    aes(label = 'Pakistan'), color = highlight) +
+                    aes(label = 'Pakistan'), color = highlight_dark) +
     scale_x_log10(labels = dollar) +
     scale_y_continuous(limits = c(0, 100)) +
     labs(title = "unused", subtitle = "unused",
@@ -593,7 +596,7 @@ fossil_elc |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), color = highlight, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of total generation", caption = "unused")
 save_fig("full", "fossil-electricity-vs-peers.png")
 
@@ -621,9 +624,9 @@ elc_scatter |>
     geom_point(alpha = 0.3) +                                    # muted backdrop
     geom_smooth() +                                              # trend
     geom_point(data = . %>% filter(iso3c == main_country),       # highlight on top
-               color = highlight, size = 3) +
+               fill = highlight, color = highlight_dark, size = 3) +
     geom_text_repel(data = . %>% filter(iso3c == main_country),
-                    aes(label = 'Pakistan'), color = highlight) +
+                    aes(label = 'Pakistan'), color = highlight_dark) +
     scale_x_log10(labels = dollar) +
     labs(title = "unused", subtitle = "unused",
          x = 'GDP per capita (PPP, log scale)', y = 'Electricity price (US cents/kWh)',

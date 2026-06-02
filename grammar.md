@@ -46,11 +46,12 @@ WCAG AA contrast against paper.
 
 | Token        | Hex       | Use                                                |
 |--------------|-----------|----------------------------------------------------|
-| `paper`      | `#FFFFFF` | Content page paper (pure white)                    |
-| `cover-bg`   | `#F3F2EA` | Cover page paper — do not use on content pages     |
-| `paper-warm` | `#F4F1EA` | Warm surface — accent panels, cover medallion bg   |
-| `rule`       | `#DDDDDD` | Hairline borders between content blocks            |
-| `gridline`   | `#ECE9E2` | In-chart gridlines (see §3)                        |
+| `paper`       | `#FFFFFF` | Content page paper (pure white)                    |
+| `cover-bg`    | `#F3F2EA` | Cover page paper — do not use on content pages     |
+| `cover-disk`  | `#ECEBE0` | Report-cover medallion disk — one tone darker than `cover-bg` |
+| `paper-warm`  | `#F4F1EA` | Warm surface — accent panels, code / quote tint    |
+| `rule`        | `#DDDDDD` | Hairline borders between content blocks            |
+| `gridline`    | `#ECE9E2` | In-chart gridlines (see §3)                        |
 
 The split is deliberate: content pages are pure white so figures land
 on a neutral background and color reads true; the cover is warmer (`cover-bg`)
@@ -183,9 +184,17 @@ Honor the axis when picking a face:
 | Lead paragraph | 18   | Slightly display, opens the section       |
 | Body / caption | 14   | Maximum legibility at small sizes         |
 
-Tools render this differently — CSS via `font-variation-settings`, LaTeX via
-fontspec axis options, ggplot via the registered face name. Tooling stubs
-where opsz isn't reachable should default to opsz 14 (text optical size).
+The opsz values above are anchored to Nil's source px sizes (display 56px,
+section 34px, etc.). The report recipe renders at exactly these sizes (it ships
+as HTML → PDF, where CSS px is an absolute print unit), so it uses these opsz
+values as-is. A recipe that renders type at a *different* scale — a smaller
+medium, or a pt-native export like `.docx` — should **rescale opsz to its own
+sizes** rather than copy these literal numbers.
+
+Tools render this differently — CSS via `font-variation-settings`, Word via the
+docx style (pt approximation — px isn't expressible there), ggplot via the
+registered face name. Tooling stubs where opsz isn't reachable should default to
+opsz 14 (text optical size).
 
 ### Role hierarchy
 
@@ -262,7 +271,7 @@ themselves are part of the grammar.
 |------------------|----------------|--------|----------|-----------|--------------------|
 | Series eyebrow   | Inter          | 600    | `ink-3`  | UPPERCASE | 0.18em tracking    |
 | Cover date       | Inter          | 700    | `accent` | UPPERCASE | 0.18em tracking    |
-| Cover authors    | Source Serif 4 | 400    | `ink-2`  | Sentence  | Comma-separated    |
+| Cover authors    | Source Serif 4 | 400    | `ink`    | Sentence  | Comma-separated    |
 
 Recipes pin the absolute size of each role. Cover meta is always two lines —
 series eyebrow on top, date directly below. Never combine.
@@ -287,7 +296,9 @@ data |>
 ```
 
 The `theme_gl()` helper provides `c_muted`, `c_1`..`c_6`, `accent`, and
-`highlight` (alias for `c_2`) as named values; do not hard-code hex.
+`highlight` (alias for `c_1`, the institutional blue) as named values, plus
+`lead_finding` (alias for `c_2`, the red) for stark emphasis; do not hard-code
+hex.
 
 ### 3.2 Most charts: two to four colors
 

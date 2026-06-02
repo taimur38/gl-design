@@ -48,8 +48,8 @@ A **6-column modular grid** governs horizontal placement.
 
 Vertical modules are **1.250" tall**; the 8.75" live height is exactly 7
 modules. The figure-size table below snaps to this grid. Body text under
-nil's typography (12pt / 19.2pt leading) sets its own baseline rhythm at
-0.267" per line — independent of the module grid, which exists for figure
+Nil's typography (12px / 19.2px leading) sets its own baseline rhythm at
+0.2" per line — independent of the module grid, which exists for figure
 and block placement.
 
 | V-modules | Height  | Use                                          |
@@ -63,79 +63,85 @@ and block placement.
 ## 3. Type sizes
 
 Applies the [grammar's role hierarchy](../grammar.md#role-hierarchy) at
-report sizes. Anchor body at **12pt / 19.2pt leading**.
+report sizes. Anchor body at **12px / 19.2px leading**.
+
+Sizes are Nil's spec values in **px**, used as-is. The report ships as
+HTML → PDF (headless Chromium), where CSS px is an absolute print unit
+(`96px = 72pt = 1in`), so px renders deterministically on the page — there is
+no reason to translate to pt. Nil designed her reference at real Letter
+geometry (8.5 × 11in pages), so her px values *are* the print sizes; e.g. body
+12px = 9pt on the page. The `.docx` export (md2docx) can't express px and
+approximates these in pt — treat Word as a lower-fidelity secondary output, not
+the source of truth.
 
 ### Display tier
 
 | Role             | Family         | Size | Weight | Leading | opsz | Tracking  |
 |------------------|----------------|------|--------|---------|------|-----------|
-| Display          | Source Serif 4 | 44pt | 400    | 1.05    | 48   | -0.025em  |
-| H1 (section)     | Source Serif 4 | 26pt | 500    | 1.10    | 28   | -0.018em  |
-| H2 (subsection)  | Source Serif 4 | 16pt | 500    | 1.25    | 18   | -0.010em  |
-| H3 (sub-subsection) | Source Serif 4 | 14pt | 600 | 1.30   | 16   | -0.005em  |
+| Display          | Source Serif 4 | 56px | 400    | 1.20    | 60   | -0.025em  |
+| H1 (section)     | Source Serif 4 | 34px | 500    | 1.08    | 36   | -0.018em  |
+| H2 (subsection)  | Source Serif 4 | 20px | 500    | 1.20    | 22   | -0.010em  |
+| H3 (sub-subsection) | Source Serif 4 | 16px | 600 | 1.30   | 16   | -0.005em  |
 
-These sizes are anchored to body 12pt and translate Nil's HTML px values
-(56 / 34 / 20 / 16) into print pt at literal CSS-px → pt conversion (×0.75)
-with rounding to typographer-friendly whole-pt values. Body and footnote
-stay anchored to print readability (12pt / 9pt) rather than literal
-conversion. See typography history note in [`followups.md`](../followups.md).
+H3 is a recipe extension — Nil's spec has only section (h1) and subsection (h2).
 
 ### Body tier
 
 | Role            | Family                | Size  | Weight | Leading |
 |-----------------|-----------------------|-------|--------|---------|
-| Lead paragraph  | Source Serif 4        | 14pt  | 300    | 1.45    |
-| Colophon body   | Source Serif 4        | 14pt  | 400    | 1.55    |
-| Body            | Inter                 | 12pt  | 400    | 1.60    |
-| Body emphasis   | Inter                 | 12pt  | 600    | 1.60    |
-| Footnote        | Inter                 | 9pt   | 400    | 1.50    |
-| Footnote anchor | Source Serif 4 italic | 12pt  | 400    | —       |
+| Lead paragraph  | Source Serif 4        | 17px  | 300    | 1.40    |
+| Colophon body   | Source Serif 4        | 14px  | 400    | 1.55    |
+| Body            | Inter                 | 12px  | 400    | 1.60    |
+| Body emphasis   | Inter                 | 12px  | 600    | 1.60    |
+| Footnote        | Inter                 | 9px   | 400    | 1.50    |
+| Footnote anchor | Source Serif 4 italic | 0.75em | 400   | —       |
 
 ### Chart-adjacent tier (figure block)
 
 | Role            | Family                 | Size  | Weight | Case      |
 |-----------------|------------------------|-------|--------|-----------|
-| Figure label    | Inter                  | 12pt  | 600    | UPPERCASE |
-| Chart title     | Source Serif 4         | 14pt  | 500    | Sentence  |
-| Chart subtitle  | Inter                  | 12pt  | 400    | Sentence  |
-| Chart source    | Source Serif 4 italic  | 12pt  | 400    | Sentence  |
+| Figure label    | Inter                  | 12px  | 600    | UPPERCASE |
+| Chart title     | Source Serif 4         | 14px  | 500    | Sentence  |
+| Chart subtitle  | Inter                  | 12px  | 400    | Sentence  |
+| Chart source    | Source Serif 4 italic  | 12px  | 400    | Sentence  |
 
-Figure label, subtitle, and source all sit at body size (12pt). The chart
-title's 14pt serif is what marks the figure block's top.
+Figure label, subtitle, and source all sit at body size (12px). The chart
+title's 14px serif is what marks the figure block's top.
 
 ### Tables
 
 | Role           | Family                | Size  | Weight |
 |----------------|-----------------------|-------|--------|
-| Table header   | Inter                 | 12pt  | 600    |
-| Table cell     | Inter                 | 12pt  | 400    |
-| Table emphasis | Inter                 | 12pt  | 600    |
-| Table note     | Source Serif 4 italic | 12pt  | 400    |
+| Table header   | Inter                 | 12px  | 600    |
+| Table cell     | Inter                 | 12px  | 400    |
+| Table emphasis | Inter                 | 12px  | 600    |
+| Table note     | Source Serif 4 italic | 12px  | 400    |
 
 ### TOC
 
 | Role         | Family                | Size  | Weight | Indent |
 |--------------|-----------------------|-------|--------|--------|
-| TOC major    | Source Serif 4        | 14pt  | 600    | 0      |
-| TOC sub      | Inter                 | 12pt  | 400    | 0.25in |
-| TOC sub-sub  | Inter italic          | 12pt  | 400    | 0.50in |
-| TOC page #   | Inter                 | 11pt  | 500    | —      |
+| TOC major    | Source Serif 4        | 14px  | 600    | 0      |
+| TOC sub      | Inter                 | 12px  | 400    | 0.25in |
+| TOC sub-sub  | Inter italic          | 12px  | 400    | 0.50in |
+| TOC page # (major) | Inter           | 11px  | 700    | — (`ink`)   |
+| TOC page # (sub)   | Inter           | 11px  | 500    | — (`ink-2`) |
 
 ### Page chrome
 
 | Role         | Family                | Size  | Weight | Case      |
 |--------------|-----------------------|-------|--------|-----------|
-| Running head | Inter                 | 9pt   | 500    | UPPERCASE |
-| Folio        | Inter                 | 9pt   | 500    | —         |
-| Folio note   | Source Serif 4 italic | 10pt  | 400    | Sentence  |
+| Running head | Inter                 | 9px   | 500    | UPPERCASE |
+| Folio        | Inter                 | 9px   | 500    | —         |
+| Folio note   | Source Serif 4 italic | 10px  | 400    | Sentence  |
 
 ### Cover meta (cover only)
 
 | Role             | Family         | Size | Weight | Color    | Case      |
 |------------------|----------------|------|--------|----------|-----------|
-| Series eyebrow   | Inter          | 11pt | 600    | `ink-3`  | UPPERCASE |
-| Cover date       | Inter          | 11pt | 700    | `accent` | UPPERCASE |
-| Cover authors    | Source Serif 4 | 14pt | 400    | `ink-2`  | Sentence  |
+| Series eyebrow   | Inter          | 11px | 600    | `ink-3`  | UPPERCASE |
+| Cover date       | Inter          | 11px | 700    | `accent` | UPPERCASE |
+| Cover authors    | Source Serif 4 | 14px | 400    | `ink`    | Sentence  |
 
 Tracking 0.18em for the eyebrow and date.
 
@@ -143,21 +149,21 @@ Tracking 0.18em for the eyebrow and date.
 
 | Role            | Family                | Size | Weight | Notes                                |
 |-----------------|-----------------------|------|--------|--------------------------------------|
-| Reference body  | Inter                 | 10pt | 400    | Hanging indent 0.25"; authors flush left |
-| Reference title | Source Serif 4 italic | 10pt | 400    | Italic; the one place serif italic appears in body context |
+| Reference body  | Inter                 | 10px | 400    | Hanging indent 0.25"; authors flush left |
+| Reference title | Source Serif 4 italic | 11px | 400    | Italic; one step larger than the body (mirrors Nil) — the one place serif italic appears in body context |
 
 ## 4. Spacing
 
 - **Above H1 / display:** generous breathing room — start on its own line,
-  leave at least 24pt above any prior block.
-- **Above H2:** 28pt
-- **Below all headings:** 8pt
-- **Paragraph spacing:** 6pt after each paragraph; body text is **justified**;
+  leave at least 24px above any prior block.
+- **Above H2:** 28px
+- **Below all headings:** 8px
+- **Paragraph spacing:** 6px after each paragraph; body text is **justified**;
   no first-line indent.
-- **Figure block:** 12pt above figure label, 6pt below chart source.
-- **Table block:** 12pt above table header, 6pt below table note.
+- **Figure block:** 12px above figure label, 6px below chart source.
+- **Table block:** 12px above table header, 6px below table note.
 
-Body text is one paragraph per logical idea, separated by 6pt of space —
+Body text is one paragraph per logical idea, separated by 6px of space —
 not by a blank line of text.
 
 ## 5. Element patterns
@@ -170,8 +176,8 @@ and folio suppressed). Two artwork variants:
 - **Working Paper** — uses `rect-pattern.svg` (rectangular network pattern,
   edge-to-edge at the bottom of the cover).
 - **Report** — uses `circle-pattern.svg` (circular medallion inside a
-  `paper-warm` `#F4F1EA` disk, one tone darker than the cover paper). The
-  circle pattern is the default for full reports.
+  `cover-disk` `#ECEBE0` disk, one tone darker than the cover paper `cover-bg`
+  `#F3F2EA`). The circle pattern is the default for full reports.
 
 Both SVGs live in
 [`assets/design-library/cover-patterns/`](../assets/design-library/cover-patterns/).
@@ -179,19 +185,19 @@ Both SVGs live in
 ```
 ┌─────────────────────────────────────┐
 │  ──────────────                     │  ← pre-title hairline (1px ink-3 @ 0.3 opacity)
-│  GROWTH LAB WORKING PAPER SERIES    │  ← eyebrow, 11pt Inter 600 ink-3 UPPER
-│  MAY 2026                           │  ← date,    11pt Inter 700 accent UPPER
+│  GROWTH LAB WORKING PAPER SERIES    │  ← eyebrow, 11px Inter 600 ink-3 UPPER
+│  MAY 2026                           │  ← date,    11px Inter 700 accent UPPER
 │                                     │
-│  (vertical space, ~96pt)            │
+│  (vertical space, ~96px)            │
 │                                     │
-│  New Mexico's Economy               │  ← display, 44pt Source Serif 4 400
-│  Over Time and Space                │     opsz 48, leading 1.05, ink
+│  New Mexico's Economy               │  ← display, 56px Source Serif 4 400
+│  Over Time and Space                │     opsz 60, leading 1.2, ink
 │                                     │
 │  ═══════════════════                │  ← title rule: 3px accent, 50% width,
 │                                     │     left-anchored
 │                                     │
-│  Juan Carlos Orrego Zamudio         │  ← authors, 14pt Source Serif 4
-│  and Tim O'Brien                    │     ink-2, leading 1.5
+│  Juan Carlos Orrego Zamudio         │  ← authors, 14px Source Serif 4
+│  and Tim O'Brien                    │     ink, leading 1.5
 │                                     │
 │         [ pattern artwork ]         │  ← rect (working paper) or circle (report)
 │                                     │     placed bottom of cover
@@ -207,22 +213,40 @@ Both SVGs live in
 - Title rule is **3px solid `accent`, 50% of content width, left-anchored** —
   asymmetric and deliberate. Sits below the display, above the authors.
 - Display title never wraps to more than three lines.
-- Authors: comma-separated, "and" before the last name. `ink-2`, not `ink-3`
-  — the byline carries voice, not chrome.
+- Authors: comma-separated, "and" before the last name. Set in `ink` (full
+  title weight, matching Nil's spec) — the byline carries the document's voice,
+  not page chrome.
 - Pattern artwork sits at the bottom of the cover; never overlaps the
   title block. On the colophon page (page 2), echo the same pattern
   desaturated (`filter: grayscale(1)`) at 35% opacity.
 
+### Colophon page (page 2)
+
+Page 2 of every report — the imprint. Single column (overrides the 6-column
+grid for prose width), white paper, no running head; folio shows the page
+number only. A small Growth Lab mark sits top-right.
+
+- **Address block** — Inter 10px / 600 / UPPERCASE / 0.18em tracking / `ink-2`,
+  leading 1.7, five stacked lines (lab, school, street, city, URL). Reads as a
+  fixed nameplate, not body text.
+- **Imprint paragraphs** — four of them (partnership note, disclaimer,
+  copyright, suggested citation), all Source Serif 4 14px / 400 / leading 1.55 /
+  `ink-2`, 16px between paragraphs. Serif sets the colophon apart from the sans
+  body used everywhere else.
+- **Pattern** — the cover artwork desaturated (`filter: grayscale(1)`) at 35%
+  opacity, pinned to the bottom; the `cover-disk` medallion goes through the
+  same filter and reads as a faint warm halo.
+
 ### Figure block
 
 ```
-FIGURE 4                                          ← figure label (12pt UPPER accent)
-Mongolia rode the commodity supercycle.           ← chart title (14pt serif, ends in .)
-Share of merchandise exports, 2003–2024, percent. ← chart subtitle (12pt ink-3, optional)
+FIGURE 4                                          ← figure label (12px UPPER accent)
+Mongolia rode the commodity supercycle.           ← chart title (14px serif, ends in .)
+Share of merchandise exports, 2003–2024, percent. ← chart subtitle (12px ink-3, optional)
 
 [ chart image — at a named figure size ]
 
-Source: Growth Lab analysis of UN Comtrade.       ← chart source (12pt serif italic)
+Source: Growth Lab analysis of UN Comtrade.       ← chart source (12px serif italic)
 ```
 
 - Caption (chart source) sits **full-width below the figure**. Body prose
@@ -235,12 +259,12 @@ Source: Growth Lab analysis of UN Comtrade.       ← chart source (12pt serif i
 
 - Top and bottom rules in `ink` (heavier).
 - Row dividers in `rule` (`#DDDDDD`).
-- Header row: sentence case (never UPPERCASE), Inter 12pt weight 600 `ink`.
+- Header row: sentence case (never UPPERCASE), Inter 12px weight 600 `ink`.
 - Numeric columns right-aligned with tabular-nums.
 - Text columns left-aligned.
 - Last row of body has a heavier (`ink`) bottom rule.
-- First-column emphasis: Inter 12pt weight 600 `ink`.
-- Table note below in Source Serif 4 italic 12pt `ink-2`.
+- First-column emphasis: Inter 12px weight 600 `ink`.
+- Table note below in Source Serif 4 italic 12px `ink-2`.
 
 ### Page chrome
 
@@ -255,13 +279,27 @@ GROWTH LAB WORKING PAPER NO. 264                                       [ GL ]
 ```
 
 - Running head: top of every content page (omitted on cover, TOC,
-  colophon, references). Series tag flush left in Inter 9pt 500 UPPERCASE
+  colophon, references). Series tag flush left in Inter 9px 500 UPPERCASE
   `ink-3` (0.16em tracking); Growth Lab logo flush right.
-- Folio: bottom flush right, Inter 9pt 500 `ink-3`, tabular-nums.
-- Folio note (optional): Source Serif 4 italic 10pt `ink-3`, flush left,
+- Folio: bottom flush right, Inter 9px 500 `ink-3`, tabular-nums.
+- Folio note (optional): Source Serif 4 italic 10px `ink-3`, flush left,
   beside the folio. Footnote anchor (`¹`) in serif italic at 0.7em,
   superscripted, `accent` color — both inline in body text and at the
   note itself.
+
+### References page
+
+Final page of every report. Single column inside `.page-inner`; standard
+running head + folio (page number only, no folio note). White paper.
+
+- **Entries** — one per `<p>`, hanging indent (`padding-left: 18px;
+  text-indent: -18px`), 8px between entries, alphabetical by author surname
+  (institutional authors filed by first significant word). See the References
+  type table above for sizes.
+- **Closing footer** — below the last reference, a 1px `rule` (`#DDDDDD`)
+  hairline, then a single Inter 9px / 500 / UPPERCASE / 0.16em / `ink-3` eyebrow
+  ("Growth Lab · Harvard Kennedy School") acting as the document's sign-off.
+  32px of space above the rule, 18px from rule to text.
 
 ### Named figure sizes
 
@@ -286,7 +324,7 @@ move to a slide recipe when one exists.)
 These extend the [grammar's general rules](../grammar.md#4-rules) with values
 specific to the report.
 
-1. **Body size is 12pt.** Do not push body text below 12pt. Footnotes (9pt)
+1. **Body size is 12px.** Do not push body text below 12px. Footnotes (9px)
    are the only exception, and they live next to the folio.
 
 2. **One lead per section.** A lead paragraph never appears twice on the
@@ -309,16 +347,17 @@ PAGE:   US Letter, margins 1.0/1.0/1.0/1.25 (L/R/T/B) → live 6.5 × 8.75"
 GRID:   6 columns × 0.944" + 5 gutters × 0.167" = 6.5" live width
         7 modules × 1.25" = 8.75" live height
 FONTS:  Source Serif 4 (voice) + Inter (function)
-BODY:   12pt Inter / 19.2pt leading
-DISPLAY:44 / 26 / 16 / 14 (display / H1 / H2 / H3, Source Serif 4)
-LEAD:   14pt Source Serif 4 weight 300
+        Sizes are Nil's px values, used as-is (CSS px = 1/96in in print).
+BODY:   12px Inter / 19.2px leading
+DISPLAY:56 / 34 / 20 / 16 (display / H1 / H2 / H3, Source Serif 4)
+LEAD:   17px Source Serif 4 weight 300
 
 CHART BLOCK (top-down):
-  Figure label (Inter 12pt 600 UPPER accent)
-  Chart title  (Source Serif 4 14pt 500 ink, ends with period)
-  Chart subtitle [optional] (Inter 12pt 400 ink-3)
+  Figure label (Inter 12px 600 UPPER accent)
+  Chart title  (Source Serif 4 14px 500 ink, ends with period)
+  Chart subtitle [optional] (Inter 12px 400 ink-3)
   [ figure image ]
-  Source (Source Serif 4 italic 12pt ink-2)
+  Source (Source Serif 4 italic 12px ink-2)
 
 FIGURE SIZES (width × height):
   full         6.5 × 4.0"     Standard chart

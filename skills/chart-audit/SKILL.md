@@ -45,9 +45,11 @@ PNGs and checks each chart against the rules below. To invoke:
 
 | Condition | Expected | Flag if |
 |-----------|----------|---------|
-| Highlighted data points | Uses `highlight` (amber `#C77A20`) or `accent` (blue `#015C9C`) | Uses `"red"`, `"#C64646"`, or any old-palette color |
-| Highlighted geoms | Painted twice — non-focus in `c_muted` (`#7E8A99`), focus on top in `highlight`/`accent` | Single geom with conditional color, or no muted layer |
+| Highlighted data points | Uses `highlight` (main blue `#2F87C8`, = `c_1`) for the default focus, or `lead_finding` (red `#CC4948`, = `c_2`) for stark emphasis | Uses `"red"`, `accent` as a data fill, or any old-palette / arbitrary hex |
+| Highlighted point stroke / label | Point stroke = `highlight_dark` (`#1A5A8E`); any label/text tied to the series = its dark tone (`#1A5A8E` blue, `#8A2C2B` red) | Main tone used for the point stroke or for text tied to the series |
+| Highlighted geoms | Painted twice — non-focus in `c_muted` (`#999FA8`), focus on top in `highlight`/`lead_finding` | Single geom with conditional color, or no muted layer |
 | Non-highlighted geoms (when a focus exists) | Painted in `c_muted` to recede | Gratuitously varied palette colors for "everyone else" |
+| `accent` (`#1A5A8E`) usage | Non-data chrome only (figure labels, eyebrows, links) | Used as a data-mark fill — that's the typography↔data-viz mix-up |
 
 ### 3. Figure dimensions
 
@@ -61,9 +63,9 @@ PNGs and checks each chart against the rules below. To invoke:
 
 | Condition | Expected | Flag if |
 |-----------|----------|---------|
-| Discrete color/fill scales | Uses `gl$palette` (set via `options()`) or `scale_*_manual()` with framework colors | Default ggplot rainbow, or colors outside the framework palette |
-| Categorical palette | 6 colors: `#015C9C #C77A20 #CEC96B #51B196 #A8352C #918BED` | Unlisted hex values (except greys, `c_muted`, `accent`, `highlight`) |
-| Manual color values | Framework tokens or standard greys | Arbitrary hex colors not in the palette |
+| Discrete color/fill scales | Uses `gl$palette` (set via `options()`) or `scale_*_gl()` with a framework palette | Default ggplot rainbow, or colors outside the framework palette |
+| Categorical palette | 6 main tones: `#2F87C8 #CC4948 #2AA584 #7554A3 #EA822D #CDC86B` (blue, red, teal, purple, orange, yellow) | Unlisted hex values (except `c_muted` greys, the `*_dark` / `*_light` tones, `accent`) |
+| Manual color values | Framework tokens (`gl$c_N`, `gl$c_N_dark`, `gl$c_muted`, `accent`) or the named ramps | Arbitrary hex colors not in the palette |
 | Charts with >4 series | Mute-then-highlight (most stays in `c_muted`) | All 6+ series at full-saturation palette colors |
 
 ### 5. Theme compliance
@@ -108,7 +110,7 @@ This check requires reading the rendered PNG:
 | Data-ink ratio | Chart area dominates; legends, axes, whitespace are secondary | Legend or axis labels take >30% of figure area |
 | Highlight visibility | Focus series jumps out of the muted layer immediately | Focus and muted are similar weights / saturations |
 | Overplotting | Points/lines are distinguishable | Dense scatter with no alpha, or many overlapping lines |
-| Grid lines | Minimal (theme_few base) | Heavy grid lines competing with data |
+| Grid lines | Horizontal-only, faint `gridline` (`#ECE9E2`); no vertical or minor unless the chart is dense | Heavy grid lines, or both X and Y gridlines on a non-dense chart |
 
 ## Output format
 

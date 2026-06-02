@@ -35,11 +35,13 @@ After calling `gl_setup()`, the following are available:
 | Object | What it is |
 |--------|-----------|
 | `gl` | Full list of design tokens — see below |
-| `highlight` | `gl$accent` (`#1A5A8E`) — blue popout, the default focus color |
-| `accent` | `gl$accent` (`#1A5A8E`) — same hex as `highlight`; used for non-data UI (eyebrows, figure labels, links) |
-| `lead_finding` | `gl$c_2` (`#CC4948`) — red, for stark / lead-finding emphasis (sparingly) |
+| `highlight` | `gl$c_1` (`#2F87C8`) — main blue, the default data focus: bar/area/point **fills** and highlighted **lines** |
+| `highlight_dark` | `gl$c_1_dark` (`#1A5A8E`) — the **stroke** on a highlighted point and the **text/label** tied to the highlight (WCAG AA) |
+| `lead_finding` | `gl$c_2` (`#CC4948`) — main red, for stark / lead-finding emphasis (sparingly) |
+| `lead_finding_dark` | `gl$c_2_dark` (`#8A2C2B`) — stroke/label for the lead-finding mark |
+| `accent` | `gl$accent` (`#1A5A8E`) — **non-data UI chrome only** (eyebrows, figure labels, links). Do **not** use as a data-mark fill — that is the typography↔data-viz mix-up to avoid |
 | `c_muted` | `gl$c_muted` (`#999FA8`) — "everyone-else" gray for de-emphasis |
-| `highlight_sz` | Standard line width for highlighted geoms (`1.8`) |
+| `highlight_sz` | `linewidth` for the highlighted focus line (`0.65`, ~2.4px). Standard/muted lines default to `0.5` (~2px) — the focus is only ~1.3× thicker, per spec §5 (not a 2× jump) |
 | `theme_gl()` | The theme function (already applied via `theme_set`) |
 | `scale_color_gl()` | Discrete color scale using GL palettes |
 | `scale_fill_gl()` | Discrete fill scale using GL palettes |
@@ -102,15 +104,20 @@ occlude the focus dot.
 ggplot(data, aes(x, y)) +
     geom_point(alpha = 0.3) +                              # 1. muted backdrop
     geom_smooth() +                                        # 2. trend
-    geom_point(data = filter(., focus),                    # 3. highlight on top
-               color = highlight, size = 3) +
-    geom_text_repel(data = filter(., focus),               # 4. label on top of dot
-                    aes(label = name), color = highlight)
+    geom_point(data = filter(., focus),                    # 3. highlight on top —
+               fill = highlight, color = highlight_dark,   #    main fill + dark stroke
+               size = 3) +
+    geom_text_repel(data = filter(., focus),               # 4. label uses the dark tone
+                    aes(label = name), color = highlight_dark)
 ```
 
-Use `highlight` (blue `#1A5A8E` = `accent`) for the default focus — the
-institutional voice. Use `lead_finding` (red `#CC4948` = `c_2`) when the
-finding is stark — gains vs. losses, alarm, exception. Use sparingly.
+Use `highlight` (main blue `#2F87C8` = `c_1`) for the default focus — the
+institutional voice. Use `lead_finding` (main red `#CC4948` = `c_2`) when the
+finding is stark — gains vs. losses, alarm, exception. Use sparingly. For a
+highlighted **point**, the fill is `highlight` and the **stroke** is
+`highlight_dark` (`#1A5A8E`); any **label** tied to the focus also uses
+`highlight_dark`. Don't confuse this with `accent` (`#1A5A8E`), which is for
+non-data UI chrome only.
 
 ### 3. Use the default palette by doing nothing
 
@@ -139,18 +146,20 @@ data |>
     ggplot(aes(x = country, y = value)) +
     geom_col() +                                  # all bars c_muted grey
     geom_col(data = \(d) filter(d, focus),
-             fill = highlight)                    # focus bar red
+             fill = highlight)                    # focus bar main blue (#2F87C8)
 ```
 
 After `gl_setup()` the relevant defaults are:
 
 | Geom | Default |
 |------|---------|
-| `geom_line` / `geom_path` / `geom_step` / `geom_point` | colour = `c_muted_dark` |
-| `geom_col` / `geom_bar` / `geom_area` | fill = `c_muted` (lighter — "backdrop") |
+| `geom_line` / `geom_path` / `geom_step` | colour = `c_muted_dark` |
+| `geom_point` | **shape 21**, fill = `c_muted`, colour (stroke) = `c_muted_dark`, 0.8 alpha — every point has a fill + a 1px darker stroke |
+| `geom_col` / `geom_bar` | fill = `c_muted`, **1px `paper` stroke** (gives the stacked-segment separation; invisible on a single bar) |
+| `geom_area` | fill = `c_muted`, no stroke (stacked areas stay gapless) |
 | `geom_smooth` | line `c_muted_dark`, ribbon `c_muted_light` |
 | `geom_ribbon` | fill = `c_muted_light`, alpha 0.5 |
-| `geom_boxplot` | white fill, `c_muted_dark` stroke |
+| `geom_boxplot` | **recedes**: `c_muted_light` fill, `c_muted` outline (background distribution) |
 | `geom_hline` / `geom_vline` | dashed `ink_3` (reference line) |
 | `geom_text` / `geom_label` | `ink_2`, sans family |
 
@@ -175,7 +184,9 @@ Available palettes:
 
 | Name | Colors | Use case |
 |------|--------|----------|
-| `"categorical"` | 6 | Default. General purpose. Used automatically. |
+| `"categorical"` | 6 | Default. General purpose. Used automatically. Main (fill) tones. |
+| `"categorical_dark"` | 6 | Dark tones, same order — strokes + all text tied to a series (WCAG AA). |
+| `"categorical_light"` | 6 | Light tones, same order — backgrounds, faded states, two/three-tone fills. |
 | `"sequential_1"`..`"sequential_6"` | 5 each | Single-hue ramp low → high (one per c-N) |
 | `"diverging_2_1"` | 6 | Red ↔ blue, midpoint-centered (default diverging) |
 | `"diverging_3_1"` | 6 | Teal ↔ blue |
@@ -232,7 +243,22 @@ save_fig("half", "small-sidebar-chart.png")
 
 When GDP per capita is on the x-axis, always use `scale_x_log10()`.
 
-### 7. Three tones, three jobs
+### 7. Prefer tones of one hue; three tones, three jobs
+
+**Whenever possible, limit the number of different colors and use different
+tones of the same hue instead** (spec §7). When two or three categories share
+a parent — goods vs. services, low/medium/high, primary/intermediate/final —
+encode them with one hue's light/main(/dark) tones rather than reaching for
+unrelated colors. The shared hue keeps the chart reading as one total; the
+lightness step carries the split. Reach for the categorical palette only when
+the categories are genuinely unrelated.
+
+```r
+# Two-tone stacked bars: one hue, main + light
+ggplot(data, aes(x = year, y = share, fill = tier)) +
+    geom_col() +
+    scale_fill_manual(values = c(Goods = gl$c_1, Services = gl$c_1_light))
+```
 
 Each `c-N` hue has light / main / dark variants. They are not
 interchangeable:
@@ -255,10 +281,19 @@ variable).
 When marks can overlap, set both fill and stroke opacity to 0.8 — overlapping
 points then darken together rather than washing out.
 
+The stroke must be the **dark** tone of the hue, the fill the **main** tone
+(Decision Rule 2). With `shape = 21`, `fill` is the circle body and `color` is
+the stroke — so pair a dark color scale with a main fill scale:
+
 ```r
 ggplot(data, aes(x, y, color = group, fill = group)) +
-    geom_point(shape = 21, size = 3, alpha = 0.8, stroke = 0.6)
+    geom_point(shape = 21, size = 3, alpha = 0.8, stroke = 0.6) +
+    scale_fill_gl("categorical") +        # main tone — circle body
+    scale_color_gl("categorical_dark")    # dark tone — stroke
 ```
+
+For a single-focus scatter, set them explicitly:
+`geom_point(shape = 21, fill = gl$c_1, color = gl$c_1_dark, alpha = 0.8, stroke = 0.6)`.
 
 Single-layer marks (bars, treemap tiles, choropleths) stay at full opacity —
 overlap isn't a risk and lowering opacity just dilutes the color.
@@ -277,6 +312,61 @@ through the polygon.
   italic 12pt) all render inside the chart. Use for standalone charts or
   presentations.
 
+### 10. Stacked bars: 1px gap between segments
+
+Spec §6 requires a **1px gap** separating each stacked-bar segment from the one
+above — a clean boundary that also helps readers with low color discrimination.
+The `geom_col`/`geom_bar` default now carries a 1px `paper` stroke, so plain
+`geom_col()` already gives the gap; you don't add anything. Order categories
+**largest mean share at the bottom**, upward.
+
+Stacked **areas** are the exception — they sit edge-to-edge with no gap; the
+color (or lightness, for the three-tone option) carries the separation.
+
+**A marker on top of a stacked bar** (e.g. a net-total dot over saturated
+segments) takes the **lightest muted tone with a white stroke** — the bar tones
+are built to contrast strongly with white, so a pale dot ringed in `paper` reads
+cleanly on top of them (a dark stroke would disappear into the dark segments).
+
+```r
+geom_point(aes(x = total), fill = gl$c_muted_light, color = gl$paper,
+           size = 2.2, stroke = 0.7)
+```
+
+### 11. Axis & title conventions
+
+- **Year axis:** when the X axis is just years, **omit the axis label** — the
+  tick labels already name the dimension. Use `labs(x = NULL)`.
+- **Chart title ends in a period** (slide mode, or the document in report mode)
+  — it reads as a finding statement. The subtitle does **not** end in a period.
+- **Gridlines default to horizontal (Y) only.** For horizontal-bar charts, flip
+  to vertical so the reader can estimate bar lengths:
+  `theme(panel.grid.major.x = element_line(color = gl$gridline, linewidth = 0.4), panel.grid.major.y = element_blank())`.
+- **Tabular figures — known limitation.** The spec asks for
+  `font-variant-numeric: tabular-nums` on all numerals, but Inter's tabular
+  feature can't be enabled through `showtext` / `font_add_google()`, so tick
+  digits render proportionally. Right-aligned y-axis ticks still align
+  acceptably; avoid relying on column alignment of in-chart numbers.
+
+### 12. Background distribution + highlighted country
+
+When box plots (or violins) show the **background distribution** of a peer set
+and a line shows one country relative to it, the box plots must **recede** —
+they are context, not the subject. The `geom_boxplot` default does this for you
+(soft `c_muted_light` fill, `c_muted` outline); draw the country as a
+`highlight` line with a `fill = highlight, color = highlight_dark` point on top.
+
+```r
+data |>
+    ggplot(aes(x = year, y = value, group = year)) +
+    geom_boxplot(data = \(d) filter(d, iso %in% peers),     # muted grey, background
+                 outlier.shape = NA) +
+    geom_line(data = \(d) filter(d, iso == focus),          # main-blue line, pops
+              aes(group = NA), color = highlight, linewidth = highlight_sz) +
+    geom_point(data = \(d) filter(d, iso == focus),
+               aes(group = NA), fill = highlight, color = highlight_dark, size = 2)
+```
+
 ## Complete example
 
 ```r
@@ -289,7 +379,7 @@ focus_country <- "Mongolia"
 
 trade_data |>
     ggplot(aes(x = year, y = export_value, group = country)) +
-    geom_line(color = c_muted, linewidth = 0.6) +
+    geom_line(color = c_muted, linewidth = 0.5) +
     geom_line(data = \(d) filter(d, country == focus_country),
               color = highlight, linewidth = highlight_sz) +
     scale_y_continuous(labels = scales::dollar) +
@@ -307,11 +397,12 @@ gl_palettes$categorical          # 6-color unnamed vector
 gl_palettes$sequential_1         # 5-color blue ramp, low → high
 gl_palettes$diverging_2_1        # 6-color red ↔ blue
 gl_palettes$hs_sectors           # named: "Agriculture" = "#e5c21a", ...
-gl$accent                        # "#1A5A8E"  (= gl$c_1_dark, = highlight)
+gl$accent                        # "#1A5A8E"  (= gl$c_1_dark; UI chrome only)
 gl$c_muted                       # "#999FA8"  (muted bars / "everyone else")
-gl$c_muted_dark                  # "#5F6773"  (lines, points, boxplot strokes)
-gl$c_1                           # "#2F87C8"  (main tone)
-gl$c_2                           # "#CC4948"  (= lead_finding red)
+gl$c_muted_dark                  # "#5F6773"  (line/point strokes)
+gl$c_1                           # "#2F87C8"  (main blue, = highlight)
+gl$c_1_dark                      # "#1A5A8E"  (= highlight_dark — point strokes/labels)
+gl$c_2                           # "#CC4948"  (main red, = lead_finding)
 gl$ink                           # "#1A1714"
 ```
 
@@ -320,13 +411,23 @@ gl$ink                           # "#1A1714"
 - [ ] `gl_setup()` called at top of script
 - [ ] No per-chart theme overrides (except legend position)
 - [ ] No monospace anywhere (no JetBrains Mono, no `font.family = "mono"`)
-- [ ] Highlights use `highlight` (blue) or `lead_finding` (red), not `"red"` or arbitrary hex
+- [ ] Highlights use `highlight` (main blue) or `lead_finding` (main red), not `"red"`, `accent`, or arbitrary hex — fills/lines use the **main** tone
+- [ ] Highlighted points use `fill = highlight` + `color = highlight_dark` (main fill, dark 1px stroke); their labels use `highlight_dark`
+- [ ] Points are shape-21 filled circles with a darker 1px stroke (the geom default)
 - [ ] Highlights use mute-then-paint — supporting data is `c_muted`
 - [ ] Most charts have 2–4 colors; bigger palettes use the muted base
-- [ ] Series labels / direct annotations use the **dark tone** (`c_N_dark`),
-      not the main tone — WCAG AA contrast
+- [ ] Series labels / direct annotations / scatter strokes use the **dark tone**
+      (`c_N_dark` / `categorical_dark`), not the main tone — WCAG AA contrast
 - [ ] Overlapping marks (scatter, radar) use 0.8 fill+stroke opacity
+- [ ] Related categories use one hue's tones (two/three-tone) before reaching
+      for multiple colors
+- [ ] Stacked bars have a 1px paper gap (`geom_col(color = gl$paper, linewidth = 0.5)`),
+      ordered largest-share-at-bottom; stacked areas stay edge-to-edge
+- [ ] Highlighted focus line is only ~1.3× the muted line (`highlight_sz`), not a 2× jump
 - [ ] Sequential ramp for ordered values; diverging only with a real midpoint
+- [ ] Year-only X axis omits its axis label (`labs(x = NULL)`)
+- [ ] Chart title (slide mode) ends in a period; subtitle does not
+- [ ] Horizontal-bar charts flip gridlines to vertical (X)
 - [ ] Figures saved with `save_fig()` at named sizes
 - [ ] GDP per capita axes use `scale_x_log10()`
 - [ ] Legend fits without clipping (use `nrow = 2` or `position = "right"` if needed)
