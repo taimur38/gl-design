@@ -1,7 +1,7 @@
 ---
 name: gl-ggplot
 description: Apply the Growth Lab design system to ggplot2 charts. Use this skill when creating R/ggplot visualizations in any project to ensure they follow GL visual standards — colors, typography, sizing, and save conventions.
-compatibility: Requires R with ggplot2, ggthemes, sysfonts, showtext.
+compatibility: Requires R with ggplot2, systemfonts, ragg.
 metadata:
   author: taimur-shah
   version: "2.0"
@@ -354,11 +354,13 @@ geom_point(aes(x = total), fill = gl$c_muted_light, color = gl$paper,
 - **Gridlines default to horizontal (Y) only.** For horizontal-bar charts, flip
   to vertical so the reader can estimate bar lengths:
   `theme(panel.grid.major.x = element_line(color = gl$gridline, linewidth = 0.4), panel.grid.major.y = element_blank())`.
-- **Tabular figures — known limitation.** The spec asks for
-  `font-variant-numeric: tabular-nums` on all numerals, but Inter's tabular
-  feature can't be enabled through `showtext` / `font_add_google()`, so tick
-  digits render proportionally. Right-aligned y-axis ticks still align
-  acceptably; avoid relying on column alignment of in-chart numbers.
+- **Tabular figures — enabled.** The spec asks for
+  `font-variant-numeric: tabular-nums` on all numerals (Decision Rule 11). Fonts
+  are registered through `systemfonts` (not `showtext`), so every Inter family
+  carries the `tnum` OpenType feature and all numerals — tick labels included —
+  render at equal width. Charts must be rasterized through a systemfonts-aware
+  device: `save_fig()` / `ggsave()` use ragg's `agg_png` by default when `ragg`
+  is installed, and `gl_setup()` sets `dev = "ragg_png"` inside a knit.
 
 ### 12. Background distribution + highlighted country
 

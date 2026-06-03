@@ -51,8 +51,11 @@ dir.create(img_dir, showWarnings = FALSE, recursive = TRUE)
 
 save_fig <- function(size_name, filename, plot = last_plot(), dpi = 300) {
     sz <- gl_fig[[size_name]]
+    # Force ragg's agg_png: fonts are registered via systemfonts (see theme_gl.R),
+    # which only the ragg device resolves. The default ggsave device can fall back
+    # to a cairo/X11 path that throws "invalid font type" on the registry families.
     ggsave(file.path(img_dir, filename), plot = plot,
-           width = sz$w, height = sz$h, dpi = dpi)
+           width = sz$w, height = sz$h, dpi = dpi, device = ragg::agg_png)
     cat(sprintf("  saved: %s (%s: %.1f x %.1f\")\n", filename, size_name, sz$w, sz$h))
 }
 

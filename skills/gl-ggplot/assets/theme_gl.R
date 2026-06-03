@@ -5,11 +5,10 @@
 #   gl_setup()                          # loads fonts, sets theme + defaults
 #   gl_setup(mode = "slide")            # slide mode (keeps title/subtitle)
 #
-# Requires: ggplot2, ggthemes, sysfonts, showtext
+# Requires: ggplot2, systemfonts, ragg (ragg pulls in textshaping)
 
 library(ggplot2)
-library(sysfonts)
-library(showtext)
+library(systemfonts)
 
 # ---- Design tokens (grammar.md) ---------------------------------------------
 #
@@ -191,8 +190,11 @@ gl_palettes <- list(
 # Base is theme_minimal — gives no panel border / no frame by default, then
 # we add the bottom+left axis lines explicitly. (theme_few would add a frame.)
 #
-# Tooling note: font_add_google() reaches the weight axis but not the opsz
-# axis. Charts default to the text-cut shapes (opsz 14) — see followups.md #3.
+# Tooling note: fonts are registered via systemfonts (see gl_register_fonts),
+# NOT showtext — so OpenType features reach the render path. In particular,
+# every Inter family carries tabular figures (`tnum`), which showtext could not
+# enable. The variable-font optical-size (opsz) axis is still NOT applied at
+# render time, so glyphs render at the font's default optical size.
 
 theme_gl <- function(base_size = 12, mode = "report") {
     t <- theme_minimal(base_size = base_size) %+replace%
@@ -254,11 +256,13 @@ theme_gl <- function(base_size = 12, mode = "report") {
             panel.grid.major.x = element_blank(),
             panel.grid.minor   = element_blank(),
 
-            # Legend — Inter 12pt ink-2.
+            # Legend — Inter 12pt ink-2. Legend entries ARE series labels, so
+            # they take series-label weight 600 (spec §3): face="bold" maps
+            # gl_sans to its semibold (600) face. The legend title stays 400.
             legend.title = element_text(family = "gl_sans", color = gl$ink_2,
                                         size = rel(1.0)),
             legend.text  = element_text(family = "gl_sans", color = gl$ink_2,
-                                        size = rel(1.0)),
+                                        face = "bold", size = rel(1.0)),
 
             # Facet strip — Inter bold, ink-2, no background.
             strip.background = element_blank(),
@@ -466,37 +470,100 @@ save_fig <- function(size_name, filename, plot = last_plot(), dpi = 300) {
     if (is.null(sz)) stop("Unknown size: ", size_name, ". Use: ",
                           paste(names(gl_fig), collapse = ", "))
     dir.create("imgs", showWarnings = FALSE, recursive = TRUE)
+    # Render PNGs through ragg's agg_png so the systemfonts registrations and
+    # tabular figures apply. (ggplot2 >= 3.3.4 picks agg by default when ragg is
+    # present, but force it for PNG to be device-independent.) device = NULL lets
+    # ggsave auto-detect for other extensions.
+    dev <- if (grepl("\\.png$", filename, ignore.case = TRUE) &&
+               requireNamespace("ragg", quietly = TRUE)) ragg::agg_png else NULL
     ggsave(file.path("imgs", filename), plot = plot,
-           width = sz$w, height = sz$h, dpi = dpi)
+           width = sz$w, height = sz$h, dpi = dpi, device = dev)
+}
+
+# ---- Font registration (systemfonts) ----------------------------------------
+#
+# Fonts are registered through systemfonts (NOT showtext) so OpenType features
+# reach the render path. The critical one is tabular figures (`tnum`): showtext
+# could not enable it, so tick numerals used to render proportionally — now
+# every Inter family is tabular (spec Decision Rule 11).
+#
+# Each weight we need is its own registered family, built from the exact named
+# instance of the bundled variable font. `register_variant(weight=)` does NOT
+# honor the variable weight axis on this toolchain (it always resolves to the
+# default instance), but `match_fonts(weight=)` returns the correct path+index,
+# which we feed to `register_font()`. Serif families carry no `tnum` — the
+# tabular rule is about Inter numerals, not serif.
+#
+#   Family             weight  tabular  Used for
+#   ─────────────────  ──────  ───────  ──────────────────────────────────────
+#   gl_sans            400/600   yes    Body sans + ticks (400); legend / series
+#                                        labels + strips via face="bold" (600)
+#   gl_sans_medium     500       yes    Axis title (Inter 500)
+#   gl_sans_heavy      700       yes    Cover date, TOC page numbers
+#   gl_serif           400/500    no    Body serif; chart title via face="bold"
+#                                        (500); chart source via face="italic"
+#   gl_serif_light     300        no    Lead paragraph
+#   gl_serif_semibold  600        no    TOC major, reference titles
+#
+# Rendering must go through a systemfonts-aware device — ragg's agg_png (which
+# save_fig / ggsave use by default when ragg is installed) or the default screen
+# device on modern R. Old Cairo/X11 paths won't see these registrations.
+
+gl_font_files <- function(root = path.expand("~/dev/gl-design")) {
+    fd <- file.path(root, "assets", "fonts")
+    c(file.path(fd, "inter", "ttf", "InterVariable.ttf"),
+      file.path(fd, "inter", "ttf", "InterVariable-Italic.ttf"),
+      file.path(fd, "source-serif-4", "ttf", "SourceSerif4Variable-Roman.ttf"),
+      file.path(fd, "source-serif-4", "ttf", "SourceSerif4Variable-Italic.ttf"))
+}
+
+gl_register_fonts <- function() {
+    files <- gl_font_files()
+    if (all(file.exists(files))) {
+        add_fonts(files)
+        sans <- "Inter Variable"; serif <- "Source Serif 4 Variable"
+    } else {
+        warning("GL bundled fonts not found at ~/dev/gl-design/assets/fonts; ",
+                "falling back to system-installed Inter / Source Serif 4.")
+        sans <- "Inter"; serif <- "Source Serif 4"
+    }
+
+    tnum <- font_feature(numbers = "tabular")
+    face <- function(family, weight, italic = FALSE) {
+        m <- match_fonts(family, weight = weight, italic = italic)
+        list(m$path, m$index)
+    }
+
+    # Inter — every family tabular (Decision Rule 11).
+    register_font("gl_sans",
+                  plain      = face(sans, "normal"),
+                  bold       = face(sans, "semibold"),                 # ->600
+                  italic     = face(sans, "normal",   italic = TRUE),
+                  bolditalic = face(sans, "semibold", italic = TRUE),
+                  features   = tnum)
+    register_font("gl_sans_medium",
+                  plain = face(sans, "medium"), features = tnum)       # 500
+    register_font("gl_sans_heavy",
+                  plain = face(sans, "bold"),   features = tnum)       # 700
+
+    # Source Serif 4 — no tabular.
+    register_font("gl_serif",
+                  plain  = face(serif, "normal"),
+                  bold   = face(serif, "medium"),                      # ->500
+                  italic = face(serif, "normal", italic = TRUE))
+    register_font("gl_serif_light",    plain = face(serif, "light"))     # 300
+    register_font("gl_serif_semibold", plain = face(serif, "semibold"))  # 600
+
+    invisible(NULL)
 }
 
 # ---- Setup -------------------------------------------------------------------
 
 #' Initialize the GL design system: load fonts, set theme and palette defaults
 #'
-#' Registers Source Serif 4 and Inter at every weight the grammar uses.
-#' `font_add_google()` (this sysfonts version) only carries regular + bold
-#' per family, so each "weight bucket" we need beyond 400/bold is a separate
-#' family registration. The aliases below mirror the grammar's role hierarchy:
-#'
-#'   Family              regular   bold    Used for
-#'   ──────────────────  ─────── ──────  ────────────────────────────────────
-#'   gl_serif_light       300     —       Lead paragraph
-#'   gl_serif             400    500      Body serif, chart title (bold),
-#'                                         chart source (italic — slanted)
-#'   gl_serif_semibold    600     —       TOC major, reference titles
-#'   gl_sans              400    600      Body sans, series labels (bold),
-#'                                         legend, table header (bold)
-#'   gl_sans_medium       500     —       Axis title (Inter 500)
-#'   gl_sans_heavy        700     —       Cover date, TOC page numbers
-#'
-#' Italic is rendered as artificial slant — sysfonts on this system doesn't
-#' carry a true italic weight axis through font_add_google().
-#'
-#' Charts use `gl_serif` (regular + bold for chart title) and `gl_sans`
-#' (regular + bold for axis title). Document-level weights (light, semibold,
-#' heavy) are also registered so slide-mode charts and inline annotations
-#' can reach them.
+#' Registers Source Serif 4 and Inter at every weight the grammar uses via
+#' systemfonts (see gl_register_fonts() for the family table and the reason we
+#' use systemfonts rather than showtext — OpenType tabular figures).
 #'
 #' When called inside a knitr knit, also registers a chunk hook that re-applies
 #' the theme and palette defaults before every chunk runs. This is necessary
@@ -510,24 +577,18 @@ save_fig <- function(size_name, filename, plot = last_plot(), dpi = 300) {
 #' @param mode "report" (suppresses title/subtitle/caption) or "slide"
 #' @param base_size Base font size (default 12 — matches 12pt body)
 gl_setup <- function(mode = "report", base_size = 12) {
-    # Source Serif 4
-    font_add_google("Source Serif 4", "gl_serif",
-                    regular.wt = 400, bold.wt = 500)
-    font_add_google("Source Serif 4", "gl_serif_light",
-                    regular.wt = 300)
-    font_add_google("Source Serif 4", "gl_serif_semibold",
-                    regular.wt = 600)
+    gl_register_fonts()
 
-    # Inter
-    font_add_google("Inter", "gl_sans",
-                    regular.wt = 400, bold.wt = 600)
-    font_add_google("Inter", "gl_sans_medium",
-                    regular.wt = 500)
-    font_add_google("Inter", "gl_sans_heavy",
-                    regular.wt = 700)
-
-    showtext_auto()
-    showtext_opts(dpi = 300)
+    # Non-interactive R (`Rscript foo.R`) defaults to the pdf() device, which
+    # cannot resolve the systemfonts registry families — so a top-level ggplot
+    # that auto-prints errors with "invalid font type". (Under showtext this
+    # worked because showtext_auto() patched every device.) Route the default
+    # device to ragg so auto-prints render harmlessly to a throwaway file.
+    # save_fig() / ggsave() still open their own ragg device for output files.
+    if (!interactive() && requireNamespace("ragg", quietly = TRUE)) {
+        options(device = function(...)
+            ragg::agg_png(filename = tempfile(fileext = ".png"), ...))
+    }
 
     apply_gl_defaults <- function() {
         theme_set(theme_gl(base_size = base_size, mode = mode))
@@ -540,10 +601,12 @@ gl_setup <- function(mode = "report", base_size = 12) {
 
     apply_gl_defaults()
 
-    # Self-installing knitr hook: re-apply defaults before every chunk so that
+    # In a knit: render through ragg so the systemfonts registrations (and
+    # tabular figures) apply, and re-apply defaults before every chunk so that
     # knitr's caching cannot leave a chunk rendering against default ggplot2.
     if (isTRUE(getOption("knitr.in.progress")) &&
         requireNamespace("knitr", quietly = TRUE)) {
+        knitr::opts_chunk$set(dev = "ragg_png")
         knitr::knit_hooks$set(gl_theme = function(before, options, envir) {
             if (before) apply_gl_defaults()
         })
