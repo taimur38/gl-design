@@ -47,7 +47,8 @@ PNGs and checks each chart against the rules below. To invoke:
 |-----------|----------|---------|
 | Highlighted data points | Uses `highlight` (main blue `#2F87C8`, = `c_1`) for the default focus, or `lead_finding` (red `#CC4948`, = `c_2`) for stark emphasis | Uses `"red"`, `accent` as a data fill, or any old-palette / arbitrary hex |
 | Highlighted point stroke / label | Point stroke = `highlight_dark` (`#1A5A8E`); any label/text tied to the series = its dark tone (`#1A5A8E` blue, `#8A2C2B` red) | Main tone used for the point stroke or for text tied to the series |
-| Highlighted geoms | Painted twice — non-focus in `c_muted` (`#999FA8`), focus on top in `highlight`/`lead_finding` | Single geom with conditional color, or no muted layer |
+| Highlighted **points** painted once | Focus rows excluded from the muted backdrop layer; focus point drawn a single time at `alpha = 1` | Focus left in the `alpha`-0.8 backdrop and overpainted — the dot reads muddy / desaturated from the grey showing through |
+| Highlighted lines / bars | Painted twice — non-focus in `c_muted` (`#999FA8`), focus on top in `highlight`/`lead_finding` (opaque geoms, so overlap is fine) | Single geom with conditional color, or no muted layer |
 | Non-highlighted geoms (when a focus exists) | Painted in `c_muted` to recede | Gratuitously varied palette colors for "everyone else" |
 | `accent` (`#1A5A8E`) usage | Non-data chrome only (figure labels, eyebrows, links) | Used as a data-mark fill — that's the typography↔data-viz mix-up |
 

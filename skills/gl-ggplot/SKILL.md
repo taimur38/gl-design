@@ -102,22 +102,32 @@ occlude the focus dot.
 
 ```r
 ggplot(data, aes(x, y)) +
-    geom_point(alpha = 0.3) +                              # 1. muted backdrop
+    geom_point(data = \(d) filter(d, !focus), alpha = 0.3) + # 1. muted backdrop, focus EXCLUDED
     geom_smooth() +                                        # 2. trend
-    geom_point(data = filter(., focus),                    # 3. highlight on top —
+    geom_point(data = \(d) filter(d, focus),               # 3. highlight, painted ONCE —
                fill = highlight, color = highlight_dark,   #    main fill + dark stroke
-               size = 3) +
-    geom_text_repel(data = filter(., focus),               # 4. label uses the dark tone
+               alpha = 1, size = 3) +                       #    alpha = 1, no grey underneath
+    geom_text_repel(data = \(d) filter(d, focus),          # 4. label uses the dark tone
                     aes(label = name), color = highlight_dark)
 ```
+
+**Why exclude the focus from the backdrop?** The `geom_point` default carries
+`alpha = 0.8` so dense clouds darken on overlap instead of washing out. But that
+opacity is poison for a highlight: if you leave the focus row in the muted
+backdrop *and* overpaint it, the highlight dot (a) shows the panel through its own
+0.8 alpha and (b) sits on top of a grey dot — the blue comes out muddy and
+desaturated. So a highlighted point is **painted once**: filter the focus *out* of
+the backdrop layer, then draw it a single time at `alpha = 1`. (Lines and bars are
+opaque, so they can stay one-line overpaints — this only bites `geom_point`.)
 
 Use `highlight` (main blue `#2F87C8` = `c_1`) for the default focus — the
 institutional voice. Use `lead_finding` (main red `#CC4948` = `c_2`) when the
 finding is stark — gains vs. losses, alarm, exception. Use sparingly. For a
-highlighted **point**, the fill is `highlight` and the **stroke** is
-`highlight_dark` (`#1A5A8E`); any **label** tied to the focus also uses
-`highlight_dark`. Don't confuse this with `accent` (`#1A5A8E`), which is for
-non-data UI chrome only.
+highlighted **point**, the fill is `highlight`, the **stroke** is
+`highlight_dark` (`#1A5A8E`), and it is drawn **once at `alpha = 1`** (focus rows
+excluded from the muted backdrop — see above); any **label** tied to the focus
+also uses `highlight_dark`. Don't confuse this with `accent` (`#1A5A8E`), which is
+for non-data UI chrome only.
 
 ### 3. Use the default palette by doing nothing
 
@@ -292,8 +302,10 @@ ggplot(data, aes(x, y, color = group, fill = group)) +
     scale_color_gl("categorical_dark")    # dark tone — stroke
 ```
 
-For a single-focus scatter, set them explicitly:
-`geom_point(shape = 21, fill = gl$c_1, color = gl$c_1_dark, alpha = 0.8, stroke = 0.6)`.
+For a single-focus scatter, draw the focus point **once at `alpha = 1`** (and keep
+it out of the muted backdrop layer):
+`geom_point(shape = 21, fill = gl$c_1, color = gl$c_1_dark, alpha = 1, stroke = 0.6)`.
+The 0.8 default opacity is for the overlapping *backdrop* cloud, not the highlight.
 
 Single-layer marks (bars, treemap tiles, choropleths) stay at full opacity —
 overlap isn't a risk and lowering opacity just dilutes the color.
@@ -363,8 +375,9 @@ data |>
                  outlier.shape = NA) +
     geom_line(data = \(d) filter(d, iso == focus),          # main-blue line, pops
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
-    geom_point(data = \(d) filter(d, iso == focus),
-               aes(group = NA), fill = highlight, color = highlight_dark, size = 2)
+    geom_point(data = \(d) filter(d, iso == focus),         # marker painted once, opaque
+               aes(group = NA), fill = highlight, color = highlight_dark,
+               alpha = 1, size = 2)
 ```
 
 ## Complete example
@@ -413,6 +426,7 @@ gl$ink                           # "#1A1714"
 - [ ] No monospace anywhere (no JetBrains Mono, no `font.family = "mono"`)
 - [ ] Highlights use `highlight` (main blue) or `lead_finding` (main red), not `"red"`, `accent`, or arbitrary hex — fills/lines use the **main** tone
 - [ ] Highlighted points use `fill = highlight` + `color = highlight_dark` (main fill, dark 1px stroke); their labels use `highlight_dark`
+- [ ] Highlighted points are painted **once** at `alpha = 1` — focus rows excluded from the muted backdrop layer, never overpainted on top of a grey dot
 - [ ] Points are shape-21 filled circles with a darker 1px stroke (the geom default)
 - [ ] Highlights use mute-then-paint — supporting data is `c_muted`
 - [ ] Most charts have 2–4 colors; bigger palettes use the muted base

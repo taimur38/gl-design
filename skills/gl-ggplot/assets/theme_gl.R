@@ -321,8 +321,10 @@ gl_set_geom_defaults <- function() {
 
     # Points: a filled circle (shape 21) so EVERY point has a fill (a tone) AND
     # a 1px stroke in the darker version of that tone (spec §5). Default to the
-    # muted pair; overlap-friendly at 0.8 opacity. Highlighted points override
-    # fill + colour, e.g. geom_point(fill = highlight, colour = highlight_dark).
+    # muted pair; overlap-friendly at 0.8 opacity. The 0.8 alpha is for the
+    # *backdrop* cloud only — a highlighted point must be drawn ONCE at alpha = 1
+    # (focus rows excluded from this muted layer), else its blue is diluted by the
+    # panel and muddied by the grey dot underneath. See the highlight block below.
     update_geom_defaults("point",   list(shape = 21, fill = gl$c_muted,
                                          colour = gl$c_muted_dark, stroke = 0.6,
                                          alpha = 0.8))
@@ -374,6 +376,17 @@ gl_set_geom_defaults <- function() {
 # `highlight` is blue (c_1, the main tone #2F87C8) — the default focus per Nil:
 # "Reserve saturated hue (usually c-1) for one or two focus series." Its dark
 # partner (c_1_dark = accent, #1A5A8E) is only for the point stroke and label.
+#
+# POINTS ARE THE EXCEPTION to the simple overpaint. Lines/bars are opaque, so
+# drawing the muted layer then overpainting the focus works. But the point
+# default carries alpha = 0.8, which dilutes a highlight dot two ways: through
+# its own transparency, and by letting the grey dot beneath it show through. So a
+# highlighted point is PAINTED ONCE — exclude the focus from the muted backdrop,
+# then draw it a single time at alpha = 1:
+#
+#   geom_point(data = \(d) filter(d, !focus), alpha = 0.3) +   # backdrop, focus out
+#   geom_point(data = \(d) filter(d, focus),                   # focus, painted once
+#              fill = highlight, color = highlight_dark, alpha = 1, size = 3)
 #
 # For a stark "lead finding" emphasis (gains vs losses, alarm, exception)
 # use `lead_finding` (c_2 red) instead. Use sparingly.

@@ -291,7 +291,7 @@ private_credit |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, alpha = 1, size = 2) +
     labs(title = "unused", y = "Private credit (% of GDP)", x = NULL)
 save_fig("full", "private-credit-comparators.png")
 
@@ -494,7 +494,7 @@ rev_peers |>
     geom_line(data = . %>% filter(ISO3 == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(ISO3 == main_country),
-               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, alpha = 1, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "revenue-vs-peers.png")
 
@@ -519,7 +519,7 @@ rev_components |>
     geom_line(data = . %>% filter(ISO3 == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(ISO3 == main_country),
-               aes(group = NA), fill = highlight, color = highlight_dark, size = 1.5) +
+               aes(group = NA), fill = highlight, color = highlight_dark, alpha = 1, size = 1.5) +
     facet_wrap(~source, scales = "free_y") +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of Total Revenue", caption = "unused")
 save_fig("full_tall", "revenue-composition-vs-peers.png")
@@ -536,7 +536,7 @@ exp_peers |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, alpha = 1, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "expenditure-vs-peers.png")
 
@@ -554,7 +554,7 @@ interest_exp |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, alpha = 1, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "interest-expense-vs-peers.png")
 
@@ -600,10 +600,10 @@ scatter_energy <- fuel_all |>
 
 scatter_energy |>
     ggplot(aes(x = gdppc_ppp, y = fuel_percap)) +
-    geom_point(alpha = 0.3) +                                    # muted backdrop
+    geom_point(data = . %>% filter(country_iso3_code != main_country), alpha = 0.3) + # muted backdrop, focus out
     geom_smooth() +                                              # trend
-    geom_point(data = . %>% filter(country_iso3_code == main_country),
-               fill = highlight, color = highlight_dark, size = 3) +                    # highlight on top
+    geom_point(data = . %>% filter(country_iso3_code == main_country),                # highlight, painted once
+               fill = highlight, color = highlight_dark, alpha = 1, size = 3) +
     geom_text_repel(data = . %>% filter(country_iso3_code == main_country),
                     aes(label = 'Pakistan'), color = highlight_dark) +
     scale_x_log10(labels = dollar) +
@@ -628,10 +628,10 @@ scatter_fuel_burden <- fuel_all |>
 
 scatter_fuel_burden |>
     ggplot(aes(x = gdppc_ppp, y = fuel_pct_exports)) +
-    geom_point(alpha = 0.3) +                                    # muted backdrop
+    geom_point(data = . %>% filter(country_iso3_code != main_country), alpha = 0.3) + # muted backdrop, focus out
     geom_smooth() +                                              # trend
-    geom_point(data = . %>% filter(country_iso3_code == main_country),
-               fill = highlight, color = highlight_dark, size = 3) +                    # highlight on top
+    geom_point(data = . %>% filter(country_iso3_code == main_country),                # highlight, painted once
+               fill = highlight, color = highlight_dark, alpha = 1, size = 3) +
     geom_text_repel(data = . %>% filter(country_iso3_code == main_country),
                     aes(label = 'Pakistan'), color = highlight_dark) +
     scale_x_log10(labels = dollar) +
@@ -653,7 +653,7 @@ fossil_elc |>
     geom_line(data = . %>% filter(countrycodeiso == main_country),
               aes(group = NA), color = highlight, linewidth = highlight_sz) +
     geom_point(data = . %>% filter(countrycodeiso == main_country),
-               aes(group = NA), fill = highlight, color = highlight_dark, size = 2) +
+               aes(group = NA), fill = highlight, color = highlight_dark, alpha = 1, size = 2) +
     labs(title = "unused", subtitle = "unused", x = NULL, y = "% of total generation", caption = "unused")
 save_fig("full", "fossil-electricity-vs-peers.png")
 
@@ -678,10 +678,10 @@ elc_scatter |>
     filter(gdppc_ppp >= 1000) |>
     filter(elc_price_cents_kwh <= 100) |>
     ggplot(aes(x = gdppc_ppp, y = elc_price_cents_kwh)) +
-    geom_point(alpha = 0.3) +                                    # muted backdrop
+    geom_point(data = . %>% filter(iso3c != main_country), alpha = 0.3) + # muted backdrop, focus out
     geom_smooth() +                                              # trend
-    geom_point(data = . %>% filter(iso3c == main_country),       # highlight on top
-               fill = highlight, color = highlight_dark, size = 3) +
+    geom_point(data = . %>% filter(iso3c == main_country),       # highlight, painted once
+               fill = highlight, color = highlight_dark, alpha = 1, size = 3) +
     geom_text_repel(data = . %>% filter(iso3c == main_country),
                     aes(label = 'Pakistan'), color = highlight_dark) +
     scale_x_log10(labels = dollar) +

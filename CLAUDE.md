@@ -76,6 +76,12 @@ Key rules:
   `highlight_dark` (`#1A5A8E`). For stark "lead finding" emphasis use
   `lead_finding` (red `#CC4948`, = `c_2`) sparingly. Never use `"red"`,
   `accent`, or arbitrary hex for emphasis.
+- **Highlighted points are painted once**: lines and bars are opaque, so the
+  overpaint pattern is fine — but the `geom_point` default carries `alpha = 0.8`,
+  which dilutes a highlight dot (through its own transparency and the grey dot
+  beneath). So exclude the focus from the muted backdrop and draw it a single
+  time at `alpha = 1`: `geom_point(data = \(d) filter(d, !focus), alpha = 0.3)`
+  then `geom_point(data = \(d) filter(d, focus), fill = highlight, color = highlight_dark, alpha = 1)`.
 - **Dark tone for text**: every direct label, legend mark, callout, or
   annotation tied to a series uses the series' dark tone (`gl$c_N_dark`),
   not the main tone — WCAG AA against paper.
