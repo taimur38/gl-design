@@ -169,16 +169,43 @@ weo_combined <- weo_hist |>
         levels = c("ca", "fiscal", "private"),
         labels = c("Current Account", "Fiscal Balance", "Private Balance (residual)")))
 
+# Direct line-end labels in each series' dark tone (Nil §3 / §11) — no legend.
+# GL palette in order (Nil decision rule 1): c_1, c_2, c_3.
+ca_main <- c("Current Account"            = gl$c_1,
+             "Fiscal Balance"             = gl$c_2,
+             "Private Balance (residual)" = gl$c_3)
+ca_dark <- c("Current Account"            = gl$c_1_dark,
+             "Fiscal Balance"             = gl$c_2_dark,
+             "Private Balance (residual)" = gl$c_3_dark)
+ca_lab  <- c("Current Account"            = "Current account",
+             "Fiscal Balance"             = "Fiscal balance",
+             "Private Balance (residual)" = "Private (residual)")
+
+ca_ends <- weo_combined |>
+    group_by(component) |>
+    filter(year == max(year)) |>
+    ungroup() |>
+    mutate(lab = ca_lab[as.character(component)], dark = ca_dark[as.character(component)])
+
 weo_combined |>
     ggplot(aes(x = year, y = value, color = component)) +
     geom_hline(yintercept = 0, color = 'grey') +
     geom_line(data = . %>% filter(component != "Current Account")) +
-    geom_line(data = . %>% filter(component == "Current Account"),
-              aes(linetype = component), color = 'black') +
-    scale_linetype_manual(values = c("Current Account" = "dotted")) +
+    geom_line(data = . %>% filter(component == "Current Account")) +
+    geom_text_repel(
+        data = ca_ends, aes(x = year, y = value, label = lab),
+        color = ca_ends$dark, inherit.aes = FALSE,
+        family = "gl_sans", fontface = "bold", size = 3.2,
+        hjust = 0, direction = "y", nudge_x = 0.3, segment.color = NA
+    ) +
+    scale_color_manual(values = ca_main) +
     scale_y_continuous(labels = percent_format(scale = 1), breaks = breaks_width(2)) +
+    scale_x_continuous(expand = expansion(mult = c(0.02, 0.04))) +
+    coord_cartesian(clip = "off") +
+    # Reserve right margin for the line-end labels (clip = "off" draws into it).
+    theme(legend.position = "none", plot.margin = margin(5, 95, 5, 5)) +
     labs(title = "unused", subtitle = "unused",
-         x = NULL, y = "% of GDP", color = "", linetype = "", caption = "unused")
+         x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "ca-decomposition.png")
 
 # 4. SBP balance sheet decomposition
@@ -205,20 +232,50 @@ sbp <- readRDS("data/sbp/imf_mfs_cbs_pak.rds") |>
     ) |>
     filter(series != "Currency in circulation")
 
+# Pop-up effect (Nil §11): the two non-story series recede to muted grey; the
+# alarm (NFA, red) and its cause (NCG, blue) carry the finding, each labeled
+# directly at the line end in its dark tone — no legend.
+sbp_focus <- c("Net foreign assets", "Net claims on central government")
+# Every series labeled directly at the line end; the two non-focus series keep
+# the muted grey and a muted-dark label so they read as background context.
+sbp_lab  <- c("Net foreign assets"               = "Net foreign assets",
+              "Net claims on central government" = "Net claims on govt",
+              "Claims on banks (ODCs)"           = "Claims on banks",
+              "Claims on private sector"         = "Claims on private sector")
+sbp_dark <- c("Net foreign assets"               = gl$c_2_dark,
+              "Net claims on central government" = gl$c_1_dark,
+              "Claims on banks (ODCs)"           = gl$c_muted_dark,
+              "Claims on private sector"         = gl$c_muted_dark)
+
+# Claims on private sector hugs zero with no story — leave it grey and unlabeled.
+sbp_ends <- sbp |>
+    filter(!is.na(value_pct), series != "Claims on private sector") |>
+    group_by(series) |>
+    filter(date == max(date)) |>
+    ungroup() |>
+    mutate(lab = sbp_lab[as.character(series)], dark = sbp_dark[as.character(series)])
+
 sbp |>
-    ggplot(aes(x = date, y = value_pct, color = series)) +
+    ggplot(aes(x = date, y = value_pct, group = series)) +
     geom_hline(yintercept = 0) +
-    geom_line() +
-    scale_color_manual(values = c(
-        "Net foreign assets"               = gl$c_2,   # red — declining (the alarm)
-        "Net claims on central government" = gl$c_1,   # blue — the source of the problem
-        "Claims on banks (ODCs)"           = gl$c_3,   # teal
-        "Claims on private sector"         = gl$c_4    # purple
-    )) +
-    guides(color = guide_legend(nrow = 2)) +
+    geom_line(data = . %>% filter(!series %in% sbp_focus), color = gl$c_muted) +
+    geom_line(data = . %>% filter(series == "Net foreign assets"),
+              color = gl$c_2, linewidth = highlight_sz) +
+    geom_line(data = . %>% filter(series == "Net claims on central government"),
+              color = gl$c_1, linewidth = highlight_sz) +
+    geom_text_repel(
+        data = sbp_ends, aes(x = date, y = value_pct, label = lab),
+        color = sbp_ends$dark, inherit.aes = FALSE,
+        family = "gl_sans", fontface = "bold", size = 3.2,
+        hjust = 0, direction = "y", nudge_x = 120, segment.color = NA
+    ) +
     scale_y_continuous(labels = percent) +
+    scale_x_date(expand = expansion(mult = c(0.02, 0.04))) +
+    coord_cartesian(clip = "off") +
+    # Reserve right margin for the line-end labels (clip = "off" draws into it).
+    theme(legend.position = "none", plot.margin = margin(5, 95, 5, 5)) +
     labs(title = "unused", subtitle = "unused",
-         x = NULL, y = "% of GDP", color = NULL, caption = "unused")
+         x = NULL, y = "% of GDP", caption = "unused")
 save_fig("full", "sbp-balance-sheet-decomposition.png")
 
 # 5. Private credit vs comparators

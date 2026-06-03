@@ -23,7 +23,7 @@ The diagnostic identifies two interrelated drivers of Pakistan's growth speed li
 
 Pakistan's foreign exchange reserves have repeatedly fallen below the three-month-of-imports threshold considered the minimum for macroeconomic stability [@imf2025weo]. Each episode triggers emergency borrowing, IMF programs, and contractionary adjustment. Since 1990, Pakistan has entered at least seven IMF programs, each breaking the growth cycle before productive momentum can build (@fig:reserves).
 
-![Pakistan's reserves in months of imports](imgs/fm_meeting/reserves-time-series.png){#fig:reserves}
+![Reserves repeatedly fall below the three-month import threshold. // Foreign exchange reserves in months of imports, Pakistan](imgs/fm_meeting/reserves-time-series.png){#fig:reserves}
 
 Source: World Bank WDI [@worldbank2025wdi].
 
@@ -31,7 +31,7 @@ Source: World Bank WDI [@worldbank2025wdi].
 
 The scatter plot in @fig:growth-vs-cab illustrates the core structural problem: years of higher per capita GDP growth are systematically associated with a worsening current account balance. This "growth–current account trade-off" is not inevitable — countries that diversify their exports can grow without generating unsustainable external deficits [@hausmann2007; @hausmann2016] — but it has defined Pakistan's economic trajectory for three decades.
 
-![GDP per capita growth vs change in current account balance](imgs/fm_meeting/gdp-growth-vs-cab-change.png){#fig:growth-vs-cab}
+![Faster growth comes with a worsening current account. // Annual GDP per capita growth vs. change in the current account balance, Pakistan](imgs/fm_meeting/gdp-growth-vs-cab-change.png){#fig:growth-vs-cab}
 
 Source: IMF WEO October 2025.
 
@@ -50,7 +50,7 @@ Both perspectives point to the same conclusion: Pakistan needs both a new macro-
 
 The current account balance can be decomposed into its fiscal and private sector components. Pakistan's data reveal that the fiscal balance is the primary driver of current account movements — when fiscal deficits widen, the current account deteriorates almost mechanically.
 
-![Current account decomposition](imgs/fm_meeting/ca-decomposition.png)
+![The fiscal balance drives the current account. // Current account decomposed into fiscal and private components, percent of GDP](imgs/fm_meeting/ca-decomposition.png){#fig:ca-decomp}
 
 Source: IMF WEO October 2025.
 
@@ -58,7 +58,7 @@ Source: IMF WEO October 2025.
 
 The State Bank of Pakistan's balance sheet tells the story of how fiscal deficits are ultimately financed. Net claims on the central government have expanded dramatically, while net foreign assets have been compressed — effectively converting domestic fiscal pressure into external vulnerability.
 
-![SBP balance sheet decomposition](imgs/fm_meeting/sbp-balance-sheet-decomposition.png)
+![Financing the deficit drains foreign assets. // State Bank of Pakistan balance sheet, percent of GDP](imgs/fm_meeting/sbp-balance-sheet-decomposition.png){#fig:sbp}
 
 Source: IMF Monetary and Financial Statistics; GDP from IMF WEO.
 
@@ -66,9 +66,11 @@ Source: IMF Monetary and Financial Statistics; GDP from IMF WEO.
 
 A comparison with peer countries reveals that Pakistan's expenditure levels are not unusually high. The problem lies on the revenue side: Pakistan collects significantly less than comparators at similar income levels.
 
-![Government expenditure vs peers](imgs/fm_meeting/expenditure-vs-peers.png)
+![Pakistan's spending is in line with its peers. // Government expenditure, percent of GDP, Pakistan vs. the comparator distribution](imgs/fm_meeting/expenditure-vs-peers.png){#fig:expenditure}
 
-![Government revenue vs peers](imgs/fm_meeting/revenue-vs-peers.png)
+Source: IMF World Revenue Longitudinal Data (WoRLD).
+
+![But it collects far less revenue than they do. // Government revenue, percent of GDP, Pakistan vs. the comparator distribution](imgs/fm_meeting/revenue-vs-peers.png){#fig:revenue}
 
 Source: IMF World Revenue Longitudinal Data (WoRLD).
 
@@ -76,7 +78,7 @@ Source: IMF World Revenue Longitudinal Data (WoRLD).
 
 Pakistan has improved income tax collections in recent years and recently expanded its reliance on trade taxes — a move it is now winding down under IMF program conditions. The composition of revenue matters as much as the level: an over-reliance on trade taxes distorts incentives for exporters and importers alike.
 
-![Revenue composition vs peers](imgs/fm_meeting/revenue-composition-vs-peers.png)
+![Pakistan leans more on trade taxes than its peers. // Tax revenue by source, percent of GDP, Pakistan vs. comparators](imgs/fm_meeting/revenue-composition-vs-peers.png){#fig:revenue-composition}
 
 Source: IMF World Revenue Longitudinal Data (WoRLD).
 
@@ -84,7 +86,7 @@ Source: IMF World Revenue Longitudinal Data (WoRLD).
 
 Fiscal deficits financed through the domestic banking system have crowded out private sector credit. Pakistan's domestic credit to the private sector as a share of GDP is among the lowest in its comparator set — a reflection of the government's dominance of the financial system.
 
-![Private credit vs comparators](imgs/fm_meeting/private-credit-comparators.png)
+![Government borrowing crowds out private credit. // Domestic credit to the private sector, percent of GDP, Pakistan vs. comparators](imgs/fm_meeting/private-credit-comparators.png){#fig:private-credit}
 
 Source: World Bank WDI.
 
@@ -94,7 +96,7 @@ Source: World Bank WDI.
 
 Pakistan's exports per capita have fallen roughly 25% since a peak in 2011. This decline is not merely a cyclical phenomenon — it reflects a structural erosion of export capacity that has left Pakistan increasingly dependent on remittances to finance its import bill.
 
-![Exports per capita](imgs/fm_meeting/exports-per-capita.png)
+![Exports per capita have fallen since their 2011 peak. // Goods and services exports per capita by sector, constant 2023 USD](imgs/fm_meeting/exports-per-capita.png){#fig:exports-percap}
 
 Source: Atlas of Economic Complexity; IMF WEO.
 
@@ -102,7 +104,7 @@ Source: Atlas of Economic Complexity; IMF WEO.
 
 The losses are concentrated in Pakistan's historically dominant sector: textiles. While other sectors have shown modest gains, they have not been sufficient to offset the decline in textile exports. This concentration risk makes Pakistan's export earnings highly sensitive to global demand conditions in a single sector.
 
-![Export decline drivers by sector](imgs/fm_meeting/exports-decline-drivers.png)
+![The decline is concentrated in textiles. // Change in exports per capita by sector since 2011, constant USD](imgs/fm_meeting/exports-decline-drivers.png){#fig:exports-drivers}
 
 Source: Atlas of Economic Complexity.
 
@@ -110,7 +112,7 @@ Source: Atlas of Economic Complexity.
 
 A decomposition of export per capita changes by sector reveals that the drivers differ across product groups. In some sectors, Pakistan has lost global market share; in others, population growth has outpaced export growth; in still others, global prices have moved against Pakistani products.
 
-![Export decomposition by sector](imgs/fm_meeting/exports-decomposition.png)
+![Different sectors decline for different reasons. // Export per capita change decomposed by sector and driver](imgs/fm_meeting/exports-decomposition.png){#fig:exports-decomp}
 
 Source: Atlas of Economic Complexity.
 
@@ -118,7 +120,7 @@ Source: Atlas of Economic Complexity.
 
 Growing remittances have partially offset the decline in export earnings, maintaining Pakistan's aggregate import capacity. But remittances are not a substitute for productive exports — they do not generate the same learning-by-doing, technology transfer, or institutional upgrading that comes from competing in global product markets.
 
-![Exports plus remittances per capita](imgs/fm_meeting/exports-plus-remittances-per-capita.png)
+![Remittances have masked the export decline. // Exports and remittances per capita, constant 2023 USD](imgs/fm_meeting/exports-plus-remittances-per-capita.png){#fig:exports-remit}
 
 Source: Atlas of Economic Complexity; World Bank WDI.
 
@@ -128,7 +130,7 @@ Source: Atlas of Economic Complexity; World Bank WDI.
 
 Given Pakistan's GDP per capita, it imports relatively little energy in absolute terms. But this apparent moderation masks a deeper problem.
 
-![Energy imports vs GDP per capita](imgs/fm_meeting/energy-imports-vs-gdppc-scatter.png)
+![In absolute terms, Pakistan imports little energy. // Energy imports per capita vs. GDP per capita](imgs/fm_meeting/energy-imports-vs-gdppc-scatter.png){#fig:energy-imports}
 
 Source: UN Comtrade; World Bank WDI.
 
@@ -136,7 +138,7 @@ Source: UN Comtrade; World Bank WDI.
 
 When measured as a share of export earnings — the relevant metric for external sustainability — Pakistan's fuel import burden is significantly higher than what its income level would predict. Energy imports consume a large fraction of the foreign exchange that exports generate, tightening the current account constraint.
 
-![Fuel burden vs GDP per capita](imgs/fm_meeting/fuel-burden-vs-gdppc-scatter.png)
+![But fuel consumes an outsized share of export earnings. // Fuel imports as a share of exports vs. GDP per capita](imgs/fm_meeting/fuel-burden-vs-gdppc-scatter.png){#fig:fuel-burden}
 
 Source: UN Comtrade; Atlas of Economic Complexity.
 
@@ -144,9 +146,11 @@ Source: UN Comtrade; Atlas of Economic Complexity.
 
 Pakistan relies heavily on fossil fuels for electricity generation and, despite charging among the highest electricity prices in its income group, still carries unfunded off-balance-sheet electricity subsidies amounting to roughly 2.2% of GDP. This circular debt ties fiscal deficits directly to dollar-denominated fuel prices, creating a channel through which energy shocks propagate into fiscal and external crises.
 
-![Fossil fuel share in electricity generation vs peers](imgs/fm_meeting/fossil-electricity-vs-peers.png)
+![Pakistan's electricity is heavily fossil-dependent. // Fossil share of electricity generation, Pakistan vs. peers, percent](imgs/fm_meeting/fossil-electricity-vs-peers.png){#fig:fossil-electricity}
 
-![Electricity price vs GDP per capita](imgs/fm_meeting/electricity-price-vs-gdppc.png)
+Source: IEA; World Bank WDI.
+
+![Yet electricity prices are among the highest for its income. // Electricity price vs. GDP per capita](imgs/fm_meeting/electricity-price-vs-gdppc.png){#fig:electricity-price}
 
 Source: IEA; World Bank WDI.
 
@@ -154,9 +158,11 @@ Source: IEA; World Bank WDI.
 
 Pakistan's external debt stock, measured against export earnings, has been rising — a concerning trend given the simultaneous decline in export capacity. Interest expense as a share of revenue has increased sharply, and the implicit interest rate on government debt has climbed, reflecting both tighter global conditions and Pakistan's elevated risk premium.
 
-![External debt as % of exports vs peers](imgs/fm_meeting/external-debt-exports-vs-peers.png)
+![External debt is rising against shrinking exports. // External debt as a share of exports, Pakistan vs. peers, percent](imgs/fm_meeting/external-debt-exports-vs-peers.png){#fig:external-debt}
 
-![Interest expense vs peers](imgs/fm_meeting/interest-expense-vs-peers.png)
+Source: IMF WEO; World Bank International Debt Statistics.
+
+![Interest now consumes a growing share of revenue. // Interest expense as a share of government revenue, Pakistan vs. peers](imgs/fm_meeting/interest-expense-vs-peers.png){#fig:interest-expense}
 
 Source: IMF WEO; World Bank International Debt Statistics.
 

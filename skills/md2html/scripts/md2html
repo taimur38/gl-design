@@ -75,6 +75,7 @@ PANDOC_ARGS=(
     --template="$TEMPLATE"
     --resource-path="$INPUT_DIR"
     --filter pandoc-crossref
+    --lua-filter="$MD2PDF_ASSETS/gl-figure.lua"
 )
 
 # Cover pattern + logo — pass as file:// paths; --embed-resources inlines

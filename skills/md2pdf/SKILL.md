@@ -56,8 +56,17 @@ pdf_options:
 ## Conventions
 
 - **Figure block**: write the image on its own line, follow with a blank
-  line, then `Source: ...` as a regular paragraph. The stylesheet uses
-  `p:has(> img) + p` to detect and style the source line.
+  line, then `Source: ...` as a regular paragraph. The `gl-figure.lua` filter
+  stacks the caption into Nil's three-part block:
+  - **Figure label** — add a `{#fig:label}` id and pandoc-crossref numbers it;
+    the filter splits "Figure N" into an accent-blue uppercase eyebrow on its
+    own line. Without an id the figure is unnumbered (no label).
+  - **Chart title** — the image alt text up to a standalone ` // ` (Source
+    Serif 4; end it with a period).
+  - **Chart subtitle** — *optional*, written after the ` // ` in the alt text:
+    `![Chart title. // Units, period, unit of analysis](chart.png){#fig:x}`.
+    (A legacy form — subtitle in the image title attribute,
+    `![Title](chart.png "Subtitle")` — still works.)
 - **Lead paragraph**: not automatic. Wrap the first paragraph after a
   heading with `<p class="lead">` (HTML pass-through) when you want the
   lead role. md-to-pdf supports inline HTML in markdown.
@@ -75,7 +84,7 @@ md2pdf does **not** render today:
 |-----------------------------------|------------------------------------------------|
 | Cover page (display + rule + byline + pattern) | Not rendered. Document starts at page 1 as content. See [`followups.md`](../../followups.md) #8. |
 | Running head (series tag + logo)  | Not rendered. Only the folio (page number) is in the bottom-right margin. |
-| Figure label ("FIGURE 4")         | Not auto-numbered. Authors include manually if needed. |
+| Figure label ("FIGURE 4")         | Rendered: pandoc-crossref numbers figures with a `{#fig:label}` id; `gl-figure.lua` styles "FIGURE N" as an accent eyebrow. Unnumbered images get title + optional subtitle only. |
 | Pandoc fenced divs (`:::`)        | Plain remark doesn't parse them. Renders as literal `:::`. |
 | TOC                               | Not generated. md-to-pdf has no built-in TOC. |
 | Optical sizing                    | CSS `font-variation-settings: 'opsz' N` is set on headings; Chromium honors it via Source Serif 4's variable axis. |

@@ -92,6 +92,9 @@ PNGs and checks each chart against the rules below. To invoke:
 | GDP per capita on x-axis | `scale_x_log10()` | Linear scale for GDP per capita |
 | Percentage y-axis | `labels = percent` or `percent_format()` | Raw decimal values (0.05 instead of 5%) |
 | Year axis | Reasonable breaks (not every year) | Overlapping year labels |
+| Year-only x-axis | **No axis title** — the tick labels already name the dimension (Nil §4) | A redundant `"Year"` axis title under year ticks |
+| Axis-title spacing | Title sits ~20px (≈15pt) off the tick labels — `theme_gl()` sets `axis.title.x = margin(t = 15)`, `axis.title.y = margin(r = 15)` | Per-chart override shrinking the gap, or a wide Y tick (e.g. "250") colliding with the rotated Y title |
+| Tick-label spacing | Tick label sits ~6px off the axis (4pt tick + 2pt) — theme default | Per-chart override pulling tick labels onto the axis line |
 
 ### 8. Text and labels
 
@@ -99,7 +102,8 @@ PNGs and checks each chart against the rules below. To invoke:
 |-----------|----------|---------|
 | Axis titles | Short, sentence case | Long prose axis titles |
 | `labs()` in report mode | Title/caption omitted (or marker strings) | Actual title/caption text that will be suppressed anyway |
-| Direct labels (if used) | `geom_text_repel()` or `geom_label_repel()` | `geom_text()` with overlapping labels |
+| Multi-series labeling | **Prefer direct line-end / series labels over a legend** (Nil §3, pop-up §11). Each series label uses the series' **dark tone** (`gl$c_N_dark`), Inter weight 600 | A legend used where 1–3 tracked series could be labeled directly at the line end; or series labels in the main tone instead of the dark tone |
+| Direct labels (if used) | `geom_text_repel()` / `geom_label_repel()`; text in the series dark tone | `geom_text()` with overlapping labels, or label color = main tone / `"black"` |
 
 ### 9. Visual weight and readability
 

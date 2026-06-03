@@ -419,9 +419,10 @@ caption {
  *   </figure>
  *   <p>Source: ...</p>
  *
- * We want caption *above* the image (recipe), so we use column-reverse,
- * then style figcaption as the chart title (with the "Figure N:" prefix
- * inline from pandoc-crossref). The trailing <p> starting with "Source:"
+ * We want caption *above* the image (recipe), so we use column-reverse.
+ * The gl-figure.lua filter splits the caption into three stacked spans —
+ * .fig-label (accent eyebrow), .fig-title (serif), .fig-subtitle (optional) —
+ * matching Nil's figure block. The trailing <p> starting with "Source:"
  * becomes the chart-source line.
  */
 figure {
@@ -440,15 +441,46 @@ figure img {
 }
 
 figure figcaption {
+    /* 14px gap from the caption stack down to the plot (Nil uses 12px). */
+    margin: 0 0 14px;
+    /* pandoc adds aria-hidden — undo any visual hiding it might imply */
+    visibility: visible;
+}
+
+/* Figure label — "FIGURE 4" eyebrow: Inter 12px 600 UPPERCASE accent, tracked. */
+figure figcaption .fig-label {
+    display: block;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.2;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 6px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Chart title — Source Serif 4 14px/500, ink. Reads as a finding (ends in period). */
+figure figcaption .fig-title {
+    display: block;
     font-family: var(--font-serif);
     font-weight: 500;
     font-size: 14px;
     line-height: 1.25;
     letter-spacing: -0.005em;
     color: var(--ink);
-    margin: 0 0 0.4em;
-    /* pandoc adds aria-hidden — undo any visual hiding it might imply */
-    visibility: visible;
+}
+
+/* Chart subtitle — Inter 12px/400, ink-3. Units / period / unit-of-analysis. */
+figure figcaption .fig-subtitle {
+    display: block;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--ink-3);
+    margin: 2px 0 0;
 }
 
 /* Chart source — the paragraph immediately after a figure */

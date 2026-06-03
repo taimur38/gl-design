@@ -226,12 +226,18 @@ theme_gl <- function(base_size = 12, mode = "report") {
             # Axes — Inter, ink-2. Label weight 500, tick weight 400.
             # Axis label is Inter 500 (gl_sans_medium), NOT 600 — the spec
             # reserves 600 for figure labels and series labels.
+            # Axis label sits ~20px (≈15pt) off the tick labels — far enough that
+            # a wide tick like "250" can't collide with the rotated Y title
+            # (Nil data-vis §4 / Decision rule). Was 6pt — too tight.
             axis.title   = element_text(family = "gl_sans_medium", color = gl$ink_2,
                                         size = rel(1.0)),
-            axis.title.x = element_text(margin = margin(t = 6)),
-            axis.title.y = element_text(margin = margin(r = 6), angle = 90),
+            axis.title.x = element_text(margin = margin(t = 15)),
+            axis.title.y = element_text(margin = margin(r = 15), angle = 90),
+            # Tick label sits 6px outside the axis = 4pt tick + 2pt gap.
             axis.text    = element_text(family = "gl_sans", color = gl$ink_2,
                                         size = rel(1.0)),
+            axis.text.x  = element_text(margin = margin(t = 2)),
+            axis.text.y  = element_text(margin = margin(r = 2)),
 
             # Axis line + ticks: 1px ink-2, 4pt outward. Bottom + left only.
             axis.line          = element_line(color = gl$ink_2, linewidth = 0.4),
