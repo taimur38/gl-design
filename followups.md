@@ -67,20 +67,13 @@ Report mode suppresses the subtitle entirely, so this only matters once
 slide mode is exercised again. Confirm the new tone reads correctly against
 the slide background before declaring done.
 
-## 5. Paper color rendering in Word
+## 5. Paper color rendering in Word — mostly moot
 
-The recipe specifies `paper #FAF8F4` (warm white) for content pages and
-`cover-bg #F3F2EA` for the cover. Word supports a page background color but
-it doesn't print by default — readers see white pages unless they enable
-"Print background colors and images." Most PDF exports respect it.
-
-**Resolution options:**
-- Set the page background in the docx; accept that Word-screen and printed
-  Word may differ from the intended look.
-- Drop the warm paper for the docx pipeline; only honor it in HTML / PDF
-  generated via LaTeX where backgrounds render reliably.
-- Generate the final PDF from HTML (Chromium / wkhtmltopdf) and accept
-  the docx as an intermediate.
+Content paper is now pure white (`paper #FFFFFF`), so the only non-white
+surface is the cover (`cover-bg #F3F2EA`). Word page backgrounds don't print
+by default, but since the cover is an HTML-or-PDF-first artifact (see §10),
+the docx pipeline simply renders white throughout. Revisit only if a Word
+cover becomes a real deliverable.
 
 ## 6. Figure block density
 
@@ -131,23 +124,44 @@ the Lua kick).
 recipe), refactoring the filter to emit AST + classes that both targets
 style natively starts to pay for itself.
 
-## 10. Docx template lags the new cover spec
+## 10. Word (docx) fidelity — rebuilt 2026-06-11, known limits
 
-`recipes/report.md` §5 now documents the cover with:
-- pre-title hairline (1px `ink-3` at 0.3 opacity)
-- 3px `accent` title rule at 50% content width, left-anchored
-- byline in `ink-2` (was `ink-3`)
-- pattern artwork (`assets/design-library/cover-patterns/rect-pattern.svg`
-  or `circle-pattern.svg`) at the bottom of the cover
+The GL Word theme was rebuilt from scratch against Nil's tokens:
+`skills/md2docx/assets/build_gl_template.py` → `templates/gl.docx` (the file
+`md2docx --theme gl` actually uses; the orphaned `assets/gl-report.docx` was
+retired). Styles now cover the full role hierarchy, the five-element figure
+block (Figure Label / Title / Subtitle / Image / Source, kept together —
+`growthlabbify.lua` splits the crossref caption on ` // ` exactly like
+md2pdf's `gl-figure.lua`), Nil tables (ink rules, `rule` dividers, bold ink
+header), references (`Bibliography`, hanging indent), and the pandoc
+fallback styles (`Compact`, `Body Text`, `First Paragraph`, …) that
+previously dropped to Normal.
 
-None of this exists in `assets/gl-report.docx` or `assets/build_gl_template.py`
-yet. Word-export fidelity of the cover page will lag the spec until the
-template is regenerated. Similarly, the colophon page's desaturated echo
-of the cover pattern (35% opacity, grayscale) is not in the template.
+Known, accepted limits of the Word path (PDF remains the source of truth):
 
-**Resolution:** treat the cover/colophon as an HTML-or-PDF-first artifact
-for now; rebuild `gl-report.docx` to include cover-page art when the cover
-becomes a routine deliverable from the docx pipeline.
+- **Sizes are 1px→1pt** (body 12pt) — ~33% larger than the canonical PDF
+  (12px = 9pt). User decision 2026-06-11: Word stays editable/readable.
+- **Weight 500/600 render bold (700)** — Word's `<w:b/>` is boolean.
+- **Title rule is full content width** — Word can't do Nil's 50% left rule.
+- **Cover artwork / colophon pattern** — still HTML-or-PDF-first; no SVG
+  pattern, hairline, or cover paper in Word.
+- **Reference titles** are italic Inter, not serif italic — pandoc emits no
+  run style to hook the serif treatment onto.
+- **TOC renders empty until fields update** (md2docx sets
+  `updateFields=false` to suppress Word's prompt) — update manually in Word.
+- **LibreOffice preview quirks** — side-by-side figures stack vertically and
+  similar artifacts in `soffice` conversion; real Word renders fine.
+
+For manual (non-pipeline) Word users, the template body is a self-documenting
+starter page (cover roles, a live SEQ-numbered figure block to copy-paste, a
+styled table), shipped alongside as `gl.dotx` so double-click creates a new
+document. See `skills/md2docx/SKILL.md` § "Using the GL theme manually".
+
+For **existing** Word documents, `skills/gl-docx-retheme/` converts to the GL
+theme: scripted theme/style transplant + direct-formatting strip, Claude
+judgment remaps (pseudo-headings, figure blocks, tables), and Word-comment
+flags for what only the author can fix (chart regeneration, finding-style
+titles, cover rebuild).
 
 ## 9. Typography size history — px vs pt (RESOLVED: px everywhere)
 
@@ -180,13 +194,13 @@ report.
 | Body     | 12 px    | 12 px                |
 | Footnote |  9 px    |  9 px                |
 
-`.docx` remains pt-native (Word can't express px) and is now an explicit
+`.docx` remains pt-native (Word can't express px) and is an explicit
 *best-effort approximation* of the PDF — see the note in
-`assets/build_gl_template.py`. **Open:** whether to rescale the docx template
-×0.75 so Word matches the PDF physically (body 9pt, footnotes 6.75pt) or keep
-it print-readable but larger than the PDF.
+`skills/md2docx/assets/build_gl_template.py`. **Resolved (2026-06-11):**
+keep the literal 1px→1pt map (body 12pt) so Word stays comfortably editable;
+accepted that Word renders ~33% larger than the canonical PDF. See §10.
 
-## 10. Old font retention on merge
+## 11. Old font retention on merge
 
 Three font families are still on the branch from the previous system:
 Source Sans 3, JetBrains Mono, Crimson Pro. None are referenced by the new

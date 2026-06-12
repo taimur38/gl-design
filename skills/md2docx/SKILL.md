@@ -27,12 +27,60 @@ md2docx --list-themes                  # show available themes
 
 Bundled themes live in [assets/templates/](assets/templates/):
 
-| Theme     | Description                                              |
-|-----------|----------------------------------------------------------|
-| `default` | Original template (Garamond, 12pt, Office colors)        |
-| `gl`      | Growth Lab (Source Sans 3, 11pt, GL brand colors/spacing) |
+| Theme     | Description                                                         |
+|-----------|----------------------------------------------------------------------|
+| `default` | Original template (Garamond, 12pt, Office colors)                    |
+| `gl`      | Growth Lab design system (Source Serif 4 + Inter, ink ramp, GL chart palette — see `grammar.md` and `recipes/report.md`) |
 
 The `--theme` flag selects a reference document from `assets/templates/{name}.docx`. All themes share the same Lua filter, citation style, and cross-reference support.
+
+The `gl` template is generated — never edit it by hand. Rebuild with:
+
+```bash
+python3 assets/build_gl_template.py   # template.docx → templates/gl.docx + gl.dotx
+```
+
+## Using the GL theme manually in Word (no pipeline)
+
+Give manual-Word users `assets/templates/gl.dotx` — double-clicking it
+creates a new document from the template (the `.docx` twin is for pandoc).
+The document opens as a **starter page** that documents itself: cover roles
+(Title / Subtitle / Author / Date), headings, a complete figure block, and a
+styled table, all applied from named styles in the Styles gallery.
+
+- **Figures**: copy-paste the sample five-paragraph figure block. Its number
+  is a live `SEQ Figure` field — Word renumbers on field update (Ctrl+A,
+  F9) and the figures appear in References → Cross-reference. Don't use
+  Word's Insert Caption for figures (wrong shape — single paragraph below
+  the image).
+- **Tables**: apply the `Table` table style (Table Design gallery); caption
+  above in `Table Caption` with a `SEQ Table` field (the starter shows one).
+- **TOC / footnotes / citations**: References → Table of Contents,
+  References → Insert Footnote, and Zotero's bibliography all land on
+  GL-styled rails automatically.
+- The figure styles are priority-clustered in the Styles pane (label →
+  title → subtitle → image → source); pipeline-only plumbing styles
+  (`Compact`, `Body Text`, …) are hidden from the ribbon gallery.
+
+## Figure blocks (GL theme)
+
+The GL theme renders Nil's five-element figure block. Author figures as:
+
+```markdown
+![Chart title ending in a period. // Optional subtitle](chart.png){#fig:label}
+
+Source: Growth Lab analysis of UN Comtrade.
+```
+
+This becomes: `FIGURE N` eyebrow (accent, uppercase) → chart title (serif) →
+subtitle (optional, ink-3) → image → source (serif italic), kept together on
+one page. Same ` // ` convention as md2pdf. A `Source:`/`Note:` paragraph
+immediately after the image is styled as the figure source. Consecutive
+images (2–3) render side-by-side with merged captions — note LibreOffice
+preview stacks them vertically; real Word renders them side-by-side.
+
+Word-fidelity limits (sizes 1px→1pt, bold-for-500, full-width title rule,
+empty TOC until fields update) are listed in `followups.md` §10.
 
 ## Requirements
 

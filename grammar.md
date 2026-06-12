@@ -167,7 +167,8 @@ without inflection. Weights used: 400, 500, 600, 700.
 > eyebrows, figure labels, any small uppercase label.
 
 Both ship locally in [`assets/fonts/`](assets/fonts/); the in-chart theme
-also pulls them from Google Fonts at runtime.
+registers the bundled variable fonts via systemfonts, falling back to
+system-installed copies when the bundle isn't present.
 
 ### Optical sizing (Source Serif 4)
 

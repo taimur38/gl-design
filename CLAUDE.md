@@ -26,15 +26,18 @@ recipes/
   slide.md            # 16:9 slide deck: canvas, type sizes, slide classes
 
 assets/               # Static embodiments of grammar + recipe
-  fonts/              # Source Sans 3 + JetBrains Mono (local copies)
+  fonts/              # Source Serif 4 + Inter (local copies; legacy/ holds retired faces)
   design-library/     # GL brand assets: logos, flags, color palettes (CSV)
-  gl-report.docx      # Word reference doc for pandoc
-  build_gl_template.py  # Builds gl-report.docx from the md2docx base template
 
 skills/               # Runnable, Claude-consumable tools
   gl-ggplot/          # GL design system for R/ggplot2 (theme, scales, sizes)
     assets/theme_gl.R   # Sourceable R file — the portable runtime
   md2docx/            # Markdown → Word conversion (pandoc + Lua filters)
+    assets/templates/gl.docx       # GL Word reference doc (the live --theme gl)
+    assets/templates/gl.dotx       # Template twin for manual Word users
+    assets/build_gl_template.py    # Rebuilds gl.docx + gl.dotx from Nil tokens
+  gl-docx-retheme/    # Convert an existing Word doc to the GL theme
+                      #   (audit → transplant → judgment remaps → flags)
   md2pdf/             # Markdown → PDF via pandoc + headless Chromium
   md2html/            # Markdown → self-contained HTML (shares md2pdf assets)
   md2slides/          # Markdown → 16:9 PDF deck via Marp + gl theme

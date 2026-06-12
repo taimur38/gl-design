@@ -38,8 +38,8 @@ Three layers, each separable:
    - **R functions** in [`skills/gl-ggplot/`](skills/gl-ggplot/) — theme,
      palettes, named figure sizes.
    - **Pandoc filters and templates** in [`skills/md2docx/`](skills/md2docx/)
-     and [`assets/gl-report.docx`](assets/gl-report.docx) — markdown to Word
-     with GL styling.
+     — markdown to Word with GL styling (reference doc at
+     `skills/md2docx/assets/templates/gl.docx`).
    - **Claude skills** — `gl-ggplot`, `md2docx`, `chart-audit` — so AI
      assistants apply the grammar automatically.
    - **Static assets** in [`assets/`](assets/) — fonts, logos, color CSVs
@@ -61,9 +61,10 @@ Three layers, each separable:
 - **Growth Lab Design Library** (`growthlab.app/design-library`) — brand
   colors, visualization palettes, logos, flags. Downloaded to
   [`assets/design-library/`](assets/design-library/).
-- **Source Sans 3** — GL's primary typeface, bundled locally in
-  [`assets/fonts/`](assets/fonts/).
-- **JetBrains Mono** — for captions, axis labels, technical annotations.
+- **Source Serif 4 + Inter** — the two-family type stack (serif for voice,
+  sans for function), bundled locally in [`assets/fonts/`](assets/fonts/).
+  Earlier iterations used Source Sans 3 and JetBrains Mono; both are retired —
+  the grammar forbids monospace anywhere.
 - **Pakistan FM meeting materials** ([`playground/`](playground/)) — a
   working dogfood example of the report recipe, with embedded ggplot code
   and rendered output.

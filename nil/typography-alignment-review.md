@@ -121,7 +121,7 @@ You chose to make the **HTML→PDF report the source of truth and author it in p
 
 **Consequence to be aware of:** body is now 12px = **9pt physical** — dense, editorial, and exactly Nil's reference (the recipe had previously bumped it to 12pt for comfort).
 
-**Open:** whether to rescale the docx template ×0.75 so Word matches the PDF physically (body 9pt, footnotes 6.75pt), or keep Word print-readable but ~33% larger than the canonical PDF.
+**Resolved (2026-06-11):** keep Word at the literal 1px→1pt map (body 12pt, ~33% larger than the canonical PDF) for editability. The docx template was rebuilt from scratch against Nil's tokens — see `skills/md2docx/assets/build_gl_template.py` and `followups.md` §10 for the remaining Word-specific fidelity limits.
 
 ---
 
