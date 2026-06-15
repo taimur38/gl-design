@@ -16,10 +16,57 @@ See [`intention.md`](intention.md) for the why.
   Word/PDF). Slide / brief / standalone-chart recipes to come.
 - **Assets** + **Skills** — the encoded, runnable form of grammar + recipe.
 
+## Source of truth & propagation
+
+Design values (colors, fonts, type scale, sizes) are **not** kept in sync
+automatically — there is no generated tokens file. Consistency is maintained by
+convention, so the authority order must be explicit. **Values flow downward;
+they never flow back up.**
+
+```
+nil/            UPSTREAM INSPIRATION — Nil's original deliverables
+                (data vis.html, typography-spec.html, *-rules.md).
+                Read-only reference. We distill from it; we do not edit it,
+                and it is not authoritative once distilled.
+  ↓ distilled into
+grammar.md      SOURCE OF TRUTH — the canonical, medium-agnostic values:
+                color ramps + palettes, type stack, weights, type scale,
+                in-chart conventions. If a value disagrees anywhere, grammar.md
+                wins. Change a token HERE FIRST.
+  ↓ applied per medium
+recipes/        Medium APPLICATIONS — page geometry, grid, figure sizes, type
+                sizes for one output (report.md, slide.md). May add medium-only
+                values (margins, DPI) but must not contradict grammar.md.
+  ↓ encoded as runnable form
+DOWNSTREAM       Must MATCH grammar.md + the relevant recipe. Never a source.
+ENCODINGS        When a grammar/recipe value changes, update every file below
+                 that carries it, then re-render the playground to verify:
+
+   skills/gl-ggplot/assets/theme_gl.R      — R: `gl` list, palettes, save_fig sizes, geom defaults
+   skills/md2docx/assets/build_gl_template.py — Python constants → gl.docx / gl.dotx (note: deliberate
+                                              px→pt + boolean-bold compromises, documented in-file)
+   skills/md2pdf/assets/md2pdf-style.css   — CSS `:root` vars (shared by md2html)
+   skills/md2pdf-minimal/assets/md2pdf-style.css
+   skills/md2slides/assets/themes/gl.css   — Marp theme CSS
+   showcase/framework-visual.html          — illustrative walkthrough (must look current)
+
+playground/      DERIVED OUTPUTS — dogfood renders (demo-report.*, imgs/). Never
+                 a source; regenerate from the above, don't hand-edit values.
+```
+
+**Auditing for drift (for LLMs):** treat `grammar.md` as ground truth. For each
+color hex / font family / type size it defines, grep the downstream encodings
+above and flag any that differ. A mismatch is a bug in the downstream file, not
+in grammar.md — unless the downstream file documents a deliberate per-medium
+compromise (as `build_gl_template.py` does for Word). `nil/` and `playground/`
+are out of scope for drift checks: the former is upstream, the latter derived.
+
 ## Repo structure
 
 ```
-grammar.md            # Visual grammar — color, type, chart conventions
+nil/                  # Upstream inspiration — Nil's original spec deliverables
+                      #   (data vis + typography HTML/MD). Read-only; not authoritative.
+grammar.md            # SOURCE OF TRUTH — color, type, chart conventions
 intention.md          # Purpose, problem, approach, inspirations
 recipes/
   report.md           # Long-form report: page, grid, figure sizes, patterns
