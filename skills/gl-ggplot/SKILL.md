@@ -18,7 +18,9 @@ palette with light/main/dark tones; mute-then-highlight).
 At the top of every R script or Rmd file that produces charts, add:
 
 ```r
-source("~/dev/gl-design/skills/gl-ggplot/assets/theme_gl.R")
+source(paste0(Sys.getenv("CLAUDE_PLUGIN_ROOT"), "/skills/gl-ggplot/assets/theme_gl.R"))
+# ^ under the installed plugin. If CLAUDE_PLUGIN_ROOT is unset (symlink install),
+#   use "~/.claude/skills/gl-ggplot/assets/theme_gl.R" — the repo root auto-detects either way.
 gl_setup()                          # report mode (default) — no title/subtitle/caption
 gl_setup(mode = "slide")            # slide mode — keeps title/subtitle/caption
 ```
@@ -531,7 +533,9 @@ data |>
 ## Complete example
 
 ```r
-source("~/dev/gl-design/skills/gl-ggplot/assets/theme_gl.R")
+source(paste0(Sys.getenv("CLAUDE_PLUGIN_ROOT"), "/skills/gl-ggplot/assets/theme_gl.R"))
+# ^ under the installed plugin. If CLAUDE_PLUGIN_ROOT is unset (symlink install),
+#   use "~/.claude/skills/gl-ggplot/assets/theme_gl.R" — the repo root auto-detects either way.
 gl_setup()
 
 library(dplyr)

@@ -148,8 +148,10 @@ markdown inside them is parsed as markdown rather than literal HTML.
 ## Quick example
 
 ```bash
-cd ~/dev/gl-design
-skills/md2slides/scripts/md2slides playground/demo-deck.md
+# Under the installed plugin, the script and demo file live under $CLAUDE_PLUGIN_ROOT:
+"$CLAUDE_PLUGIN_ROOT/skills/md2slides/scripts/md2slides" \
+  "$CLAUDE_PLUGIN_ROOT/playground/demo-deck.md"
+# (From a git checkout instead: cd into the repo and run skills/md2slides/scripts/md2slides ...)
 ```
 
 Renders `playground/demo-deck.md` to `playground/demo-deck.pdf`. The demo

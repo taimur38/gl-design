@@ -1,13 +1,16 @@
 % gl_pdf.tex — Growth Lab design system for R Markdown PDF output
 %
-% Usage in a YAML header:
+% Usage in a YAML header (point in_header at this file wherever the kit lives):
 %   output:
 %     pdf_document:
 %       latex_engine: xelatex
 %       includes:
-%         in_header: ~/dev/gl-design/skills/gl-ggplot/assets/gl_pdf.tex
+%         in_header: .../skills/gl-ggplot/assets/gl_pdf.tex
 %
 % Requires: xelatex (or lualatex). Variable fonts work in both engines.
+% Fonts are resolved BY NAME via fontconfig, so the GL fonts must be installed
+% on the system first (run scripts/install.sh, then `fc-cache -f` on Linux).
+% This keeps the header portable — no machine-specific paths.
 %
 % Fonts (nil-design):
 %   Inter             — main / sans / body (variable file)
@@ -21,42 +24,17 @@
 
 \usepackage{fontspec}
 
-\setmainfont{InterVariable}[
-  Path           = /home/taimur/dev/gl-design/assets/fonts/inter/ttf/,
-  Extension      = .ttf,
-  UprightFont    = *,
-  ItalicFont     = *-Italic,
-  BoldFont       = *,
-  BoldItalicFont = *-Italic
-]
+% Resolved by family name via fontconfig (see header note). Inter and Source
+% Serif 4 ship as variable faces whose italic cut is a same-family sibling, so
+% fontspec discovers upright + italic automatically; bold falls back to the
+% renderer (heading weights 500/600 are not separately addressable here).
+\setmainfont{Inter Variable}
 
-\setsansfont{InterVariable}[
-  Path           = /home/taimur/dev/gl-design/assets/fonts/inter/ttf/,
-  Extension      = .ttf,
-  UprightFont    = *,
-  ItalicFont     = *-Italic,
-  BoldFont       = *,
-  BoldItalicFont = *-Italic
-]
+\setsansfont{Inter Variable}
 
-\newfontfamily\glserif{SourceSerif4Variable-Roman}[
-  Path           = /home/taimur/dev/gl-design/assets/fonts/source-serif-4/ttf/,
-  Extension      = .ttf,
-  UprightFont    = *,
-  ItalicFont     = SourceSerif4Variable-Italic,
-  BoldFont       = *,
-  BoldItalicFont = SourceSerif4Variable-Italic
-]
+\newfontfamily\glserif{Source Serif 4 Variable}
 
-\setmonofont{JetBrainsMono}[
-  Path           = /home/taimur/dev/gl-design/assets/fonts/legacy/jetbrains-mono/ttf/,
-  UprightFont    = *-Regular,
-  BoldFont       = *-Bold,
-  ItalicFont     = *-Italic,
-  BoldItalicFont = *-BoldItalic,
-  Extension      = .ttf,
-  Scale          = 0.92
-]
+\setmonofont{JetBrains Mono}[ Scale = 0.92 ]
 
 % ---- Colours ----------------------------------------------------------------
 % Mirrors the `gl` palette in theme_gl.R.

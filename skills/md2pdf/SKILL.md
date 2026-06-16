@@ -95,8 +95,10 @@ use the docx pipeline ([`../md2docx/`](../md2docx/)).
 ## Quick example
 
 ```bash
-cd ~/dev/gl-design
-skills/md2pdf/scripts/md2pdf playground/demo-report.md demo-report.pdf
+# Under the installed plugin, the script and demo file live under $CLAUDE_PLUGIN_ROOT:
+"$CLAUDE_PLUGIN_ROOT/skills/md2pdf/scripts/md2pdf" \
+  "$CLAUDE_PLUGIN_ROOT/playground/demo-report.md" demo-report.pdf
+# (From a git checkout instead: cd into the repo and run skills/md2pdf/scripts/md2pdf ...)
 ```
 
 Renders `playground/demo-report.md` to `demo-report.pdf` with full GL
