@@ -33,10 +33,13 @@ printf '%sroot: %s%s\n\n' "$dim" "$ROOT" "$rst"
 printf 'Markdown → Word / PDF / HTML (pandoc pipelines)\n'
 have pandoc          && ok "pandoc"          || bad "pandoc"          "$PM pandoc"
 have pandoc-crossref && ok "pandoc-crossref" || bad "pandoc-crossref" "see https://github.com/lierdakil/pandoc-crossref/releases (or 'brew install pandoc-crossref')"
-if have chromium || have chromium-browser || have google-chrome || have google-chrome-stable; then
-  ok "headless Chromium (for PDF)"
+# md2pdf prefers chrome-headless-shell from the puppeteer cache, then falls back
+# to a system Chromium/Chrome — so check the cache too, not just PATH.
+if find "$HOME/.cache/puppeteer" \( -name 'chrome-headless-shell' -o -name 'chrome' \) -type f 2>/dev/null | grep -q . \
+   || have chromium || have chromium-browser || have google-chrome || have google-chrome-stable; then
+  ok "headless Chromium (for PDF / slides)"
 else
-  bad "Chromium / Chrome (PDF rendering)" "$PM chromium  (or install Google Chrome)"
+  bad "Chromium / Chrome (PDF rendering)" "$PM chromium  (or: npx puppeteer browsers install chrome-headless-shell)"
 fi
 
 # ---- slides (Marp) ----------------------------------------------------------
@@ -69,10 +72,13 @@ if [ -f "$ROOT/assets/fonts/inter/ttf/InterVariable.ttf" ]; then
 else
   bad "bundled fonts missing from repo" "re-clone the repo; assets/fonts must be intact"
 fi
-if fc-list 2>/dev/null | grep -qi "Inter" && fc-list 2>/dev/null | grep -qi "Source Serif 4"; then
+# Capture first: `fc-list | grep -q` would SIGPIPE fc-list under `set -o pipefail`
+# and report a false negative even when the fonts are present.
+fc_all="$(fc-list 2>/dev/null || true)"
+if grep -qi "Inter" <<<"$fc_all" && grep -qi "Source Serif 4" <<<"$fc_all"; then
   ok "fonts registered with the system (needed for the PDF/xelatex + Chromium paths)"
 else
-  warn "fonts not system-registered" "run scripts/install.sh to copy them into your font dir, then 'fc-cache -f' (Linux)"
+  warn "fonts not system-registered" "run scripts/install-fonts.sh (needed for the PDF / slides / xelatex paths; the R path works without it)"
 fi
 
 # ---- summary ----------------------------------------------------------------

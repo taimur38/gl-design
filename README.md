@@ -26,12 +26,17 @@ ships these skills:
 | **md2pdf-minimal** | Node-only fallback for PDF when the pandoc path is unavailable |
 | **gl-docx-retheme** | Restyle an existing Word doc to the GL theme |
 
+> **These skills ship together as the `gl-design` plugin — they are not standalone.**
+> They share one source of truth: `grammar.md` and `recipes/` at the plugin root. The
+> skills reference those shared files (and the bundled fonts), so copying a single skill
+> directory out on its own will break it. Install the whole kit, not one skill.
+
 ## Install
 
 ### 1. Clone
 
 ```bash
-git clone https://github.com/growthlab/gl-design.git
+git clone https://github.com/taimur38/gl-design.git
 cd gl-design
 ```
 
@@ -52,9 +57,15 @@ It does **not** install anything — it tells you what to run. Install the items
 **Preferred — Claude Code plugin** (auto-updates from git, no symlinks):
 
 ```bash
-claude plugin marketplace add ./           # or: growthlab/gl-design once pushed
+claude plugin marketplace add ./           # or: taimur38/gl-design once pushed
 claude plugin install gl-design
+bash scripts/install-fonts.sh              # one-time: register fonts system-wide
 ```
+
+The plugin install gives you the skills and `/design-kit`. It does **not** register the
+fonts — and the PDF, slides, and xelatex paths resolve fonts by name from the OS (the
+R/ggplot path reads the bundled fonts directly and needs nothing). So run
+`scripts/install-fonts.sh` once after installing.
 
 **Fallback — symlink script** (if you're not on the plugin system):
 
@@ -62,8 +73,8 @@ claude plugin install gl-design
 bash scripts/install.sh
 ```
 
-This symlinks the eight skills into `~/.claude/skills/`, copies the bundled fonts into your
-user font directory, and re-runs the doctor.
+This symlinks the eight skills into `~/.claude/skills/`, installs the fonts (via
+`install-fonts.sh`), and re-runs the doctor.
 
 ## Use
 
@@ -97,7 +108,7 @@ intention.md        Why the system exists
 skills/             The eight runnable skills (theme, pipelines, audits)
 assets/             Fonts + brand library that the skills consume
 commands/           /design-kit session primer
-scripts/            doctor.sh (check deps) · install.sh (symlink fallback)
+scripts/            doctor.sh (check deps) · install-fonts.sh (register fonts) · install.sh (symlink fallback)
 playground/         Dogfood report that exercises the whole kit end-to-end
 showcase/           Interactive walkthrough of the system (open in a browser)
 nil/                Upstream design inspiration (read-only)

@@ -83,4 +83,19 @@ Skills must not hardcode absolute paths. `theme_gl.R` resolves the repo root in 
 The repo root is itself the Claude Code plugin: `.claude-plugin/plugin.json` +
 `.claude-plugin/marketplace.json` declare it, and `skills/`, `commands/` auto-discover.
 Adding a skill = drop it under `skills/` and add it to the `skills` array in
-`marketplace.json`. Adding a command = drop a `.md` under `commands/`.
+`marketplace.json`. Adding a command = drop a `.md` under `commands/` (do **not** list it
+in `marketplace.json` — the `commands`/`skills`/`agents` fields there are directory-path
+*overrides*, not file lists).
+
+**The skills are plugin members, not standalone.** They deliberately share one source of
+truth — `grammar.md`, `recipes/`, and `assets/fonts` at the plugin root — and reference it
+via `../../grammar.md`-style links and `${CLAUDE_PLUGIN_ROOT}`. That resolves only because
+the whole repo is the plugin root; a skill copied out on its own will break. This is why
+the repo is packaged as one plugin rather than eight per-skill plugins, and why new skills
+should keep referencing the shared files at the root rather than vendoring copies.
+
+**Fonts on the plugin path.** `claude plugin install` does not run any script, so plugin
+users must run `scripts/install-fonts.sh` once to register the fonts system-wide. Only the
+R/ggplot path reads the bundled fonts directly; the PDF / slides / xelatex paths resolve
+fonts by name from the OS. `scripts/install.sh` (the symlink fallback) calls
+`install-fonts.sh` for you. Keep font logic in `install-fonts.sh`, not duplicated.

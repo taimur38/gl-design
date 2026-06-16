@@ -14,7 +14,6 @@
       "source": "./",
       "description": "The full Growth Lab design kit — the /design-kit session primer plus eight sub-skills: gl-ggplot, chart-audit, md2docx, md2pdf, md2html, md2slides, md2pdf-minimal, gl-docx-retheme.",
       "strict": false,
-      "commands": ["./commands/design-kit.md"],
       "skills": [
         "./skills/gl-ggplot",
         "./skills/chart-audit",

@@ -43,17 +43,7 @@ done
 
 # ---- 2. fonts ---------------------------------------------------------------
 echo
-case "$(uname -s)" in
-  Darwin) FONT_DST="${HOME}/Library/Fonts" ;;
-  *)      FONT_DST="${HOME}/.local/share/fonts/gl-design" ;;
-esac
-mkdir -p "$FONT_DST"
-find "$ROOT/assets/fonts" -path '*/legacy/*' -prune -o \( -name '*.ttf' -o -name '*.otf' \) -print 2>/dev/null \
-  | while read -r f; do cp -f "$f" "$FONT_DST/"; done
-echo "  fonts copied → $FONT_DST"
-if command -v fc-cache >/dev/null 2>&1; then
-  fc-cache -f "$FONT_DST" >/dev/null 2>&1 && echo "  font cache refreshed"
-fi
+bash "$ROOT/scripts/install-fonts.sh"
 
 # ---- 3. doctor --------------------------------------------------------------
 echo

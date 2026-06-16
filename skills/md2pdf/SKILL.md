@@ -1,7 +1,7 @@
 ---
 name: md2pdf
 description: Convert markdown files to styled PDF documents using the Growth Lab visual grammar. Use this skill when the user asks to render, export, or convert a markdown file to PDF, or when a task requires producing a PDF that matches the GL design system.
-compatibility: Requires Node.js (npx) and the md-to-pdf package; uses local Source Serif 4 + Inter via Google Fonts at render time.
+compatibility: Requires pandoc, pandoc-crossref, and headless Chromium (chrome-headless-shell). Optional references.bib in the input dir enables citations via citeproc.
 metadata:
   author: taimur-shah
   version: "2.0"
@@ -11,9 +11,10 @@ metadata:
 
 Convert markdown to a PDF that follows the [Growth Lab visual
 grammar](../../grammar.md) and the [report
-recipe](../../recipes/report.md). The skill is a thin Node wrapper around
-`md-to-pdf` plus a stylesheet that maps markdown elements to the grammar's
-role hierarchy.
+recipe](../../recipes/report.md). The pipeline is pandoc (with
+`pandoc-crossref`, and `citeproc` when a `references.bib` is present) →
+standalone HTML with the GL stylesheet → `chrome-headless-shell --print-to-pdf`.
+The stylesheet maps markdown elements to the grammar's role hierarchy.
 
 ## Usage
 
