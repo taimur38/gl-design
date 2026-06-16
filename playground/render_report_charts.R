@@ -115,9 +115,11 @@ macro_df %>%
     rename(`Reserves (months of imports)` = wdi_fi_res_totl_mo) %>%
     filter(!is.na(`Reserves (months of imports)`)) %>%
     ggplot(aes(x = year, y = `Reserves (months of imports)`)) +
-    geom_hline(yintercept = 3, linetype = 'dashed', color = 'grey') +
-    geom_line() +
-    geom_point() +
+    # Reference threshold: dashed ink_3 (theme default — annotates a threshold, not data)
+    geom_hline(yintercept = 3, linetype = 'dashed') +
+    # Single-series primary line: c_1 blue is the spec default for single-series charts.
+    geom_line(color = highlight, linewidth = highlight_sz) +
+    geom_point(fill = highlight, color = highlight_dark, alpha = 1, size = 2) +
     labs(title = "Pakistan: Reserves in Months of Imports",
          subtitle = "unused in report mode",
          x = NULL, y = "Reserves (months of imports)")
@@ -139,9 +141,11 @@ weo_scatter <- weo_rgdp |>
 
 weo_scatter |>
     ggplot(aes(x = gdppc_growth, y = ca_change)) +
-    geom_hline(yintercept = 0, color = 'grey') +
-    geom_vline(xintercept = 0, color = 'grey') +
-    geom_vline(xintercept = 2, linetype = 'dashed', color = 'grey') +
+    # Zero baselines: solid ink_2 (spec §4 — "zero baseline at ink weight, never gridline weight")
+    geom_hline(yintercept = 0, colour = gl$ink_2, linetype = "solid", linewidth = 0.4) +
+    geom_vline(xintercept = 0, colour = gl$ink_2, linetype = "solid", linewidth = 0.4) +
+    # Reference threshold: dashed ink_3 (theme default)
+    geom_vline(xintercept = 2, linetype = 'dashed') +
     geom_smooth(method = 'lm', se = TRUE) +
     geom_point() +
     labs(title = "unused", subtitle = "unused",
@@ -192,7 +196,8 @@ ca_ends <- weo_combined |>
 
 weo_combined |>
     ggplot(aes(x = year, y = value, color = component)) +
-    geom_hline(yintercept = 0, color = 'grey') +
+    # Zero baseline: solid ink_2 (spec §4 — never dashed, never gridline weight)
+    geom_hline(yintercept = 0, colour = gl$ink_2, linetype = "solid", linewidth = 0.4) +
     geom_line(data = . %>% filter(component != "Current Account")) +
     geom_line(data = . %>% filter(component == "Current Account")) +
     geom_text_repel(
@@ -260,7 +265,8 @@ sbp_ends <- sbp |>
 
 sbp |>
     ggplot(aes(x = date, y = value_pct, group = series)) +
-    geom_hline(yintercept = 0) +
+    # Zero baseline: solid ink_2 (spec §4 — theme default for geom_hline is dashed)
+    geom_hline(yintercept = 0, colour = gl$ink_2, linetype = "solid", linewidth = 0.4) +
     geom_line(data = . %>% filter(!series %in% sbp_focus), color = gl$c_muted) +
     geom_line(data = . %>% filter(series == "Net foreign assets"),
               color = gl$c_2, linewidth = highlight_sz) +
@@ -449,7 +455,8 @@ decomp |>
     # white stroke so it reads against the strong-vs-white bar colors.
     geom_point(aes(x = total), fill = gl$c_muted_light, color = gl$paper,
                size = 2.2, stroke = 0.7, show.legend = FALSE) +
-    geom_vline(xintercept = 0) +
+    # Zero baseline: solid ink_2 (spec §4 — theme default for geom_vline is dashed)
+    geom_vline(xintercept = 0, colour = gl$ink_2, linetype = "solid", linewidth = 0.4) +
     scale_x_continuous(labels = function(x) paste0(x, '%')) +
     labs(title = "unused", subtitle = "unused",
          x = 'Change in per capita exports (log pp)', y = '', fill = '', caption = "unused")

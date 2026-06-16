@@ -40,7 +40,7 @@ gl <- list(
     cover_bg    = "#F3F2EA",  # Cover only
     cover_disk  = "#ECEBE0",  # Report-cover medallion disk (one tone darker than cover_bg)
     rule        = "#DDDDDD",  # Hairline borders
-    gridline    = "#ECE9E2",  # In-chart gridlines
+    gridline    = "#D8D4CC",  # In-chart gridlines
 
     # Categorical — three tones per hue
     c_1_light = "#B5D5EA", c_1 = "#2F87C8", c_1_dark = "#1A5A8E",   # Blue
@@ -52,7 +52,7 @@ gl <- list(
 
     # Muted gray — "everyone else"
     c_muted_light = "#CDD2D9",
-    c_muted       = "#999FA8",
+    c_muted       = "#AFB5BE",
     c_muted_dark  = "#5F6773",
 
     # Full categorical palette (main tones, in order)
@@ -181,7 +181,7 @@ gl_palettes <- list(
 # In-chart chrome (grammar.md §3.5):
 #   axis line   — 1px ink-2, bottom + left only (no panel border)
 #   tick mark   — 1px ink-2, 4pt outward
-#   gridline    — 1px gl$gridline (#ECE9E2), horizontal only by default
+#   gridline    — 1px gl$gridline (#D8D4CC), horizontal only by default
 #                 (Nil's rule: never both X and Y unless the chart is dense).
 #                 Override with theme(panel.grid.major.x = element_line(...))
 #                 when the chart genuinely needs vertical gridlines.

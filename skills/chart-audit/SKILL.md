@@ -48,7 +48,7 @@ PNGs and checks each chart against the rules below. To invoke:
 | Highlighted data points | Uses `highlight` (main blue `#2F87C8`, = `c_1`) for the default focus, or `lead_finding` (red `#CC4948`, = `c_2`) for stark emphasis | Uses `"red"`, `accent` as a data fill, or any old-palette / arbitrary hex |
 | Highlighted point stroke / label | Point stroke = `highlight_dark` (`#1A5A8E`); any label/text tied to the series = its dark tone (`#1A5A8E` blue, `#8A2C2B` red) | Main tone used for the point stroke or for text tied to the series |
 | Highlighted **points** painted once | Focus rows excluded from the muted backdrop layer; focus point drawn a single time at `alpha = 1` | Focus left in the `alpha`-0.8 backdrop and overpainted — the dot reads muddy / desaturated from the grey showing through |
-| Highlighted lines / bars | Painted twice — non-focus in `c_muted` (`#999FA8`), focus on top in `highlight`/`lead_finding` (opaque geoms, so overlap is fine) | Single geom with conditional color, or no muted layer |
+| Highlighted lines / bars | Painted twice — non-focus in `c_muted` (`#AFB5BE`), focus on top in `highlight`/`lead_finding` (opaque geoms, so overlap is fine) | Single geom with conditional color, or no muted layer |
 | Non-highlighted geoms (when a focus exists) | Painted in `c_muted` to recede | Gratuitously varied palette colors for "everyone else" |
 | `accent` (`#1A5A8E`) usage | Non-data chrome only (figure labels, eyebrows, links) | Used as a data-mark fill — that's the typography↔data-viz mix-up |
 
@@ -115,7 +115,7 @@ This check requires reading the rendered PNG:
 | Data-ink ratio | Chart area dominates; legends, axes, whitespace are secondary | Legend or axis labels take >30% of figure area |
 | Highlight visibility | Focus series jumps out of the muted layer immediately | Focus and muted are similar weights / saturations |
 | Overplotting | Points/lines are distinguishable | Dense scatter with no alpha, or many overlapping lines |
-| Grid lines | Horizontal-only, faint `gridline` (`#ECE9E2`); no vertical or minor unless the chart is dense | Heavy grid lines, or both X and Y gridlines on a non-dense chart |
+| Grid lines | Horizontal-only, `gridline` (`#D8D4CC`); no vertical or minor unless the chart is dense | Heavy grid lines, or both X and Y gridlines on a non-dense chart |
 
 ## Output format
 

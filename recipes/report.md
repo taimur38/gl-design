@@ -372,9 +372,9 @@ ACCENT:      #1A5A8E (= c-1-dark)
 CATEGORICAL (main tone):
              c-1 #2F87C8  c-2 #CC4948  c-3 #2AA584
              c-4 #7554A3  c-5 #EA822D  c-6 #CDC86B
-MUTED:       c-muted #999FA8 (paint everyone-else, then highlight focus in
+MUTED:       c-muted #AFB5BE (paint everyone-else, then highlight focus in
              c-1 or c-2). Light #CDD2D9 / dark #5F6773 variants for stroke/text.
-PAPER:       paper #FFFFFF  cover-bg #F3F2EA  rule #DDDDDD  gridline #ECE9E2
+PAPER:       paper #FFFFFF  cover-bg #F3F2EA  rule #DDDDDD  gridline #D8D4CC
 COVER:       rect-pattern.svg (working paper) | circle-pattern.svg (report)
              assets/design-library/cover-patterns/
 ```

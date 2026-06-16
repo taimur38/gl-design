@@ -40,7 +40,7 @@ After calling `gl_setup()`, the following are available:
 | `lead_finding` | `gl$c_2` (`#CC4948`) — main red, for stark / lead-finding emphasis (sparingly) |
 | `lead_finding_dark` | `gl$c_2_dark` (`#8A2C2B`) — stroke/label for the lead-finding mark |
 | `accent` | `gl$accent` (`#1A5A8E`) — **non-data UI chrome only** (eyebrows, figure labels, links). Do **not** use as a data-mark fill — that is the typography↔data-viz mix-up to avoid |
-| `c_muted` | `gl$c_muted` (`#999FA8`) — "everyone-else" gray for de-emphasis |
+| `c_muted` | `gl$c_muted` (`#AFB5BE`) — "everyone-else" gray for de-emphasis |
 | `highlight_sz` | `linewidth` for the highlighted focus line (`0.65`, ~2.4px). Standard/muted lines default to `0.5` (~2px) — the focus is only ~1.3× thicker, per spec §5 (not a 2× jump) |
 | `theme_gl()` | The theme function (already applied via `theme_set`) |
 | `scale_color_gl()` | Discrete color scale using GL palettes |
@@ -60,12 +60,78 @@ After calling `gl_setup()`, the following are available:
 | `gl$ink_3`   | `#4F4A42` | Captions, eyebrows, chrome, chart subtitles           |
 | `gl$ink_4`   | `#9A9389` | In-chart faint markers, sparse trendlines             |
 | `gl$accent`  | `#1A5A8E` | Eyebrows, figure labels, links — = `gl$c_1_dark`      |
-| `gl$gridline`| `#ECE9E2` | In-chart major gridlines                              |
+| `gl$gridline`| `#D8D4CC` | In-chart major gridlines                              |
 | `gl$c_1`..`gl$c_6` | (palette) | Categorical main tones (fills)                 |
 | `gl$c_1_dark`..`gl$c_6_dark` | (palette) | Dark tones — strokes + labels         |
 | `gl$c_1_light`..`gl$c_6_light` | (palette) | Light tones — backgrounds, faded    |
-| `gl$c_muted` | `#999FA8` | "Everyone else" gray for the mute-then-highlight move |
+| `gl$c_muted` | `#AFB5BE` | "Everyone else" gray for the mute-then-highlight move |
 | `gl$c_muted_dark` | `#5F6773` | Strokes / labels for muted series                |
+
+### Web / D3 widget encoding
+
+**When building any HTML, D3, or SVG chart widget, copy this block verbatim —
+never reconstruct color values from memory.** This is the authoritative JS
+mirror of `theme_gl.R`. Update here whenever `grammar.md` changes.
+
+```js
+const GL = {
+  // Ink ramp
+  ink:          '#1A1714',
+  ink_2:        '#2C2823',
+  ink_3:        '#4F4A42',  // axis lines, tick labels, captions — standard axis color
+  ink_4:        '#9A9389',  // faint markers, sparse trendlines
+  accent:       '#1A5A8E',  // non-data chrome only (eyebrows, links) — = c_1_dark
+  paper:        '#FFFFFF',
+  gridline:     '#D8D4CC',  // horizontal major gridlines
+
+  // Categorical palette — main tones (fills, lines)
+  c_1:          '#2F87C8',  // blue
+  c_2:          '#CC4948',  // red
+  c_3:          '#2AA584',  // teal
+  c_4:          '#7554A3',  // purple
+  c_5:          '#EA822D',  // orange
+  c_6:          '#CDC86B',  // yellow
+
+  // Dark tones — strokes on marks + ALL text tied to a series (WCAG AA)
+  c_1_dark:     '#1A5A8E',
+  c_2_dark:     '#8A2C2B',
+  c_3_dark:     '#1A6B53',
+  c_4_dark:     '#4A3470',
+  c_5_dark:     '#A8580F',
+  c_6_dark:     '#8A8638',
+
+  // Light tones — backgrounds, faded states
+  c_1_light:    '#B5D5EA',
+  c_2_light:    '#E89C9C',
+  c_3_light:    '#92D6BF',
+  c_4_light:    '#B5A0CC',
+  c_5_light:    '#F4BC8A',
+  c_6_light:    '#E6E2A8',
+
+  // Muted — "everyone else" grey
+  // IMPORTANT: c_muted is the fill/line color only.
+  // Any label, end-label, or legend entry for a muted series must use c_muted_dark.
+  c_muted:      '#AFB5BE',
+  c_muted_dark: '#5F6773',
+  c_muted_light:'#CDD2D9',
+
+  // Convenience aliases
+  highlight:         '#2F87C8',  // = c_1 — default data focus (fills, lines)
+  highlight_dark:    '#1A5A8E',  // = c_1_dark — point strokes + all labels tied to highlight
+  lead_finding:      '#CC4948',  // = c_2 — stark emphasis (sparingly)
+  lead_finding_dark: '#8A2C2B',  // = c_2_dark — stroke/label for lead-finding mark
+};
+
+// Dark-mode swap — axes and gridlines only; brand colors stay the same
+const dm = matchMedia('(prefers-color-scheme: dark)').matches;
+const AX = dm ? '#6B6560' : GL.ink_3;   // axis lines + tick labels
+const GR = dm ? '#302C28' : GL.gridline; // gridlines
+
+// Font sizes (SVG user units — see Rule 11 for sizing rationale)
+// For a 310-unit wide viewBox in a ~310px column:
+const FS     = 9.5;  // tick labels, axis titles, source line
+const FS_LBL = 10;   // series end-labels, direct data labels
+```
 
 ## Core rules
 
@@ -145,6 +211,36 @@ data |>
 The 6-color palette is deliberately small. If you have 7+ categories,
 consider whether mute-then-highlight would tell the story better than seven
 distinct colors.
+
+#### Assign colors in order
+
+When mapping categories to the categorical palette, always assign in order:
+c_1 (blue) first, then c_2 (red), c_3 (teal), c_4 (purple), c_5 (orange),
+c_6 (yellow). Never skip or reorder unless a category has an established
+external convention (e.g., Atlas sector palettes).
+
+#### Color count — warn at 5+
+
+**If a user's chart requires more than 4 distinct categorical colors, surface
+this warning before writing the chart code:**
+
+> ⚠️ **Color count check:** You're about to use 5 or more distinct colors.
+> Color should convey meaning, not sequence — adding a new color costs the
+> reader attention every time. Before introducing a fifth color, consider:
+>
+> - **Mute the background, highlight the message.** Paint all
+>   lower-priority series in `c_muted` grey and reserve a saturated hue
+>   for the 1–2 series that carry the actual finding. This almost always
+>   tells the story more clearly than five equal-weight colors.
+> - **Group or consolidate categories** so fewer distinct colors suffice.
+> - **Use tones of one hue** (light / main / dark of c_1, for example)
+>   for categories that share a parent — the shared hue keeps them reading
+>   as one total; lightness carries the split.
+>
+> If you've considered these alternatives and still need 5–6 colors, assign
+> them in order and proceed. More than 6 distinct colors nearly always
+> signals that a different chart type — small multiples, ranked bar,
+> treemap — would communicate better than a rainbow legend.
 
 **Untyped geoms default to muted, not a saturated color** — this is the
 GL popout pattern: paint everyone in `c_muted` first (no aesthetic mapping
@@ -275,12 +371,21 @@ interchangeable:
 
 - **Main** (`gl$c_1`, `gl$c_2`, ...) — fills (bars, lines, treemap tiles,
   scatter circles, choropleth polygons).
-- **Dark** (`gl$c_1_dark`, ...) — strokes on overlapping marks, and every
-  text element tied to the series: direct labels, legend marks, callouts,
-  annotations. Required for WCAG AA contrast against paper. **Do not use
-  the main tone for text** — it fails contrast.
+- **Dark** (`gl$c_1_dark`, ...) — strokes on overlapping marks, and **every
+  text element associated with the color**: direct labels, end-labels, legend
+  marks, callouts, annotations. Required for WCAG AA contrast against paper.
+  **Never use the main tone for text** — it fails contrast.
 - **Light** (`gl$c_1_light`, ...) — backgrounds, faded states, the lighter
   end of a sequential ramp.
+
+**This rule covers every color in the palette without exception — including
+`c_muted`.** A muted line or bar uses `gl$c_muted` (#AFB5BE) for the mark;
+its end-label, legend entry, and any annotation must use `gl$c_muted_dark`
+(#5F6773). Using `c_muted` for the label text fails contrast against paper.
+
+> **Quick test:** if a text element names or points to a colored mark, it
+> must use the dark tone of that mark's color. No label ever shares the same
+> hex as its associated fill or line.
 
 The only place dark is used as a *fill* is the three-tone stacked area
 (light / main / dark of one hue, when three bands belong to the same parent
@@ -345,10 +450,51 @@ geom_point(aes(x = total), fill = gl$c_muted_light, color = gl$paper,
            size = 2.2, stroke = 0.7)
 ```
 
-### 11. Axis & title conventions
+### 11. Minimum font size — 12px everywhere
+
+**12px is the floor for every text element inside a visualization.** This
+applies without exception to:
+
+- Axis tick labels
+- Axis titles (the rotated Y label and the X label)
+- Direct series labels, callout annotations, and line-end labels
+- Legend text
+- Figure labels (eyebrows) and chart source lines
+
+Never go below 12px, even when space is tight. If labels crowd at 12px,
+reduce the number of ticks, abbreviate the label text, or resize the figure
+— do not shrink the type.
+
+In ggplot2, `base_size = 12` in `theme_gl()` already sets the floor; do not
+override any `element_text(size = ...)` below 12.
+
+**In D3 / SVG widgets**, the 12px rule applies to the *rendered output*
+(exported PNG at 300 DPI). SVG `font-size` attributes are in viewBox user
+units and scale with the container — setting `font-size="12"` on a 320-unit
+viewBox that renders at 600px produces 22px text visually. Instead, size
+relative to the viewBox so the text lands near 12px at the intended render
+width. For a 310-unit wide viewBox in a ~310px column, use:
+
+| Role | SVG font-size |
+|------|--------------|
+| Tick labels, axis titles, source line | `9.5` |
+| Series end-labels, direct data labels | `10` |
+
+These values give ~10–11px at a 310px column. If the viewBox width changes,
+rescale: `font-size = 12 × (viewBox_width / render_width_px)`.
+
+### 13. Axis & title conventions
 
 - **Year axis:** when the X axis is just years, **omit the axis label** — the
   tick labels already name the dimension. Use `labs(x = NULL)`.
+- **Y-axis label is always rotated vertically** — `angle = 90` pointing upward,
+  centered on the axis (`hjust = 0.5`). Never leave it horizontal. In ggplot2
+  this is the default when you supply a `labs(y = "...")` label; do not
+  override `axis.title.y` to flatten it. In D3/SVG, always apply
+  `attr('transform', 'rotate(-90)')` with `attr('text-anchor', 'middle')` and
+  position it clear of the widest tick label (at least 15pt offset from tick
+  label start — see `axis.title.y = element_text(margin = margin(r = 15))` in
+  `theme_gl`).
 - **Chart title ends in a period** (slide mode, or the document in report mode)
   — it reads as a finding statement. The subtitle does **not** end in a period.
 - **Gridlines default to horizontal (Y) only.** For horizontal-bar charts, flip
@@ -362,7 +508,7 @@ geom_point(aes(x = total), fill = gl$c_muted_light, color = gl$paper,
   device: `save_fig()` / `ggsave()` use ragg's `agg_png` by default when `ragg`
   is installed, and `gl_setup()` sets `dev = "ragg_png"` inside a knit.
 
-### 12. Background distribution + highlighted country
+### 14. Background distribution + highlighted country
 
 When box plots (or violins) show the **background distribution** of a peer set
 and a line shows one country relative to it, the box plots must **recede** —
@@ -413,7 +559,7 @@ gl_palettes$sequential_1         # 5-color blue ramp, low → high
 gl_palettes$diverging_2_1        # 6-color red ↔ blue
 gl_palettes$hs_sectors           # named: "Agriculture" = "#e5c21a", ...
 gl$accent                        # "#1A5A8E"  (= gl$c_1_dark; UI chrome only)
-gl$c_muted                       # "#999FA8"  (muted bars / "everyone else")
+gl$c_muted                       # "#AFB5BE"  (muted bars / "everyone else")
 gl$c_muted_dark                  # "#5F6773"  (line/point strokes)
 gl$c_1                           # "#2F87C8"  (main blue, = highlight)
 gl$c_1_dark                      # "#1A5A8E"  (= highlight_dark — point strokes/labels)
@@ -431,9 +577,13 @@ gl$ink                           # "#1A1714"
 - [ ] Highlighted points are painted **once** at `alpha = 1` — focus rows excluded from the muted backdrop layer, never overpainted on top of a grey dot
 - [ ] Points are shape-21 filled circles with a darker 1px stroke (the geom default)
 - [ ] Highlights use mute-then-paint — supporting data is `c_muted`
-- [ ] Most charts have 2–4 colors; bigger palettes use the muted base
-- [ ] Series labels / direct annotations / scatter strokes use the **dark tone**
-      (`c_N_dark` / `categorical_dark`), not the main tone — WCAG AA contrast
+- [ ] Colors assigned in order (c_1, c_2, c_3 …); no skipping or reordering
+- [ ] 5+ distinct colors prompted a color-count check before proceeding; mute-then-highlight or grouping considered first
+- [ ] Most charts use 2–4 colors; anything larger defaults to the muted base
+- [ ] **Every label associated with a colored mark uses the dark tone of that color** —
+      direct labels, end-labels, legend entries, callouts, annotations, all of them.
+      `c_1` fill → `c_1_dark` label. `c_muted` fill/line → `c_muted_dark` label.
+      No label ever shares the same hex as its associated mark's fill or line.
 - [ ] Overlapping marks (scatter, radar) use 0.8 fill+stroke opacity
 - [ ] Related categories use one hue's tones (two/three-tone) before reaching
       for multiple colors
@@ -441,6 +591,8 @@ gl$ink                           # "#1A1714"
       ordered largest-share-at-bottom; stacked areas stay edge-to-edge
 - [ ] Highlighted focus line is only ~1.3× the muted line (`highlight_sz`), not a 2× jump
 - [ ] Sequential ramp for ordered values; diverging only with a real midpoint
+- [ ] All text in the visualization is ≥ 12px: tick labels, axis titles, direct labels, legend text, source line — no exceptions
+- [ ] Y-axis label is rotated vertically (upward, centered) — never horizontal
 - [ ] Year-only X axis omits its axis label (`labs(x = NULL)`)
 - [ ] Chart title (slide mode) ends in a period; subtitle does not
 - [ ] Horizontal-bar charts flip gridlines to vertical (X)

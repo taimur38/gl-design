@@ -51,7 +51,7 @@ WCAG AA contrast against paper.
 | `cover-disk`  | `#ECEBE0` | Report-cover medallion disk — one tone darker than `cover-bg` |
 | `paper-warm`  | `#F4F1EA` | Warm surface — accent panels, code / quote tint    |
 | `rule`        | `#DDDDDD` | Hairline borders between content blocks            |
-| `gridline`    | `#ECE9E2` | In-chart gridlines (see §3)                        |
+| `gridline`    | `#D8D4CC` | In-chart gridlines (see §3)                        |
 
 The split is deliberate: content pages are pure white so figures land
 on a neutral background and color reads true; the cover is warmer (`cover-bg`)
@@ -83,7 +83,7 @@ more, re-think the encoding or use the muted base in §3.
 | Token     | Hex         | Use                                                |
 |-----------|-------------|----------------------------------------------------|
 | `c-muted-light` | `#CDD2D9` | Faded fills, background panels                 |
-| `c-muted` | `#999FA8`   | "Everyone-else" series in the highlight pattern    |
+| `c-muted` | `#AFB5BE`   | "Everyone-else" series in the highlight pattern    |
 | `c-muted-dark`  | `#5F6773` | Dark stroke or label for a muted series        |
 
 A cool grey that visually recedes behind the warm ink and the categorical
@@ -315,8 +315,17 @@ interchangeable:
 | Tone  | Job                                                                                      |
 |-------|------------------------------------------------------------------------------------------|
 | Main  | Fills — bars, lines, treemap tiles, scatter circles, choropleth polygons                 |
-| Dark  | Strokes on overlapping marks, and **every text element** referring to the series — direct labels, legend marks, callouts, annotations. Required for WCAG AA contrast against paper. |
+| Dark  | Strokes on overlapping marks, and **every text element** associated with the color — direct labels, end-labels, legend marks, callouts, annotations. Required for WCAG AA contrast against paper. |
 | Light | Backgrounds, faded states, sequential ramp tail                                          |
+
+**This rule applies to every color in the palette without exception, including
+the muted grey.** A muted series whose line or bar is `c-muted` (#AFB5BE) must
+have its end-label, legend entry, and any annotation in `c-muted-dark`
+(#5F6773) — never in `c-muted` itself, which fails contrast against paper.
+
+> **Simple test:** if a text element names or points to a colored mark, it
+> must use the dark tone of that mark's color. There is no case where a label
+> shares the exact same hex as its associated fill or line.
 
 Only one chart type uses the dark tone as a *fill*: the three-tone stacked
 area (light / main / dark of one hue, when three bands belong to the same
@@ -343,7 +352,7 @@ opacity just dilutes the color.
 - **Tick label offset**: 6px outside the axis
 - **Axis label offset**: measure from the *start* of the tick label, not from
   the axis line — typically 20px on both X and Y to clear wide numbers
-- **Gridline**: 1px solid `gridline` (`#ECE9E2`). Use only where the reader
+- **Gridline**: 1px solid `gridline` (`#D8D4CC`). Use only where the reader
   needs to estimate values; avoid both X and Y unless the chart is dense
 - **Zero baseline**: render with axis weight, not gridline weight
 - **Year axis**: when the X axis is just years, omit the axis label — the
@@ -394,9 +403,11 @@ this list.
    series, use the muted color for the rest and let the focus series carry
    the story. Six categorical colors is a hard ceiling.
 
-6. **Dark tone for strokes and text.** Every label, legend mark, callout,
-   and annotation tied to a series uses the dark variant of that series'
-   color, not the main tone. The main tone is for fills.
+6. **Dark tone for strokes and text — no exceptions.** Every label, legend
+   mark, callout, and annotation associated with a colored mark uses the
+   **dark variant** of that mark's color, not the main tone. This applies to
+   every color in the palette: `c-1` fills → `c-1-dark` labels; `c-muted`
+   fills/lines → `c-muted-dark` labels. The main tone is for fills only.
 
 7. **0.8 opacity on overlapping marks.** Scatter circles, radar polygons,
    any overlaid shape. Single-layer marks (bars, treemap, choropleth) stay
