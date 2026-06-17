@@ -24,6 +24,7 @@ ships these skills:
 
 | Skill | Does |
 |---|---|
+| **/design-kit** | **Start here.** Session primer — verifies tooling, loads the grammar + report recipe, and makes every chart and document you produce follow GL conventions for the rest of the session |
 | **gl-ggplot** | GL theme, palettes, and `save_fig` sizes for R/ggplot2 charts |
 | **chart-audit** | Visual audit checklist to run after generating charts |
 | **md2docx** | Markdown → Word (.docx) with citations + cross-references |
