@@ -1,7 +1,7 @@
 ---
 name: gl-ggplot
 description: Apply the Growth Lab design system to ggplot2 charts. Use this skill when creating R/ggplot visualizations in any project to ensure they follow GL visual standards — colors, typography, sizing, and save conventions.
-compatibility: Requires R with ggplot2, systemfonts, ragg.
+compatibility: Requires R >= 4.1, systemfonts >= 1.1.0 (for match_fonts), ggplot2 >= 3.3, and ragg. These are floors, not pins — newer is fine, and no upgrade is needed if you already meet them.
 metadata:
   author: taimur-shah
   version: "2.0"

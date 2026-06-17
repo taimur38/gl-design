@@ -33,6 +33,16 @@ ships these skills:
 
 ## Install
 
+> **Installing with Claude (the common path).** Point Claude Code at this public repo and
+> say "install this." Claude should: **(1)** run `claude plugin install gl-design` — this is
+> OS-neutral and gives the skills + `/design-kit`; **(2)** do the font step for the OS:
+> *Linux/macOS* → `bash scripts/install-fonts.sh`; *Windows* → install the four `.ttf` files
+> under `assets/fonts/inter/ttf/` and `assets/fonts/source-serif-4/ttf/` for the current user
+> (right-click → Install, or PowerShell); **(3)** verify external tools — `scripts/doctor.sh`
+> on Linux/macOS, or check `pandoc`, `pandoc-crossref`, Node/Marp, and Chromium natively on
+> Windows. The R/ggplot chart path needs no font step; only PDF/slides/xelatex do. The
+> scripts are conveniences — Claude can run the equivalent native commands on any OS.
+
 ### 1. Clone
 
 ```bash
@@ -51,6 +61,21 @@ bash scripts/doctor.sh
 ```
 
 It does **not** install anything — it tells you what to run. Install the items it marks `✗`.
+
+**Requirements (floors, not pins — newer is fine; don't upgrade if you already meet them):**
+
+| Tool | Minimum | Needed for |
+|---|---|---|
+| R | 4.1 | charts (`\(x)` lambda syntax in the theme) |
+| systemfonts (R pkg) | 1.1.0 | font registration (`match_fonts`) |
+| ggplot2 (R pkg) | 3.3 | charts |
+| ragg, textshaping (R pkg) | any recent | chart raster output |
+| pandoc + pandoc-crossref | any recent (crossref must match your pandoc) | md2docx / md2pdf / md2html |
+| Node.js + Marp CLI | any LTS (Marp via `npx` on demand) | md2slides |
+| Chromium / chrome-headless-shell | any recent | md2pdf / md2slides PDF rendering |
+
+The doctor checks **presence** (and warns if R/systemfonts are below the floor) but never
+forces an upgrade.
 
 ### 3. Install the skills
 

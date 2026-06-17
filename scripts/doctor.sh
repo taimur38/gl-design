@@ -55,9 +55,20 @@ fi
 printf '\nCharts (R / ggplot2)\n'
 if have Rscript; then
   ok "Rscript ($(Rscript --version 2>&1 | head -1))"
+  # R >= 4.1 is the real floor (theme_gl.R uses the \(x) lambda shorthand).
+  rmajor=$(Rscript -e 'cat(as.character(getRversion()))' 2>/dev/null)
+  if Rscript -e 'q(status = as.integer(getRversion() < "4.1"))' 2>/dev/null; then
+    ok "R $rmajor (>= 4.1)"
+  else
+    warn "R $rmajor is below 4.1" "theme_gl.R needs R >= 4.1 (lambda syntax); upgrade R if charts error"
+  fi
   pkgs=$(Rscript -e 'cat(setdiff(c("ggplot2","systemfonts","ragg","textshaping"), rownames(installed.packages())), sep=" ")' 2>/dev/null)
   if [ -z "${pkgs// }" ]; then
     ok "R packages: ggplot2, systemfonts, ragg, textshaping"
+    # systemfonts >= 1.1.0 is required for match_fonts(); presence alone isn't enough.
+    if ! Rscript -e 'q(status = as.integer(packageVersion("systemfonts") < "1.1.0"))' 2>/dev/null; then
+      warn "systemfonts < 1.1.0" "gl_setup() needs systemfonts >= 1.1.0 (match_fonts); Rscript -e 'install.packages(\"systemfonts\")'"
+    fi
   else
     bad "missing R packages:$pkgs" "Rscript -e 'install.packages(c($(echo $pkgs | sed "s/[^ ]*/\"&\"/g;s/ /,/g")))'"
   fi
@@ -72,13 +83,28 @@ if [ -f "$ROOT/assets/fonts/inter/ttf/InterVariable.ttf" ]; then
 else
   bad "bundled fonts missing from repo" "re-clone the repo; assets/fonts must be intact"
 fi
-# Capture first: `fc-list | grep -q` would SIGPIPE fc-list under `set -o pipefail`
-# and report a false negative even when the fonts are present.
-fc_all="$(fc-list 2>/dev/null || true)"
-if grep -qi "Inter" <<<"$fc_all" && grep -qi "Source Serif 4" <<<"$fc_all"; then
-  ok "fonts registered with the system (needed for the PDF/xelatex + Chromium paths)"
+# fontconfig (fc-list) only exists on Linux. macOS/Windows resolve fonts without
+# it, so don't treat its absence as "fonts missing" — check the user font dir.
+if have fc-list; then
+  # Capture first: `fc-list | grep -q` would SIGPIPE fc-list under `set -o pipefail`
+  # and report a false negative even when the fonts are present.
+  fc_all="$(fc-list 2>/dev/null || true)"
+  if grep -qi "Inter" <<<"$fc_all" && grep -qi "Source Serif 4" <<<"$fc_all"; then
+    ok "fonts registered with the system (needed for the PDF/xelatex + Chromium paths)"
+  else
+    warn "fonts not system-registered" "run scripts/install-fonts.sh (needed for the PDF / slides / xelatex paths; the R path works without it)"
+  fi
 else
-  warn "fonts not system-registered" "run scripts/install-fonts.sh (needed for the PDF / slides / xelatex paths; the R path works without it)"
+  case "$(uname -s)" in
+    Darwin)
+      if [ -f "$HOME/Library/Fonts/InterVariable.ttf" ]; then
+        ok "fonts present in ~/Library/Fonts (macOS resolves these directly)"
+      else
+        warn "GL fonts not in ~/Library/Fonts" "run scripts/install-fonts.sh (R path works without it)"
+      fi ;;
+    *)
+      warn "cannot verify system fonts (no fontconfig)" "ensure Inter + Source Serif 4 are installed for the PDF/slides paths; the R path works without it" ;;
+  esac
 fi
 
 # ---- summary ----------------------------------------------------------------
