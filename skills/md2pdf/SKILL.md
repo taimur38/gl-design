@@ -40,7 +40,7 @@ pdf_options:
 |-------------------|---------------------------------------------|-----------------------------------------------|
 | `# Heading`       | H1 / Section                                | Source Serif 4 26pt 500 ink, opsz 28          |
 | `## Heading`      | H2 / Subsection                             | Source Serif 4 16pt 500 ink, opsz 18          |
-| `### Heading`     | H3 (improvised — see followups.md #1)       | Source Serif 4 14pt 600 ink, opsz 16          |
+| `### Heading`     | H3 (improvised — see docs/followups.md #1)  | Source Serif 4 14pt 600 ink, opsz 16          |
 | `#### Heading`    | Eyebrow                                     | Inter 11pt 600 UPPER accent, 0.14em tracking  |
 | `body paragraph`  | Body                                        | Inter 12pt 400 ink-2, 1.6 leading             |
 | `**bold**`        | Body emphasis                               | Inter 12pt 600 ink                            |
@@ -83,7 +83,7 @@ md2pdf does **not** render today:
 
 | Recipe feature                    | Status                                         |
 |-----------------------------------|------------------------------------------------|
-| Cover page (display + rule + byline + pattern) | Not rendered. Document starts at page 1 as content. See [`followups.md`](../../followups.md) #8. |
+| Cover page (display + rule + byline + pattern) | Not rendered. Document starts at page 1 as content. See [`followups.md`](../../docs/followups.md) #8. |
 | Running head (series tag + logo)  | Not rendered. Only the folio (page number) is in the bottom-right margin. |
 | Figure label ("FIGURE 4")         | Rendered: pandoc-crossref numbers figures with a `{#fig:label}` id; `gl-figure.lua` styles "FIGURE N" as an accent eyebrow. Unnumbered images get title + optional subtitle only. |
 | Pandoc fenced divs (`:::`)        | Plain remark doesn't parse them. Renders as literal `:::`. |
@@ -104,5 +104,5 @@ use the docx pipeline ([`../md2docx/`](../md2docx/)).
 
 Renders `playground/demo-report.md` to `demo-report.pdf` with full GL
 typography (Source Serif 4 + Inter, opsz-tuned headings, recipe color
-tokens). Inspect against [`nil/GL-report-sample.html`](../../nil/GL-report-sample.html)
+tokens). Inspect against [`nil/GL-report-sample.html`](../../docs/nil/GL-report-sample.html)
 for visual alignment.

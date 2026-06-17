@@ -80,7 +80,7 @@ images (2–3) render side-by-side with merged captions — note LibreOffice
 preview stacks them vertically; real Word renders them side-by-side.
 
 Word-fidelity limits (sizes 1px→1pt, bold-for-500, full-width title rule,
-empty TOC until fields update) are listed in `followups.md` §10.
+empty TOC until fields update) are listed in `docs/followups.md` §10.
 
 ## Requirements
 
