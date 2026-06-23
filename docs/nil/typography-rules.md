@@ -1,6 +1,6 @@
 # Growth Lab — Typography Spec
 
-> Markdown transcription of `nil/typography-spec.html` (Nil's typography spec &
+> Markdown transcription of `docs/nil/typography-spec.html` (Nil's typography spec &
 > sample report). This captures the **explicit rules Nil wrote** — the prose
 > ("usage") notes, the per-element spec cards, the type scale, the palette, and
 > the decision rules — not values inferred from CSS alone. Companion to

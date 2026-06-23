@@ -1,7 +1,7 @@
 # theme_gl.R — Growth Lab design system for ggplot2
 #
-# Usage:
-#   source("~/dev/gl-design/skills/gl-ggplot/assets/theme_gl.R")
+# Usage (source by whatever path the kit lives at — the root is auto-detected):
+#   source(".../skills/gl-ggplot/assets/theme_gl.R")
 #   gl_setup()                          # loads fonts, sets theme + defaults
 #   gl_setup(mode = "slide")            # slide mode (keeps title/subtitle)
 #
@@ -509,7 +509,40 @@ save_fig <- function(size_name, filename, plot = last_plot(), dpi = 300) {
 # save_fig / ggsave use by default when ragg is installed) or the default screen
 # device on modern R. Old Cairo/X11 paths won't see these registrations.
 
-gl_font_files <- function(root = path.expand("~/dev/gl-design")) {
+# Resolve the gl-design repo root so bundled fonts/assets are found wherever the
+# kit is installed (plugin, symlink, or git clone). Priority:
+#   1. GL_DESIGN_ROOT          — explicit override
+#   2. CLAUDE_PLUGIN_ROOT      — set when running inside the installed plugin
+#   3. this script's location  — <root>/skills/gl-ggplot/assets/theme_gl.R
+#   4. ~/dev/gl-design         — legacy fallback (original dev checkout)
+gl_this_file <- function() {
+    for (i in seq_len(sys.nframe())) {
+        of <- sys.frame(i)$ofile
+        if (!is.null(of)) return(normalizePath(of, mustWork = FALSE))
+    }
+    NA_character_
+}
+
+gl_design_root <- function() {
+    has_fonts <- function(p) nzchar(p) && dir.exists(file.path(p, "assets", "fonts"))
+
+    env <- Sys.getenv("GL_DESIGN_ROOT", "")
+    if (has_fonts(env)) return(normalizePath(env))
+
+    plugin <- Sys.getenv("CLAUDE_PLUGIN_ROOT", "")
+    if (has_fonts(plugin)) return(normalizePath(plugin))
+
+    self <- gl_this_file()
+    if (!is.na(self)) {
+        cand <- normalizePath(file.path(dirname(self), "..", "..", ".."),
+                              mustWork = FALSE)
+        if (has_fonts(cand)) return(cand)
+    }
+
+    path.expand("~/dev/gl-design")
+}
+
+gl_font_files <- function(root = gl_design_root()) {
     fd <- file.path(root, "assets", "fonts")
     c(file.path(fd, "inter", "ttf", "InterVariable.ttf"),
       file.path(fd, "inter", "ttf", "InterVariable-Italic.ttf"),
@@ -523,7 +556,8 @@ gl_register_fonts <- function() {
         add_fonts(files)
         sans <- "Inter Variable"; serif <- "Source Serif 4 Variable"
     } else {
-        warning("GL bundled fonts not found at ~/dev/gl-design/assets/fonts; ",
+        warning("GL bundled fonts not found under the resolved gl-design root ",
+                "(set GL_DESIGN_ROOT to override); ",
                 "falling back to system-installed Inter / Source Serif 4.")
         sans <- "Inter"; serif <- "Source Serif 4"
     }

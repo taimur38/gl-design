@@ -1,0 +1,11 @@
+{
+  "name": "gl-design",
+  "version": "1.0.0",
+  "description": "Growth Lab design system — a visual grammar (color, type, charts) plus the runnable tools that apply it: ggplot theme, markdown→Word/PDF/HTML/slides pipelines, and chart/docx audits. Run /design-kit in any project to prime a session onto the grammar.",
+  "author": {
+    "name": "Growth Lab",
+    "email": "taimur38@gmail.com"
+  },
+  "homepage": "https://github.com/taimur38/gl-design",
+  "repository": "https://github.com/taimur38/gl-design"
+}

@@ -1,7 +1,7 @@
 ---
 name: gl-ggplot
 description: Apply the Growth Lab design system to ggplot2 charts. Use this skill when creating R/ggplot visualizations in any project to ensure they follow GL visual standards — colors, typography, sizing, and save conventions.
-compatibility: Requires R with ggplot2, systemfonts, ragg.
+compatibility: Requires R >= 4.1, systemfonts >= 1.1.0 (for match_fonts), ggplot2 >= 3.3, and ragg. These are floors, not pins — newer is fine, and no upgrade is needed if you already meet them.
 metadata:
   author: taimur-shah
   version: "2.0"
@@ -18,7 +18,9 @@ palette with light/main/dark tones; mute-then-highlight).
 At the top of every R script or Rmd file that produces charts, add:
 
 ```r
-source("~/dev/gl-design/skills/gl-ggplot/assets/theme_gl.R")
+source(paste0(Sys.getenv("CLAUDE_PLUGIN_ROOT"), "/skills/gl-ggplot/assets/theme_gl.R"))
+# ^ under the installed plugin. If CLAUDE_PLUGIN_ROOT is unset (symlink install),
+#   use "~/.claude/skills/gl-ggplot/assets/theme_gl.R" — the repo root auto-detects either way.
 gl_setup()                          # report mode (default) — no title/subtitle/caption
 gl_setup(mode = "slide")            # slide mode — keeps title/subtitle/caption
 ```
@@ -531,7 +533,9 @@ data |>
 ## Complete example
 
 ```r
-source("~/dev/gl-design/skills/gl-ggplot/assets/theme_gl.R")
+source(paste0(Sys.getenv("CLAUDE_PLUGIN_ROOT"), "/skills/gl-ggplot/assets/theme_gl.R"))
+# ^ under the installed plugin. If CLAUDE_PLUGIN_ROOT is unset (symlink install),
+#   use "~/.claude/skills/gl-ggplot/assets/theme_gl.R" — the repo root auto-detects either way.
 gl_setup()
 
 library(dplyr)

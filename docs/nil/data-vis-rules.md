@@ -1,6 +1,6 @@
 # Growth Lab — Data Visualization Spec
 
-> Markdown transcription of `nil/data vis.html` (Nil's data-viz spec & sample
+> Markdown transcription of `docs/nil/data vis.html` (Nil's data-viz spec & sample
 > charts). This is the source of truth for chart rules. Where the HTML
 > contradicts itself, the contradiction is flagged inline as **[spec
 > conflict]**.

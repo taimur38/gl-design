@@ -11,7 +11,7 @@ metadata:
 
 Converts an existing Word document to the Growth Lab design system
 ([`grammar.md`](../../grammar.md), [`recipes/report.md`](../../recipes/report.md),
-Nil's specs under [`nil/`](../../nil/)). Three layers of work:
+Nil's specs under [`nil/`](../../docs/nil/)). Three layers of work:
 
 1. **Mechanical** (scripted): theme + styles transplant, page geometry,
    direct-formatting strip.
@@ -121,7 +121,7 @@ short summary of what was changed mechanically vs. what needs the author.
 ## Known limits
 
 - Sizes are the Word approximation (1px→1pt; body 12pt) — see
-  `followups.md` §10 for all Word-fidelity limits.
+  `docs/followups.md` §10 for all Word-fidelity limits.
 - `--strip-direct` removes *all* direct font/size/color, including
   intentional ones; audit first.
 - Embedded OLE objects (Excel charts) and text boxes are not restyled —

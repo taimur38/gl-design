@@ -1,0 +1,29 @@
+{
+  "name": "gl-design",
+  "owner": {
+    "name": "Growth Lab",
+    "email": "taimur38@gmail.com"
+  },
+  "metadata": {
+    "description": "Growth Lab design system: visual grammar + runnable tools (ggplot theme, md→docx/pdf/html/slides, chart & docx audits).",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "gl-design",
+      "source": "./",
+      "description": "The full Growth Lab design kit — the /design-kit session primer plus eight sub-skills: gl-ggplot, chart-audit, md2docx, md2pdf, md2html, md2slides, md2pdf-minimal, gl-docx-retheme.",
+      "strict": false,
+      "skills": [
+        "./skills/gl-ggplot",
+        "./skills/chart-audit",
+        "./skills/md2docx",
+        "./skills/md2pdf",
+        "./skills/md2html",
+        "./skills/md2slides",
+        "./skills/md2pdf-minimal",
+        "./skills/gl-docx-retheme"
+      ]
+    }
+  ]
+}

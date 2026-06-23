@@ -44,7 +44,7 @@ pdf_options:
 |-------------------|---------------------------------------------|-----------------------------------------------|
 | `# Heading`       | H1 / Section                                | Source Serif 4 26pt 500 ink, opsz 28          |
 | `## Heading`      | H2 / Subsection                             | Source Serif 4 16pt 500 ink, opsz 18          |
-| `### Heading`     | H3 (improvised — see followups.md #1)       | Source Serif 4 14pt 600 ink, opsz 16          |
+| `### Heading`     | H3 (improvised — see docs/followups.md #1)  | Source Serif 4 14pt 600 ink, opsz 16          |
 | `#### Heading`    | Eyebrow                                     | Inter 11pt 600 UPPER accent, 0.14em tracking  |
 | `body paragraph`  | Body                                        | Inter 12pt 400 ink-2, 1.6 leading             |
 | `**bold**`        | Body emphasis                               | Inter 12pt 600 ink                            |
@@ -78,7 +78,7 @@ md2pdf does **not** render today:
 
 | Recipe feature                    | Status                                         |
 |-----------------------------------|------------------------------------------------|
-| Cover page (display + rule + byline + pattern) | Not rendered. Document starts at page 1 as content. See [`followups.md`](../../followups.md) #8. |
+| Cover page (display + rule + byline + pattern) | Not rendered. Document starts at page 1 as content. See [`followups.md`](../../docs/followups.md) #8. |
 | Running head (series tag + logo)  | Not rendered. Only the folio (page number) is in the bottom-right margin. |
 | Figure label ("FIGURE 4")         | Not auto-numbered. Authors include manually if needed. |
 | Pandoc fenced divs (`:::`)        | Plain remark doesn't parse them. Renders as literal `:::`. |
@@ -91,11 +91,13 @@ use the docx pipeline ([`../md2docx/`](../md2docx/)).
 ## Quick example
 
 ```bash
-cd ~/dev/gl-design
-skills/md2pdf/scripts/md2pdf playground/demo-report.md demo-report.pdf
+# Under the installed plugin, the script and demo file live under $CLAUDE_PLUGIN_ROOT:
+"$CLAUDE_PLUGIN_ROOT/skills/md2pdf-minimal/scripts/md2pdf-minimal" \
+  "$CLAUDE_PLUGIN_ROOT/playground/demo-report.md" demo-report.pdf
+# (From a git checkout instead: cd into the repo and run skills/md2pdf-minimal/scripts/md2pdf-minimal ...)
 ```
 
 Renders `playground/demo-report.md` to `demo-report.pdf` with full GL
 typography (Source Serif 4 + Inter, opsz-tuned headings, recipe color
-tokens). Inspect against [`nil/GL-report-sample.html`](../../nil/GL-report-sample.html)
+tokens). Inspect against [`nil/GL-report-sample.html`](../../docs/nil/GL-report-sample.html)
 for visual alignment.
